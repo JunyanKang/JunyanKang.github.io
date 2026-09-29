@@ -31,6 +31,8 @@ First set the Pages custom domain to `kanglab.cool`. In DNSPod, configure:
 
 Use the default DNS line and a 600-second TTL. Preserve unrelated DNS records. After DNS validation and certificate issuance, enable **Enforce HTTPS** in Pages settings. GitHub provides the certificate; a separately purchased Tencent SSL certificate is not needed for Pages.
 
+Current DNSPod free-plan configuration (2026-09-29): the plan permits only two A records for the same host. The first two addresses above (`108.153` and `109.153`) are configured, together with the `www` CNAME. GitHub's Pages health check confirms that the apex domain points to Pages and is valid. Adding the third address was rejected with `LimitExceeded.SubdomainRollLimit`; no plan upgrade was purchased. The four-address table is GitHub's full recommended set, not a claim that all four were installed.
+
 The Actions deployment does not configure a domain merely from a `CNAME` file. The domain must be set in the repository's Pages settings. `_config.yml` should use `url: https://kanglab.cool` after binding, with `baseurl: ''`.
 
 ## Validation and recovery
@@ -40,4 +42,3 @@ Check home, publications, resources, and `/expression-atlas/?gene=Pax6`; also re
 If a build fails, the previously deployed site remains available. Fix the failure and push again. To roll back a content change, revert the relevant commit and let Actions redeploy. Do not delete the existing database or its source tables when updating the public snapshot.
 
 References: [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages), [custom domains](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site), [al-folio](https://github.com/alshedivat/al-folio).
-

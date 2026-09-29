@@ -1,7 +1,7 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, ChangeEvent, FormEvent, MouseEvent } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { queryExpressionAtlas } from '../api/modules';
 import { ErrorState } from '../components/common/ErrorState.tsx';
 import { LoadingState } from '../components/common/LoadingState.tsx';
@@ -1302,7 +1302,7 @@ const DatasetFigurePanel = ({
         matched={matched}
       />
       <div className="expression-atlas-dataset-panel-body">
-        {viewMode === 'plot' ? (
+        {!dataset.hasMatch ? <p className="text-muted" role="status">No matching gene in this dataset. Missing data does not indicate zero expression.</p> : viewMode === 'plot' ? (
           <div className="expression-atlas-plot-layout">
             <div ref={plotRef} className="expression-atlas-plot-layout__figure">
               <div className="expression-atlas-plot-layout__figure-actions">
@@ -1401,7 +1401,7 @@ const CombinedMouseTissuePanel = ({
       <div className="expression-atlas-dataset-panel-body">
         <div className="expression-atlas-combined-stack">
           <section className="expression-atlas-combined-section">
-            {viewMode === 'plot' ? (
+            {!rnaDataset.hasMatch ? <p className="text-muted" role="status">Mouse tissue RNA: no matching gene. Missing data does not indicate zero expression.</p> : viewMode === 'plot' ? (
               <div className="expression-atlas-plot-layout">
                 <div ref={rnaPlotRef} className="expression-atlas-plot-layout__figure">
                   <div className="expression-atlas-plot-layout__figure-actions">
@@ -1436,7 +1436,7 @@ const CombinedMouseTissuePanel = ({
             )}
           </section>
           <section className="expression-atlas-combined-section">
-            {viewMode === 'plot' ? (
+            {!proteinDataset.hasMatch ? <p className="text-muted" role="status">Mouse tissue protein: no matching gene. Missing data does not indicate zero expression.</p> : viewMode === 'plot' ? (
               <div className="expression-atlas-plot-layout">
                 <div ref={proteinPlotRef} className="expression-atlas-plot-layout__figure">
                   <div className="expression-atlas-plot-layout__figure-actions">
@@ -1550,6 +1550,7 @@ export const ExpressionAtlasPage = () => {
   const initialGene = searchParams.get('gene')?.trim() || 'Pax6';
   const [queryInput, setQueryInput] = useState(initialGene);
   const [submittedGene, setSubmittedGene] = useState(initialGene);
+  const [queryAttempt, setQueryAttempt] = useState(0);
   const [selectedDatasetKey, setSelectedDatasetKey] = useState<string>('');
   const [datasetViewModes, setDatasetViewModes] = useState<Record<string, DatasetViewMode>>({});
   const [datasetPlotSettings, setDatasetPlotSettings] = useState<Record<string, PlotSettings>>({});
@@ -1599,7 +1600,7 @@ export const ExpressionAtlasPage = () => {
     return () => {
       cancelled = true;
     };
-  }, [submittedGene]);
+  }, [submittedGene, queryAttempt]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -1609,6 +1610,7 @@ export const ExpressionAtlasPage = () => {
     nextParams.set('gene', nextGene);
     setSearchParams(nextParams, { replace: true });
     setSubmittedGene(nextGene);
+    if (nextGene === submittedGene) setQueryAttempt((attempt) => attempt + 1);
   };
 
   const matchedDatasetCount = useMemo(
@@ -1686,9 +1688,9 @@ export const ExpressionAtlasPage = () => {
               Query bulk and single-cell eye-related expression datasets from our public expression collection.
             </p>
           </div>
-          <Link to="/internal-resources" className="link-button link-button--outline">
+          <a href="/resources/" className="link-button link-button--outline">
             Back to resources
-          </Link>
+          </a>
         </div>
 
         <KlCard className="expression-atlas-intro expression-atlas-intro--hero">
@@ -1746,7 +1748,7 @@ export const ExpressionAtlasPage = () => {
         </KlCard>
 
         {queryState.loading ? <LoadingState message="Querying expression atlas..." /> : null}
-        {queryState.error ? <ErrorState description={queryState.error} onRetry={() => setSubmittedGene(queryInput.trim() || 'Pax6')} /> : null}
+        {queryState.error ? <ErrorState description={queryState.error} onRetry={() => setQueryAttempt((attempt) => attempt + 1)} /> : null}
 
         {queryState.data ? (
           <div className="expression-atlas-stack">
