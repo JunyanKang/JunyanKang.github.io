@@ -1,7 +1,7 @@
 ---
 media:
-  input: assets/img/team
-  output: "/assets/img/team"
+  input: assets/img
+  output: "/assets/img"
   categories:
   - image
 content:
@@ -176,9 +176,9 @@ content:
   format: json
   fields:
   - name: items
-    label: Lab-curated publications
+    label: 全部论文 / All publications
     type: object
-    description: DOI 相同则覆盖 ORCID 条目；不会被后续导入覆盖。
+    description: 包含现有全部论文。展开条目可编辑；可新增、隐藏或删除。保存后网站自动更新，后续 ORCID 导入不会覆盖已有编辑。
     list:
       collapsible:
         collapsed: true
@@ -211,6 +211,37 @@ content:
     - name: hidden
       label: Hide this DOI from public list
       type: boolean
+    - name: preview
+      label: 悬停配图 / Figure preview
+      type: object
+      description: 使用本文原图，保留坐标与标签。更换图片时请清空下方裁剪参数，以显示新图全貌。
+      fields:
+      - name: image
+        label: 图片 / Image
+        type: image
+      - name: label
+        label: 图号或简短标题 / Figure label
+        type: string
+      - name: alt
+        label: 图像说明 / Accessible description
+        type: text
+      - name: source
+        label: 原文或图片来源 / Source URL
+        type: string
+      - name: credit
+        label: 作者、期刊与版权 / Credit
+        type: string
+      - name: crop
+        label: 可选展示裁剪 / Optional crop
+        type: object
+        description: 仅改变展示窗口，不修改原图。整图展示时全部留空；选择某个 panel 时必须保留该 panel 完整坐标及标签。
+        fields:
+        - {name: x, label: Left (px), type: number}
+        - {name: y, label: Top (px), type: number}
+        - {name: width, label: Panel width (px), type: number}
+        - {name: height, label: Panel height (px), type: number}
+        - {name: source_width, label: Original width (px), type: number}
+        - {name: source_height, label: Original height (px), type: number}
 - name: software
   label: 软件 / Software
   type: file

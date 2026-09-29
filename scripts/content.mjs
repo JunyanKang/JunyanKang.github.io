@@ -10,10 +10,35 @@ export function mergePublications(imported, manual) {
     if (doi && !/^10\.\d{4,9}\/\S+$/.test(doi)) throw new Error(`Invalid DOI: ${doi}`);
     merged.url = doi ? `https://doi.org/${doi}` : merged.url;
     if (!/^https:\/\//.test(merged.url || '')) throw new Error(`Publication URL must use HTTPS: ${key}`);
-    if (paper.author_names?.length) merged.authors = paper.author_names.join(', ');
+    if (Array.isArray(paper.author_names)) merged.authors = paper.author_names.join(', ');
+    if (merged.preview?.image) {
+      const p = merged.preview;
+      if (!/^\/assets\/img\/[a-zA-Z0-9_./ -]+\.(png|jpe?g|webp)$/i.test(p.image) || p.image.includes('..')) throw new Error(`Invalid preview image: ${key}`);
+      if (!/^https:\/\//.test(p.source || '') || !p.alt?.trim()) throw new Error(`Preview requires source and description: ${key}`);
+      if (p.crop && Object.values(p.crop).some(v => v != null && v !== '')) {
+        const c = p.crop;
+        if (!['x','y','width','height','source_width','source_height'].every(k => Number.isFinite(c[k])) || c.x < 0 || c.y < 0 || c.width <= 0 || c.height <= 0 || c.x + c.width > c.source_width || c.y + c.height > c.source_height) throw new Error(`Invalid preview crop: ${key}`);
+      } else if (p.crop) merged.preview = { ...p, crop: undefined };
+    }
     records.set(key, merged);
   }
   return [...records.values()].sort((a,b) => Number(b.year)-Number(a.year) || a.title.localeCompare(b.title));
+}
+export function addNewImportedPublications(previousImported, imported, catalog) {
+  const keys = paper => [
+    paper.doi ? `doi:${String(paper.doi).replace(/^https?:\/\/(?:dx\.)?doi\.org\//i, '').trim().toLowerCase()}` : `title:${String(paper.title || '').trim().toLowerCase()}`,
+    ...(paper.orcid_put_code ? [`orcid:${paper.orcid_put_code}`] : []),
+  ];
+  // Previously imported records that are absent from the catalog were deleted.
+  const known = new Set([...previousImported, ...catalog].flatMap(keys));
+  const result = [...catalog];
+  for (const paper of imported) {
+    const identities = keys(paper);
+    if (identities.some(key => known.has(key))) continue;
+    result.push({ ...paper, year: Number(paper.year) });
+    identities.forEach(key => known.add(key));
+  }
+  return result;
 }
 export function validateTeam(team, codes) {
   const forbidden = /^(advisor|supervisor|mentor|gender|sex|导师|性别)$/i;

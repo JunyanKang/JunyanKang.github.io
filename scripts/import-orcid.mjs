@@ -1,7 +1,10 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
+import { addNewImportedPublications, mergePublications, bibliography } from './content.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+const previous = JSON.parse(await readFile(`${root}/_data/publications.json`, 'utf8'));
+const catalog = JSON.parse(await readFile(`${root}/_data/publications_manual.json`, 'utf8'));
 const orcid = '0000-0001-5191-5217';
 const api = `https://pub.orcid.org/v3.0/${orcid}`;
 async function getJson(url) {
@@ -59,10 +62,11 @@ const affiliations = ['employments', 'educations'].flatMap(kind =>
     };
   }))
 ).sort((a,b) => Number(b.start_year) - Number(a.start_year));
-const bibEscape = text => String(text).replace(/\\/g, '\\textbackslash{}').replace(/[{}]/g, '').replace(/[%&#_]/g, match => `\\${match}`);
-const bib = papers.map((p, i) => `@article{kang${p.year}_${i + 1},\n  title = {{${bibEscape(p.title)}}},\n${p.author_names.length ? `  author = {${p.author_names.map(name => `{${bibEscape(name)}}`).join(' and ')}},\n` : ''}  journal = {${bibEscape(p.journal)}},\n  year = {${p.year}},\n${p.doi ? `  doi = {${p.doi}},\n` : ''}  url = {${p.url}}\n}`).join('\n\n');
+const items = addNewImportedPublications(previous.items, papers, catalog.items);
+const bib = bibliography(mergePublications([], items));
 await mkdir(`${root}/assets/data`, { recursive: true });
 await mkdir(`${root}/_data`, { recursive: true });
+await writeFile(`${root}/_data/publications_manual.json`, JSON.stringify({ ...catalog, items }, null, 2) + '\n');
 await writeFile(`${root}/_data/publications.json`, JSON.stringify({ orcid, retrieved_at: retrievedAt, source: api, items: papers }, null, 2) + '\n');
 await writeFile(`${root}/_data/profile.json`, JSON.stringify({ orcid, retrieved_at: retrievedAt, affiliations }, null, 2) + '\n');
 await writeFile(`${root}/assets/data/publications.bib`, bib + '\n');

@@ -45,7 +45,7 @@ Use the footer **Admin** link for the hosted content editor. Invited editors sig
 | Home and research | `_pages/about.md`, `_pages/research.md` |
 | Software links | `_data/software.yml` |
 | ORCID publications and affiliations | `_data/publications.json`, `_data/profile.json` |
-| Curated publication additions / corrections | `_data/publications_manual.json` |
+| All CMS-managed publications and figure previews | `_data/publications_manual.json` |
 | Team / photo / hometown map | `_data/team.json`, `assets/img/team/` |
 | Contact email / map address | `_data/contact.json` |
 | CMS forms | `.pages.yml` |
@@ -59,7 +59,7 @@ Refresh public scholarly metadata explicitly:
 node scripts/import-orcid.mjs
 ```
 
-This uses ORCID for works/affiliations and DOI-verified Crossref publisher metadata for author lists. It deduplicates DOI records and regenerates the downloadable BibTeX. Review the generated changes before pushing; no unverified publications are invented.
+This uses ORCID for works/affiliations and DOI-verified Crossref publisher metadata for author lists. Only newly discovered works are appended to the CMS catalog; existing edits, hidden entries and deletions are respected. The public list and BibTeX are generated from that catalog, not directly from the ORCID snapshot. Review the changes before pushing; no unverified publications are invented.
 
 ## Refresh atlas from the original project
 
