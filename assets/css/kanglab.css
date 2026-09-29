@@ -144,12 +144,15 @@ footer { border-top: 1px solid var(--kl-border); background: transparent !import
 .kl-training summary { cursor: pointer; padding: 10px 0; color: #17645d; font-size: 15px; }
 .kl-contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; border-top: 1px solid var(--kl-border); padding: 32px 0; }
 .kl-contact-grid p { font-size: 15px; color: #53665c; }
-.kl-footer { border-top: 1px solid var(--kl-border); padding-top: 18px; color: #53665c; }
+.kl-footer { border-top: 1px solid var(--kl-border); padding: 18px 0 8px; color: #53665c; }
 .kl-footer-inner { display: flex; justify-content: space-between; gap: 30px; align-items: flex-start; }
 .kl-footer strong { font-family: Georgia,serif; font-size: 20px; color: #253331; }
 .kl-footer p { margin: 6px 0 14px; font-size: 12px; line-height: 1.7; }
 .kl-footer-links { display: flex; gap: 24px; font-size: 13px; }
-.kl-colophon { display: flex; justify-content: space-between; gap: 16px; padding: 14px 0 20px; border-top: 1px solid var(--kl-border); font-size: 11px; color: #6d7970; }
+.kl-footer-brand { display:flex; align-items:center; gap:8px; }
+.kl-admin-link { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; color:#627567; border-radius:4px; }
+.kl-admin-link:hover { color:#17645d; background:#eaf0ec; }
+.kl-admin-link:focus-visible { outline:2px solid #17645d; outline-offset:2px; }
 @media (max-width: 900px) {
   .kl-nav { gap: 16px; font-size: 13px; }
   .kl-brand img { width: 170px; }
@@ -172,7 +175,7 @@ footer { border-top: 1px solid var(--kl-border); background: transparent !import
   .kl-focus-topics { flex-direction: row; flex-wrap: wrap; border-left: 0; border-top: 1px solid #c9d8cd; padding: 12px 0 0; gap: 22px; }
   .kl-section-heading { flex-wrap: wrap; margin-bottom: 22px; }
   .kl-open-grid article { padding: 22px; }
-  .kl-footer-inner, .kl-colophon { flex-direction: column; gap: 10px; }
+  .kl-footer-inner { flex-direction: column; gap: 10px; }
   .kl-footer-links { flex-wrap: wrap; padding-bottom: 20px; }
   .kl-research-section { scroll-margin-top: 145px; }
 }
