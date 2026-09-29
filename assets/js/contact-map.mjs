@@ -43,21 +43,23 @@ export async function initContactMap(root, fetcher = fetch) {
   const select = root.querySelector('select');
   const preview = root.querySelector('[data-amap-preview]');
   const google = root.querySelector('[data-google-map]');
-  let country = null;
+  let manuallySelected = false;
   function render() {
-    const provider = select.value === 'auto' ? providerForCountry(country) : select.value;
+    const provider = select.value;
     const links = mapLinks(provider, root.dataset.address, root.dataset.location);
     preview.hidden = provider !== 'amap';
     google.hidden = provider !== 'google';
     if (provider === 'google' && !google.hasAttribute('src')) google.src = links.embed;
-    select.title = select.value === 'auto'
-      ? `Auto · ${links.name}${country ? '' : ' (default)'}` : links.name;
+    select.title = links.name;
     root.dataset.provider = provider;
   }
-  select.addEventListener('change', render);
+  select.addEventListener('change', () => { manuallySelected = true; render(); });
   render();
-  country = await lookupCountry(fetcher);
-  render();
+  const country = await lookupCountry(fetcher);
+  if (!manuallySelected) {
+    select.value = providerForCountry(country);
+    render();
+  }
 }
 
 if (typeof document !== 'undefined') {

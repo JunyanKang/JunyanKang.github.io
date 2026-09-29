@@ -27,4 +27,5 @@ test('contact details show only the English address and no legacy map caption/bu
   assert.doesNotMatch(template, /<figcaption/);
   assert.doesNotMatch(template, /kl-map-toolbar|data-map-status/);
   assert.match(template, /class="kl-map-provider"[^>]*aria-label="Map provider"/);
+  assert.doesNotMatch(template, /value="auto"/);
 });

@@ -240,7 +240,9 @@ footer { border-top: 1px solid var(--kl-border); background: transparent !import
 .kl-contact-details p, .kl-contact-details address {font-size:14px;color:#536b5c;line-height:1.9;font-style:normal;}.kl-contact-email {font-size:18px;overflow-wrap:anywhere;}
 .kl-visit-map {position:relative;margin:0;min-width:0;}.kl-visit-map iframe {width:100%;aspect-ratio:15/8;height:auto;border:1px solid #d9e3da;border-radius:4px;display:block;background:#eef3ed;}
 .kl-map-preview {display:block;border:1px solid #d9e3da;border-radius:4px;overflow:hidden;background:#eef3ed;}.kl-map-preview img {display:block;width:100%;height:auto;}.kl-map-unavailable {display:flex;align-items:center;justify-content:center;aspect-ratio:15/8;padding:20px;font-size:13px;}
-.kl-map-provider {position:absolute;right:12px;bottom:32px;z-index:2;max-width:145px;font:inherit;font-size:12px;line-height:1.4;color:#33594f;background:#fff;border:1px solid #d9e3da;border-radius:5px;padding:7px 9px;box-shadow:0 2px 10px #2533311a;cursor:pointer;}.kl-map-provider:focus-visible {outline:2px solid #17645d;outline-offset:2px;}.kl-visit-map [hidden] {display:none;}
+.kl-map-provider {position:absolute;right:6px;bottom:6px;z-index:2;max-width:145px;font:inherit;font-size:12px;line-height:1.4;color:#33594f;background:#fff;border:1px solid #d9e3da;border-radius:5px;padding:7px 9px;box-shadow:0 2px 10px #2533311a;cursor:pointer;}.kl-body select:focus, .kl-body select:focus-visible {outline:none;box-shadow:none;border-color:#89958f;}
+/* Leave Google's bottom-edge attribution visible. */
+.kl-visit-map[data-provider="google"] .kl-map-provider {bottom:24px;}.kl-visit-map [hidden] {display:none;}
 @media(max-width:700px){.kl-visit-layout{grid-template-columns:1fr;gap:25px;}}
 .kl-region-button.is-active span { color: inherit; }
 .kl-map-region .kl-map-sea { fill:#a3b7aa; stroke:#829a8a; stroke-width:.7; }

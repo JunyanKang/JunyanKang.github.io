@@ -13,11 +13,11 @@ nav_order: 5
   {% capture amap_link %}https://uri.amap.com/search?keyword={{ destination }}&amp;view=map&amp;src=KangLab&amp;callnative=0{% endcapture %}
   {% if map.available %}{% capture amap_link %}https://uri.amap.com/marker?position={{ map.location }}&amp;name={{ destination }}&amp;coordinate=gaode&amp;callnative=0&amp;src=KangLab{% endcapture %}{% endif %}
   <figure class="kl-visit-map" data-contact-map data-address="{{ contact.address_zh | escape }}" data-location="{{ map.location | escape }}">
-    <select class="kl-map-provider" id="contact-map-provider" aria-label="Map provider"><option value="auto">Auto</option><option value="amap">AMap</option><option value="google">Google Maps</option></select>
+    <select class="kl-map-provider" id="contact-map-provider" aria-label="Map provider"><option value="amap">AMap</option><option value="google">Google Maps</option></select>
     <a class="kl-map-preview" data-amap-preview href="{{ amap_link }}" target="_blank" rel="noopener noreferrer" aria-label="Open directions to {{ contact.address_en | escape }} on AMap">
       {% if map.available %}<img src="{{ map.image | relative_url }}?v={{ map.generated_at | uri_escape }}" width="1500" height="800" alt="AMap street map marking {{ contact.address_zh | escape }}. Click to open directions.">{% else %}<span class="kl-map-unavailable">Map preview unavailable. Open the address in AMap ↗</span>{% endif %}
     </a>
     <iframe data-google-map hidden title="Google map to {{ contact.address_en | escape }}" referrerpolicy="no-referrer" allowfullscreen></iframe>
   </figure>
 </div>
-<script type="module" src="{{ '/assets/js/contact-map.mjs' | relative_url }}"></script>
+<script type="module" src="{{ '/assets/js/contact-map.mjs' | relative_url }}?v={{ site.time | date: '%s' }}"></script>

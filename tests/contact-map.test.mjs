@@ -38,11 +38,11 @@ test('country lookup handles failures, malformed results and timeout', async () 
   assert.equal(await lookupCountry(async () => { throw new Error('offline'); }), null);
   assert.equal(await lookupCountry(() => new Promise(() => {}), 5), null);
 });
-test('manual selection wins over an in-flight country lookup; switching back restores auto', async () => {
+test('manual selection wins over an in-flight country lookup and remains editable', async () => {
   let change, resolveCountry;
-  const select = { value: 'auto', addEventListener: (_, fn) => { change = fn; } };
-  const preview = {}, google = { hasAttribute: () => Boolean(google.src) }, link = {}, status = {};
-  const elements = { select, '[data-amap-preview]': preview, '[data-google-map]': google, '[data-map-directions]': link, '[data-map-status]': status };
+  const select = { value: 'amap', addEventListener: (_, fn) => { change = fn; } };
+  const preview = {}, google = { hasAttribute: () => Boolean(google.src) };
+  const elements = { select, '[data-amap-preview]': preview, '[data-google-map]': google };
   const root = { dataset: { address: 'Shanghai' }, querySelector: name => elements[name] };
   const initialized = initContactMap(root, () => new Promise(resolve => { resolveCountry = resolve; }));
   assert.equal(root.dataset.provider, 'amap');
@@ -51,11 +51,24 @@ test('manual selection wins over an in-flight country lookup; switching back res
   resolveCountry({ ok: true, json: async () => ({ country: 'US' }) });
   await initialized;
   assert.equal(root.dataset.provider, 'amap');
-  select.value = 'auto'; change();
+  select.value = 'google'; change();
   assert.equal(root.dataset.provider, 'google');
   assert.equal(google.hidden, false);
   assert.equal(preview.hidden, true);
   select.value = 'amap'; change();
   assert.equal(preview.hidden, false);
   assert.equal(google.hidden, true);
+});
+
+test('automatic IP selection updates the displayed provider rather than showing Auto', async () => {
+  for (const [country, expected] of [['CN', 'amap'], ['US', 'google'], [null, 'amap']]) {
+    const select = { value: 'amap', addEventListener() {} };
+    const preview = {}, google = { hasAttribute: () => Boolean(google.src) };
+    const elements = { select, '[data-amap-preview]': preview, '[data-google-map]': google };
+    const root = { dataset: { address: 'Shanghai' }, querySelector: name => elements[name] };
+    await initContactMap(root, async () => ({ ok: true, json: async () => ({ country }) }));
+    assert.equal(select.value, expected);
+    assert.equal(root.dataset.provider, expected);
+    assert.equal(select.title, expected === 'amap' ? 'AMap' : 'Google Maps');
+  }
 });
