@@ -18,7 +18,6 @@ nav_order: 5
       {% if map.available %}<img src="{{ map.image | relative_url }}?v={{ map.generated_at | uri_escape }}" width="1500" height="800" alt="AMap street map marking {{ contact.address_zh | escape }}. Click to open directions.">{% else %}<span class="kl-map-unavailable">Map preview unavailable. Open the address in AMap ↗</span>{% endif %}
     </a>
     <iframe data-google-map hidden title="Google map to {{ contact.address_en | escape }}" referrerpolicy="no-referrer" allowfullscreen></iframe>
-    <figcaption><span>Street-address location · Pudong, Shanghai</span><a data-map-directions href="{{ amap_link }}" target="_blank" rel="noopener noreferrer">Directions on AMap ↗</a></figcaption>
   </figure>
 </div>
 <script type="module" src="{{ '/assets/js/contact-map.mjs' | relative_url }}"></script>

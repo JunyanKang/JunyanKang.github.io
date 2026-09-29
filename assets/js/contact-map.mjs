@@ -43,7 +43,6 @@ export async function initContactMap(root, fetcher = fetch) {
   const select = root.querySelector('select');
   const preview = root.querySelector('[data-amap-preview]');
   const google = root.querySelector('[data-google-map]');
-  const link = root.querySelector('[data-map-directions]');
   const status = root.querySelector('[data-map-status]');
   let country = null;
   function render() {
@@ -52,8 +51,6 @@ export async function initContactMap(root, fetcher = fetch) {
     preview.hidden = provider !== 'amap';
     google.hidden = provider !== 'google';
     if (provider === 'google' && !google.hasAttribute('src')) google.src = links.embed;
-    link.href = links.directions;
-    link.textContent = `Directions on ${links.name} ↗`;
     status.textContent = select.value === 'auto'
       ? `Auto · ${links.name}${country ? '' : ' (default)'}` : links.name;
     root.dataset.provider = provider;
