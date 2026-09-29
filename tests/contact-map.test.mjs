@@ -38,37 +38,48 @@ test('country lookup handles failures, malformed results and timeout', async () 
   assert.equal(await lookupCountry(async () => { throw new Error('offline'); }), null);
   assert.equal(await lookupCountry(() => new Promise(() => {}), 5), null);
 });
-test('manual selection wins over an in-flight country lookup and remains editable', async () => {
-  let change, resolveCountry;
-  const select = { value: 'amap', addEventListener: (_, fn) => { change = fn; } };
-  const preview = {}, google = { hasAttribute: () => Boolean(google.src) };
-  const elements = { select, '[data-amap-preview]': preview, '[data-google-map]': google };
-  const root = { dataset: { address: 'Shanghai' }, querySelector: name => elements[name] };
-  const initialized = initContactMap(root, () => new Promise(resolve => { resolveCountry = resolve; }));
-  assert.equal(root.dataset.provider, 'amap');
-  assert.equal(google.src, undefined);
-  select.value = 'amap'; change();
+function mapFixture() {
+  const buttons = ['amap', 'google'].map(mapProvider => ({
+    dataset: { mapProvider }, attributes: {},
+    setAttribute(name, value) { this.attributes[name] = value; },
+    addEventListener(_, fn) { this.click = fn; },
+  }));
+  let source, loads = 0;
+  const preview = {}, google = { hasAttribute: () => Boolean(source), get src() { return source; }, set src(value) { source = value; loads++; } };
+  const root = { dataset: { address: 'Shanghai' }, querySelector: name => name === '[data-amap-preview]' ? preview : google, querySelectorAll: () => buttons };
+  return { root, buttons, preview, google, get loads() { return loads; } };
+}
+
+test('manual logo selection wins over an in-flight country lookup and retries Google', async () => {
+  let resolveCountry;
+  const f = mapFixture();
+  const initialized = initContactMap(f.root, () => new Promise(resolve => { resolveCountry = resolve; }));
+  assert.equal(f.root.dataset.provider, 'amap');
+  assert.equal(f.loads, 0);
+  f.buttons[0].click();
   resolveCountry({ ok: true, json: async () => ({ country: 'US' }) });
   await initialized;
-  assert.equal(root.dataset.provider, 'amap');
-  select.value = 'google'; change();
-  assert.equal(root.dataset.provider, 'google');
-  assert.equal(google.hidden, false);
-  assert.equal(preview.hidden, true);
-  select.value = 'amap'; change();
-  assert.equal(preview.hidden, false);
-  assert.equal(google.hidden, true);
+  assert.equal(f.root.dataset.provider, 'amap');
+  f.buttons[1].click();
+  assert.equal(f.root.dataset.provider, 'google');
+  assert.equal(f.google.hidden, false);
+  assert.equal(f.preview.hidden, true);
+  assert.equal(f.loads, 1);
+  f.buttons[0].click();
+  assert.equal(f.preview.hidden, false);
+  assert.equal(f.google.hidden, true);
+  f.buttons[1].click();
+  assert.equal(f.loads, 2);
+  f.buttons[1].click();
+  assert.equal(f.loads, 3);
 });
 
-test('automatic IP selection updates the displayed provider rather than showing Auto', async () => {
+test('automatic IP selection activates exactly the logo of the displayed provider', async () => {
   for (const [country, expected] of [['CN', 'amap'], ['US', 'google'], [null, 'amap']]) {
-    const select = { value: 'amap', addEventListener() {} };
-    const preview = {}, google = { hasAttribute: () => Boolean(google.src) };
-    const elements = { select, '[data-amap-preview]': preview, '[data-google-map]': google };
-    const root = { dataset: { address: 'Shanghai' }, querySelector: name => elements[name] };
-    await initContactMap(root, async () => ({ ok: true, json: async () => ({ country }) }));
-    assert.equal(select.value, expected);
-    assert.equal(root.dataset.provider, expected);
-    assert.equal(select.title, expected === 'amap' ? 'AMap' : 'Google Maps');
+    const f = mapFixture();
+    await initContactMap(f.root, async () => ({ ok: true, json: async () => ({ country }) }));
+    assert.equal(f.root.dataset.provider, expected);
+    assert.equal(f.buttons.filter(b => b.attributes['aria-pressed'] === 'true').length, 1);
+    assert.equal(f.buttons.find(b => b.attributes['aria-pressed'] === 'true').dataset.mapProvider, expected);
   }
 });

@@ -40,25 +40,27 @@ export async function lookupCountry(fetcher = fetch, timeoutMs = 3000) {
 }
 
 export async function initContactMap(root, fetcher = fetch) {
-  const select = root.querySelector('select');
+  const buttons = root.querySelectorAll('[data-map-provider]');
   const preview = root.querySelector('[data-amap-preview]');
   const google = root.querySelector('[data-google-map]');
   let manuallySelected = false;
-  function render() {
-    const provider = select.value;
+  function render(provider, reload = false) {
     const links = mapLinks(provider, root.dataset.address, root.dataset.location);
     preview.hidden = provider !== 'amap';
     google.hidden = provider !== 'google';
-    if (provider === 'google' && !google.hasAttribute('src')) google.src = links.embed;
-    select.title = links.name;
+    // Switching back or clicking Google again retries a failed frame load.
+    if (provider === 'google' && (reload || root.dataset.provider !== 'google' || !google.hasAttribute('src'))) google.src = links.embed;
+    buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.mapProvider === provider)));
     root.dataset.provider = provider;
   }
-  select.addEventListener('change', () => { manuallySelected = true; render(); });
-  render();
+  buttons.forEach(button => button.addEventListener('click', () => {
+    manuallySelected = true;
+    render(button.dataset.mapProvider, true);
+  }));
+  render('amap');
   const country = await lookupCountry(fetcher);
   if (!manuallySelected) {
-    select.value = providerForCountry(country);
-    render();
+    render(providerForCountry(country));
   }
 }
 

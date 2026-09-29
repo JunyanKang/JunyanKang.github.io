@@ -18,7 +18,7 @@ nav_order: 1
 <section class="kl-research-section" id="rna">
 <span class="kl-number">02 / RNA BIOLOGY</span><h2>Post-transcriptional control of differentiation</h2>
 <p>Our publication record spans piRNA-mediated mRNA regulation, translation of stored mRNAs, biomolecular condensation and 3′-UTR regulation. These studies provide a foundation for investigating how gene expression is coordinated with cellular differentiation.</p>
-<a href="{{ '/publications/?q=translation' | relative_url }}">Related publications ↗</a>
+<div class="kl-links"><a href="{{ '/publications/?q=translation' | relative_url }}">Related publications ↗</a></div>
 </section>
 
 <section class="kl-research-section" id="cell-fate">

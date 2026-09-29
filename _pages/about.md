@@ -12,7 +12,7 @@ nav: false
     <div class="kl-links kl-hero-actions"><a class="kl-button" href="{{ '/research/' | relative_url }}">Explore our research <span aria-hidden="true">↗</span></a><a class="kl-text-link" href="{{ '/expression-atlas/' | relative_url }}">Query the expression atlas <span aria-hidden="true">↗</span></a></div>
     <p class="kl-affiliation">Shanghai Ninth People's Hospital<br>Shanghai Jiao Tong University School of Medicine</p>
   </div>
-  <figure class="kl-hero-figure"><img src="{{ '/assets/img/retinal-layers-concept.png' | relative_url }}" width="1448" height="1086" alt="Conceptual illustration of layered retinal cells, including rods, cones and retinal neurons" fetchpriority="high"><figcaption>Retinal cell diversity <span>Conceptual illustration</span></figcaption></figure>
+  <figure class="kl-hero-figure"><img src="{{ '/assets/img/retinal-layers-concept.png' | relative_url }}" width="1448" height="1086" alt="Conceptual illustration of layered retinal cells, including rods, cones and retinal neurons" fetchpriority="high"></figure>
 </section>
 
 <section class="kl-section">

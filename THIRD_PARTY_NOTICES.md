@@ -9,3 +9,5 @@ Software repository cards link to external projects. Each repository retains its
 ORCID provides the public works and affiliation records. Crossref publisher metadata supplies author lists, matched by DOI. Source identifiers remain attached to the imported data and displayed publication links.
 
 The atlas data snapshot retains source citations in its manifest. No new license is asserted over third-party datasets by this notice.
+
+The contact-map provider icons are the original AMap favicon (`https://www.amap.com/favicon.ico`) and Google Maps product icon (`https://www.gstatic.com/images/branding/product/2x/maps_96in128dp.png`). They identify their respective map services; trademarks belong to their owners. AMap street-map images retain the original map attribution and approval number. Team-map geometry comes from DataV GeoAtlas (`https://datav.aliyun.com/portal/school/atlas/area_selector`).

@@ -13,7 +13,10 @@ nav_order: 5
   {% capture amap_link %}https://uri.amap.com/search?keyword={{ destination }}&amp;view=map&amp;src=KangLab&amp;callnative=0{% endcapture %}
   {% if map.available %}{% capture amap_link %}https://uri.amap.com/marker?position={{ map.location }}&amp;name={{ destination }}&amp;coordinate=gaode&amp;callnative=0&amp;src=KangLab{% endcapture %}{% endif %}
   <figure class="kl-visit-map" data-contact-map data-address="{{ contact.address_zh | escape }}" data-location="{{ map.location | escape }}">
-    <select class="kl-map-provider" id="contact-map-provider" aria-label="Map provider"><option value="amap">AMap</option><option value="google">Google Maps</option></select>
+    <div class="kl-map-provider" role="group" aria-label="Map provider">
+      <button class="kl-map-provider-button" type="button" data-map-provider="amap" aria-label="高德地图" title="高德地图" aria-pressed="true"><img src="{{ '/assets/img/map-providers/amap.ico' | relative_url }}" width="22" height="22" alt=""></button>
+      <button class="kl-map-provider-button" type="button" data-map-provider="google" aria-label="谷歌地图" title="谷歌地图" aria-pressed="false"><img src="{{ '/assets/img/map-providers/google-maps.png' | relative_url }}" width="22" height="22" alt=""></button>
+    </div>
     <a class="kl-map-preview" data-amap-preview href="{{ amap_link }}" target="_blank" rel="noopener noreferrer" aria-label="Open directions to {{ contact.address_en | escape }} on AMap">
       {% if map.available %}<img src="{{ map.image | relative_url }}?v={{ map.generated_at | uri_escape }}" width="1500" height="800" alt="AMap street map marking {{ contact.address_zh | escape }}. Click to open directions.">{% else %}<span class="kl-map-unavailable">Map preview unavailable. Open the address in AMap ↗</span>{% endif %}
     </a>
