@@ -4,7 +4,7 @@
   <div>
     <h3><a href="{{ paper.url | escape }}"{% if paper.preview.image %} data-paper-preview{% endif %}>{{ paper.title | escape }}</a></h3>
     {% unless include.compact %}{% if paper.authors != '' %}<p class="kl-authors">{{ paper.authors | escape }}</p>{% endif %}{% endunless %}
-    <p class="kl-journal">{{ paper.journal | escape }}{% if paper.volume %} · {{ paper.volume | escape }}{% endif %} <a class="kl-paper-doi" href="{{ paper.url | escape }}">{% if paper.doi %}DOI{% else %}Record{% endif %} ↗</a>{% if paper.preview.image %} <button type="button" class="kl-figure-toggle" data-paper-figure hidden aria-expanded="false" aria-label="Preview figure: {{ paper.title | escape }}">Figure</button>{% endif %}</p>
+    <p class="kl-journal">{{ paper.journal | escape }}{% if paper.volume %} · {{ paper.volume | escape }}{% endif %} <a class="kl-paper-doi" href="{{ paper.url | escape }}">{% if paper.doi %}DOI{% else %}Record{% endif %} ↗</a></p>
     {% if paper.preview.image %}<script type="application/json" data-preview-config>{{ paper.preview | jsonify | replace: '</', '<\/' }}</script>{% endif %}
   </div>
 </article>

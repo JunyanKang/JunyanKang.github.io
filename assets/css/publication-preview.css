@@ -1,10 +1,8 @@
-.kl-figure-toggle { margin-left:10px; border:0; padding:0; color:#17645d; background:none; font:12px 'Avenir Next',sans-serif; cursor:pointer; text-decoration:underline dotted; text-underline-offset:3px; }
-.kl-figure-toggle[hidden], .kl-figure-preview[hidden], .kl-figure-preview [hidden] { display:none; }
-.kl-figure-toggle:focus-visible, .kl-figure-preview :focus-visible { outline:2px solid #17645d; outline-offset:3px; }
+.kl-figure-preview[hidden], .kl-figure-preview [hidden] { display:none; }
+.kl-figure-preview :focus-visible { outline:2px solid #17645d; outline-offset:3px; }
 .kl-figure-preview { position:fixed; z-index:1100; width:min(440px,calc(100vw - 24px)); padding:12px; box-sizing:border-box; border:1px solid #dce5de; border-radius:8px; background:#fff; box-shadow:0 12px 40px #223b3229; color:#253331; font:12px/1.5 'Avenir Next',sans-serif; }
-.kl-figure-preview-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
-.kl-figure-preview-heading strong { font-size:13px; font-weight:600; }
-.kl-figure-preview-heading button { flex:none; width:28px; height:28px; border:0; border-radius:50%; background:#f1f5f1; color:#365e50; font:22px/1 sans-serif; cursor:pointer; }
+.kl-figure-preview { padding-top:38px; }
+.kl-figure-close { position:absolute; top:5px; right:7px; width:28px; height:28px; border:0; border-radius:50%; background:#f1f5f1; color:#365e50; font:22px/1 sans-serif; cursor:pointer; }
 .kl-figure-viewport { position:relative; overflow:hidden; margin:0 auto; background:white; }
 .kl-figure-viewport img { position:absolute; max-width:none; display:block; }
 .kl-figure-source { display:block; margin-top:10px; font-size:10px; color:#64776b; text-decoration:none; overflow-wrap:anywhere; }
