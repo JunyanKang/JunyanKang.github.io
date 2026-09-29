@@ -2,6 +2,14 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
+test('five content pages omit the large introductory header without losing accessible page titles', async () => {
+  for (const file of ['research.md', 'publications.html', 'profile.html', 'resources.html', 'contact.md']) {
+    const template = await readFile(new URL(`../_pages/${file}`, import.meta.url), 'utf8');
+    assert.doesNotMatch(template, /<header class="kl-page-heading">/);
+    assert.match(template, /<h1 class="kl-visually-hidden">[^<]+<\/h1>/);
+  }
+});
+
 test('footer uses an accessible admin icon next to Kang Lab, without a colophon', async () => {
   const layout = await readFile(new URL('../_layouts/kanglab.liquid', import.meta.url), 'utf8');
   const footer = layout.match(/<footer\b[\s\S]*?<\/footer>/)[0];

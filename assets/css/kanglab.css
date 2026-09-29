@@ -8,6 +8,7 @@ footer { border-top: 1px solid var(--kl-border); background: transparent !import
 .kl-academic { padding-top: 20px; padding-bottom: 28px; font-size: 16px; line-height: 1.65; }
 .kl-academic h1, .kl-academic h2, .kl-academic h3 { color: #253331; line-height: 1.2; font-weight: 500; }
 .kl-academic h1 { font-size: clamp(32px,4vw,46px); font-family: Georgia, serif; letter-spacing: -.045em; margin: 6px 0 12px; }
+.kl-academic .kl-visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
 .kl-academic h2 { font-size: 27px; font-family: Georgia, serif; letter-spacing: -.02em; }
 .kl-academic h3 { font-size: 19px; }
 .kl-academic a { color: #17645d; text-underline-offset: 4px; }

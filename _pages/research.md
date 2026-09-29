@@ -4,7 +4,7 @@ permalink: /research/
 nav: true
 nav_order: 1
 ---
-<header class="kl-page-heading"><p class="kl-eyebrow">QUESTIONS & APPROACHES</p><h1>Understanding the retina,<br>across time and species.</h1><p>Retinal development, aging and evolution are our current research focus. RNA regulation and cell-fate mechanisms provide complementary perspectives.</p></header>
+<h1 class="kl-visually-hidden">Research</h1>
 <nav class="kl-research-nav" aria-label="Research directions"><a href="#retina">Retinal biology</a><a href="#rna">RNA & translation</a><a href="#cell-fate">Cell fate & chromatin</a></nav>
 
 <section class="kl-research-section" id="retina">
