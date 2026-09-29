@@ -3,34 +3,22 @@
     {
       "title": "DDX19B modulates post-meiotic 3′-UTR profile shifts in mice",
       "year": 2026,
-      "journal": "Communications Biology",
       "doi": "10.1038/s42003-026-11045-7",
-      "author_source": "Crossref publisher metadata",
-      "url": "https://doi.org/10.1038/s42003-026-11045-7",
-      "orcid_put_code": 228059730,
-      "selected": false,
-      "hidden": false,
-      "preview": {
-        "image": "/assets/img/publications/ddx19b.png",
-        "label": "Graphical abstract",
-        "alt": "DDX19B and post-meiotic 3-prime UTR regulation",
-        "source": "https://www.nature.com/articles/s42003-026-11045-7",
-        "credit": "Yu et al. · Communications Biology (2026) · CC BY-NC-ND 4.0"
-      },
+      "journal": "Communications Biology",
       "author_entries": [
         {
           "name": "Xinghai Yu",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Zi-Wu Wang",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Xinyu Liu",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
@@ -41,40 +29,30 @@
         {
           "name": "Qing Li",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         },
         {
           "name": "Jun-Yan Kang",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         }
-      ]
+      ],
+      "url": "https://doi.org/10.1038/s42003-026-11045-7",
+      "selected": false,
+      "hidden": false,
+      "preview": {
+        "image": "/assets/img/publications/ddx19b.png",
+        "label": "Graphical abstract",
+        "alt": "DDX19B and post-meiotic 3-prime UTR regulation",
+        "source": "https://www.nature.com/articles/s42003-026-11045-7",
+        "credit": "Yu et al. · Communications Biology (2026) · CC BY-NC-ND 4.0"
+      }
     },
     {
       "title": "Systematic discovery of retina-enriched Rik genes identifies 1190005I06Rik as a novel modulator of visual signalling",
       "year": 2026,
-      "journal": "Journal of Translational Medicine",
       "doi": "10.1186/s12967-026-07769-z",
-      "author_source": "Crossref publisher metadata",
-      "url": "https://doi.org/10.1186/s12967-026-07769-z",
-      "orcid_put_code": 204122449,
-      "selected": true,
-      "hidden": false,
-      "preview": {
-        "image": "/assets/img/publications/retina-rik.png",
-        "label": "Figure 1a · Study design",
-        "alt": "Mouse tissue RNA sequencing and retina-enriched gene discovery",
-        "source": "https://link.springer.com/article/10.1186/s12967-026-07769-z",
-        "credit": "Liu et al. · Journal of Translational Medicine (2026)",
-        "crop": {
-          "x": 0,
-          "y": 0,
-          "width": 824,
-          "height": 515,
-          "source_width": 1985,
-          "source_height": 1048
-        }
-      },
+      "journal": "Journal of Translational Medicine",
       "author_entries": [
         {
           "name": "Yu-Tong Liu",
@@ -101,25 +79,31 @@
           "first_author": false,
           "corresponding_author": false
         }
-      ]
+      ],
+      "url": "https://doi.org/10.1186/s12967-026-07769-z",
+      "selected": true,
+      "hidden": false,
+      "preview": {
+        "image": "/assets/img/publications/retina-rik.png",
+        "label": "Figure 1a · Study design",
+        "alt": "Mouse tissue RNA sequencing and retina-enriched gene discovery",
+        "source": "https://link.springer.com/article/10.1186/s12967-026-07769-z",
+        "credit": "Liu et al. · Journal of Translational Medicine (2026)",
+        "crop": {
+          "x": 0,
+          "y": 0,
+          "width": 824,
+          "height": 515,
+          "source_width": 1985,
+          "source_height": 1048
+        }
+      }
     },
     {
       "title": "CCDC189 affects sperm flagellum formation by interacting with CABCOCO1.",
       "year": 2023,
-      "journal": "National science review",
       "doi": "10.1093/nsr/nwad181",
-      "author_source": "Crossref publisher metadata",
-      "url": "https://doi.org/10.1093/nsr/nwad181",
-      "orcid_put_code": 147159752,
-      "selected": false,
-      "hidden": false,
-      "preview": {
-        "image": "/assets/img/publications/ccdc189.jpg",
-        "label": "Figure 7 · Proposed model",
-        "alt": "CCDC189 and CABCOCO1 in sperm flagellum formation",
-        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10437088/",
-        "credit": "Wang et al. · National Science Review (2023)"
-      },
+      "journal": "National science review",
       "author_entries": [
         {
           "name": "Mengyue Wang",
@@ -161,25 +145,23 @@
           "first_author": false,
           "corresponding_author": false
         }
-      ]
+      ],
+      "url": "https://doi.org/10.1093/nsr/nwad181",
+      "selected": false,
+      "hidden": false,
+      "preview": {
+        "image": "/assets/img/publications/ccdc189.jpg",
+        "label": "Figure 7 · Proposed model",
+        "alt": "CCDC189 and CABCOCO1 in sperm flagellum formation",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10437088/",
+        "credit": "Wang et al. · National Science Review (2023)"
+      }
     },
     {
       "title": "Diverse roles of biomolecular condensation in eukaryotic translational regulation",
       "year": 2023,
-      "journal": "RNA Biology",
       "doi": "10.1080/15476286.2023.2275108",
-      "author_source": "Crossref publisher metadata",
-      "url": "https://doi.org/10.1080/15476286.2023.2275108",
-      "orcid_put_code": 145675618,
-      "selected": false,
-      "hidden": false,
-      "preview": {
-        "image": "/assets/img/publications/condensation.jpg",
-        "label": "Figure 2 · Translational regulation",
-        "alt": "FXR1 condensation, translational silencing and activation",
-        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10730148/",
-        "credit": "Zhang et al. · RNA Biology (2023) · CC BY-NC 4.0"
-      },
+      "journal": "RNA Biology",
       "author_entries": [
         {
           "name": "Yuhan Zhang",
@@ -201,25 +183,23 @@
           "first_author": false,
           "corresponding_author": false
         }
-      ]
+      ],
+      "url": "https://doi.org/10.1080/15476286.2023.2275108",
+      "selected": false,
+      "hidden": false,
+      "preview": {
+        "image": "/assets/img/publications/condensation.jpg",
+        "label": "Figure 2 · Translational regulation",
+        "alt": "FXR1 condensation, translational silencing and activation",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10730148/",
+        "credit": "Zhang et al. · RNA Biology (2023) · CC BY-NC 4.0"
+      }
     },
     {
       "title": "Polysome Profiling in Adult Mouse Testes.",
       "year": 2023,
-      "journal": "Bio-protocol",
       "doi": "10.21769/bioprotoc.4686",
-      "author_source": "Crossref publisher metadata",
-      "url": "https://doi.org/10.21769/bioprotoc.4686",
-      "orcid_put_code": 147159745,
-      "selected": false,
-      "hidden": false,
-      "preview": {
-        "image": "/assets/img/publications/polysome.jpg",
-        "label": "Graphical overview",
-        "alt": "Polysome profiling workflow in adult mouse testes",
-        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10262073/",
-        "credit": "Bio-protocol (2023) · CC BY-NC 4.0"
-      },
+      "journal": "Bio-protocol",
       "author_entries": [
         {
           "name": "Jun- Kang",
@@ -251,25 +231,23 @@
           "first_author": false,
           "corresponding_author": false
         }
-      ]
+      ],
+      "url": "https://doi.org/10.21769/bioprotoc.4686",
+      "selected": false,
+      "hidden": false,
+      "preview": {
+        "image": "/assets/img/publications/polysome.jpg",
+        "label": "Graphical overview",
+        "alt": "Polysome profiling workflow in adult mouse testes",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10262073/",
+        "credit": "Bio-protocol (2023) · CC BY-NC 4.0"
+      }
     },
     {
       "title": "LLPS of FXR1 drives spermiogenesis by activating translation of stored mRNAs",
       "year": 2022,
-      "journal": "Science",
       "doi": "10.1126/science.abj6647",
-      "author_source": "Crossref publisher metadata",
-      "url": "https://doi.org/10.1126/science.abj6647",
-      "orcid_put_code": 117130604,
-      "selected": true,
-      "hidden": false,
-      "preview": {
-        "image": "/assets/img/publications/fxr1-cas.jpg",
-        "label": "Research model · Author institution",
-        "alt": "FXR1 phase separation activates translation of stored mRNAs",
-        "source": "https://cemcs.cas.cn/kyjz/202208/t20220810_6497938.html",
-        "credit": "Kang et al. · Science (2022) · Image: CEMCS, Chinese Academy of Sciences"
-      },
+      "journal": "Science",
       "author_entries": [
         {
           "name": "Jun-Yan Kang",
@@ -401,25 +379,23 @@
           "first_author": false,
           "corresponding_author": false
         }
-      ]
+      ],
+      "url": "https://doi.org/10.1126/science.abj6647",
+      "selected": true,
+      "hidden": false,
+      "preview": {
+        "image": "/assets/img/publications/fxr1-cas.jpg",
+        "label": "Research model · Author institution",
+        "alt": "FXR1 phase separation activates translation of stored mRNAs",
+        "source": "https://cemcs.cas.cn/kyjz/202208/t20220810_6497938.html",
+        "credit": "Kang et al. · Science (2022) · Image: CEMCS, Chinese Academy of Sciences"
+      }
     },
     {
       "title": "Potential transmission chains of variant B.1.1.7 and co-mutations of SARS-CoV-2.",
       "year": 2021,
-      "journal": "Cell discovery",
       "doi": "10.1038/s41421-021-00282-1",
-      "author_source": "Crossref publisher metadata",
-      "url": "https://doi.org/10.1038/s41421-021-00282-1",
-      "orcid_put_code": 114746916,
-      "selected": false,
-      "hidden": false,
-      "preview": {
-        "image": "/assets/img/publications/sars-2021.png",
-        "label": "Figure 3 · Co-mutations",
-        "alt": "Co-mutation correlations and transmission analysis of SARS-CoV-2",
-        "source": "https://www.nature.com/articles/s41421-021-00282-1",
-        "credit": "Cell Discovery (2021)"
-      },
+      "journal": "Cell discovery",
       "author_entries": [
         {
           "name": "Jingsong Zhang",
@@ -476,33 +452,23 @@
           "first_author": false,
           "corresponding_author": false
         }
-      ]
+      ],
+      "url": "https://doi.org/10.1038/s41421-021-00282-1",
+      "selected": false,
+      "hidden": false,
+      "preview": {
+        "image": "/assets/img/publications/sars-2021.png",
+        "label": "Figure 3 · Co-mutations",
+        "alt": "Co-mutation correlations and transmission analysis of SARS-CoV-2",
+        "source": "https://www.nature.com/articles/s41421-021-00282-1",
+        "credit": "Cell Discovery (2021)"
+      }
     },
     {
       "title": "PHF7 is a novel histone H2A E3 ligase prior to histone-to-protamine exchange during spermiogenesis.",
       "year": 2019,
-      "journal": "Development (Cambridge, England)",
       "doi": "10.1242/dev.175547",
-      "author_source": "Crossref publisher metadata",
-      "url": "https://doi.org/10.1242/dev.175547",
-      "orcid_put_code": 114746678,
-      "selected": false,
-      "hidden": false,
-      "preview": {
-        "image": "/assets/img/publications/phf7-fig6.jpg",
-        "label": "Figure 6b · Promoter binding overlap",
-        "alt": "Venn diagram of gene promoters bound by PHF7 and H3K4me3, measured by ChIP-seq",
-        "source": "https://journals.biologists.com/dev/article/146/13/dev175547/19848/PHF7-is-a-novel-histone-H2A-E3-ligase-prior-to",
-        "credit": "Wang et al. · Development (2019) · The Company of Biologists",
-        "crop": {
-          "x": 790,
-          "y": 0,
-          "width": 490,
-          "height": 355,
-          "source_width": 1280,
-          "source_height": 963
-        }
-      },
+      "journal": "Development (Cambridge, England)",
       "author_entries": [
         {
           "name": "Xiukun Wang",
@@ -609,25 +575,31 @@
           "first_author": false,
           "corresponding_author": false
         }
-      ]
+      ],
+      "url": "https://doi.org/10.1242/dev.175547",
+      "selected": false,
+      "hidden": false,
+      "preview": {
+        "image": "/assets/img/publications/phf7-fig6.jpg",
+        "label": "Figure 6b · Promoter binding overlap",
+        "alt": "Venn diagram of gene promoters bound by PHF7 and H3K4me3, measured by ChIP-seq",
+        "source": "https://journals.biologists.com/dev/article/146/13/dev175547/19848/PHF7-is-a-novel-histone-H2A-E3-ligase-prior-to",
+        "credit": "Wang et al. · Development (2019) · The Company of Biologists",
+        "crop": {
+          "x": 790,
+          "y": 0,
+          "width": 490,
+          "height": 355,
+          "source_width": 1280,
+          "source_height": 963
+        }
+      }
     },
     {
       "title": "Ubiquitination-Deficient Mutations in Human Piwi Cause Male Infertility by Impairing Histone-to-Protamine Exchange during Spermiogenesis.",
       "year": 2017,
-      "journal": "Cell",
       "doi": "10.1016/j.cell.2017.04.034",
-      "author_source": "Crossref publisher metadata",
-      "url": "https://doi.org/10.1016/j.cell.2017.04.034",
-      "orcid_put_code": 114746580,
-      "selected": true,
-      "hidden": false,
-      "preview": {
-        "image": "/assets/img/publications/piwi-2017.jpg",
-        "label": "Graphical abstract",
-        "alt": "PIWI ubiquitination, histone replacement and male infertility",
-        "source": "https://www.sciencedirect.com/science/article/pii/S0092867417304889",
-        "credit": "Gou et al. · Cell (2017) · Elsevier"
-      },
+      "journal": "Cell",
       "author_entries": [
         {
           "name": "Lan-Tao Gou",
@@ -719,25 +691,23 @@
           "first_author": false,
           "corresponding_author": false
         }
-      ]
+      ],
+      "url": "https://doi.org/10.1016/j.cell.2017.04.034",
+      "selected": true,
+      "hidden": false,
+      "preview": {
+        "image": "/assets/img/publications/piwi-2017.jpg",
+        "label": "Graphical abstract",
+        "alt": "PIWI ubiquitination, histone replacement and male infertility",
+        "source": "https://www.sciencedirect.com/science/article/pii/S0092867417304889",
+        "credit": "Gou et al. · Cell (2017) · Elsevier"
+      }
     },
     {
       "title": "MIWI and piRNA-mediated cleavage of messenger RNAs in mouse testes.",
       "year": 2015,
-      "journal": "Cell research",
       "doi": "10.1038/cr.2015.4",
-      "author_source": "Crossref publisher metadata",
-      "url": "https://doi.org/10.1038/cr.2015.4",
-      "orcid_put_code": 114746698,
-      "selected": false,
-      "hidden": false,
-      "preview": {
-        "image": "/assets/img/publications/miwi-2015.jpg",
-        "label": "Figure 2 · piRNA-guided cleavage",
-        "alt": "MIWI-dependent piRNA target cleavage in mouse testes",
-        "source": "https://www.nature.com/articles/cr20154",
-        "credit": "Cell Research (2015)"
-      },
+      "journal": "Cell research",
       "author_entries": [
         {
           "name": "Peng Zhang",
@@ -799,33 +769,23 @@
           "first_author": false,
           "corresponding_author": false
         }
-      ]
+      ],
+      "url": "https://doi.org/10.1038/cr.2015.4",
+      "selected": false,
+      "hidden": false,
+      "preview": {
+        "image": "/assets/img/publications/miwi-2015.jpg",
+        "label": "Figure 2 · piRNA-guided cleavage",
+        "alt": "MIWI-dependent piRNA target cleavage in mouse testes",
+        "source": "https://www.nature.com/articles/cr20154",
+        "credit": "Cell Research (2015)"
+      }
     },
     {
       "title": "Pachytene piRNAs instruct massive mRNA elimination during late spermiogenesis.",
       "year": 2014,
-      "journal": "Cell research",
       "doi": "10.1038/cr.2014.41",
-      "author_source": "Crossref publisher metadata",
-      "url": "https://doi.org/10.1038/cr.2014.41",
-      "orcid_put_code": 114746799,
-      "selected": false,
-      "hidden": false,
-      "preview": {
-        "image": "/assets/img/publications/mrna-2014.jpg",
-        "label": "Figure 7f · Proposed model",
-        "alt": "MIWI, piRNAs and CAF1 regulate mRNA elimination during spermiogenesis",
-        "source": "https://www.nature.com/articles/cr201441",
-        "credit": "Gou et al. · Cell Research (2014)",
-        "crop": {
-          "x": 45,
-          "y": 525,
-          "width": 670,
-          "height": 399,
-          "source_width": 800,
-          "source_height": 924
-        }
-      },
+      "journal": "Cell research",
       "author_entries": [
         {
           "name": "Lan-Tao Gou",
@@ -922,7 +882,25 @@
           "first_author": false,
           "corresponding_author": false
         }
-      ]
+      ],
+      "url": "https://doi.org/10.1038/cr.2014.41",
+      "selected": false,
+      "hidden": false,
+      "preview": {
+        "image": "/assets/img/publications/mrna-2014.jpg",
+        "label": "Figure 7f · Proposed model",
+        "alt": "MIWI, piRNAs and CAF1 regulate mRNA elimination during spermiogenesis",
+        "source": "https://www.nature.com/articles/cr201441",
+        "credit": "Gou et al. · Cell Research (2014)",
+        "crop": {
+          "x": 45,
+          "y": 525,
+          "width": 670,
+          "height": 399,
+          "source_width": 800,
+          "source_height": 924
+        }
+      }
     }
   ]
 }
