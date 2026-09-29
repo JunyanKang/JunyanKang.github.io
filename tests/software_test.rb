@@ -25,8 +25,13 @@ class SoftwareVisibilityTest
 
   def test_tools_and_categories
     result = render_page
-    assert_equal 5, result.scan('<article>').size
+    assert_equal @software['projects'].count { |p| p['visible'] == true }, result.scan('<article>').size
     refute_includes result, 'MarkItDown'
+    refute_includes result, 'View on GitHub'
+    assert_equal @software['projects'].count { |p| p['visible'] == true }, result.scan('class="kl-software-icon kl-github-link"').size
+    refute_includes result, 'Releases ↗'
+    assert_equal @software['projects'].count { |p| p['visible'] == true && p['releases'] }, result.scan('class="kl-software-icon kl-release-link"').size
+    assert_includes result, 'aria-label="Open ERG Viewer on GitHub"'
     plugins = result.split('data-software-group="productivity"').last
     assert_includes plugins, 'Biomed Workbench'
     assert_includes plugins, 'Codex plugin'
@@ -35,7 +40,18 @@ class SoftwareVisibilityTest
   def test_hidden_tools_are_not_rendered_or_deleted
     @software['projects'].find { |p| p['title'] == 'Biomed Workbench' }['visible'] = false
     refute_includes render_page, 'Biomed Workbench'
-    assert_equal 5, @software['projects'].size
+    assert_equal 6, @software['projects'].size
+  end
+
+  def test_erg_viewer_is_in_imaging_and_can_be_hidden
+    project = @software['projects'].find { |p| p['title'] == 'ERG Viewer' }
+    assert_equal 'imaging', project['group']
+    assert_equal 'https://github.com/JunyanKang/ERG_Viewer', project['url']
+    imaging = render_page.split('data-software-group="imaging"').last.split('data-software-group="productivity"').first
+    assert_includes imaging, 'ERG Viewer'
+    assert_includes imaging, project['url']
+    project['visible'] = false
+    refute_includes render_page, 'ERG Viewer'
   end
 
   def test_empty_categories_and_unpublished_tools_are_not_rendered

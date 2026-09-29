@@ -36,7 +36,7 @@ footer { border-top: 1px solid var(--kl-border); background: transparent !import
 .kl-publication h3 { margin: 0 0 8px; font-size: 17px; line-height: 1.5; font-weight: 600; }
 .kl-publication h3 a { color: #293832; }
 .kl-authors { font-size: 12px; line-height: 1.75; color: #6a756e; margin-bottom: 5px; }
-.kl-author-mark { font-size:.75em; vertical-align:super; line-height:0; margin-left:1px; color:#17645d; }
+.kl-author-mark { position:relative; top:-.35em; font-size:.75em; vertical-align:baseline; line-height:0; margin-left:1px; color:#17645d; }
 .kl-journal { font-family: Georgia, serif; font-style: italic; font-size: 15px; margin: 0; }
 .kl-paper-doi { display:inline-block; margin-left:10px; font:12px 'Avenir Next',sans-serif; white-space:nowrap; }
 .kl-tools-banner { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 30px; }
@@ -55,6 +55,11 @@ footer { border-top: 1px solid var(--kl-border); background: transparent !import
 .kl-resource-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; }
 .kl-resource-grid article { border: 1px solid var(--kl-border); border-radius: 6px; padding: 20px; display: flex; flex-direction: column; align-items: flex-start; background: #fff; }
 .kl-resource-grid h2 { margin-top: 20px; }
+.kl-software-title { display:flex; align-items:center; gap:10px; max-width:100%; }
+.kl-software-title > span { min-width:0; overflow-wrap:anywhere; }
+.kl-software-actions { display:inline-flex; flex:none; align-items:center; gap:2px; }
+.kl-software-title .kl-software-icon { display:inline-flex; align-items:center; justify-content:center; flex:0 0 32px; width:32px; height:32px; color:#45675f; border:0; border-radius:4px; }
+.kl-software-title .kl-software-icon:hover { color:#17645d; background:#edf3ee; }
 .kl-resource-grid article > p { font-size: 14px; color: #68746d; }
 .kl-resource-grid .kl-button, .kl-service-note { margin-top: auto; }
 .kl-resource-grid .kl-links { margin-top: auto; align-items: center; padding-top: 14px; }

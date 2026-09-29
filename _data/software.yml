@@ -39,6 +39,14 @@ projects:
     url: https://github.com/JunyanKang/SpatialPlexomera
     upstream: https://github.com/fengshuoliu/SpatialPlexomera
     license: MIT
+  - title: ERG Viewer
+    visible: true
+    group: imaging
+    category: Visual electrophysiology
+    description: A desktop workstation for OPTOPROBE ERG and FVEP recordings, with dual-eye waveform review, manual landmark annotation, cohort analysis, and figure and source-data exports.
+    url: https://github.com/JunyanKang/ERG_Viewer
+    releases: https://github.com/JunyanKang/ERG_Viewer/releases
+    license: License not specified
   - title: MouseScope
     visible: true
     group: imaging
