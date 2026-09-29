@@ -17,9 +17,8 @@ nav_order: 5
       <button class="kl-map-provider-button" type="button" data-map-provider="amap" aria-label="高德地图" title="高德地图" aria-pressed="true"><img src="{{ '/assets/img/map-providers/amap.ico' | relative_url }}" width="22" height="22" alt=""></button>
       <button class="kl-map-provider-button" type="button" data-map-provider="google" aria-label="谷歌地图" title="谷歌地图" aria-pressed="false"><img src="{{ '/assets/img/map-providers/google-maps.png' | relative_url }}" width="22" height="22" alt=""></button>
     </div>
-    <a class="kl-map-preview" data-amap-preview href="{{ amap_link }}" target="_blank" rel="noopener noreferrer" aria-label="Open directions to {{ contact.address_en | escape }} on AMap">
-      {% if map.available %}<img src="{{ map.image | relative_url }}?v={{ map.generated_at | uri_escape }}" width="1500" height="800" alt="AMap street map marking {{ contact.address_zh | escape }}. Click to open directions.">{% else %}<span class="kl-map-unavailable">Map preview unavailable. Open the address in AMap ↗</span>{% endif %}
-    </a>
+    <iframe data-amap-map data-src="{{ '/assets/maps/amap.html' | relative_url }}?v={{ site.time | date: '%s' }}" title="Interactive AMap to {{ contact.address_en | escape }}" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    <noscript><a href="{{ amap_link }}" target="_blank" rel="noopener noreferrer">Open in AMap &#8599;</a></noscript>
     <iframe data-google-map hidden title="Google map to {{ contact.address_en | escape }}" referrerpolicy="no-referrer" allowfullscreen></iframe>
   </figure>
 </div>

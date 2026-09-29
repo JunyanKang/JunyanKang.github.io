@@ -41,13 +41,14 @@ export async function lookupCountry(fetcher = fetch, timeoutMs = 3000) {
 
 export async function initContactMap(root, fetcher = fetch) {
   const buttons = root.querySelectorAll('[data-map-provider]');
-  const preview = root.querySelector('[data-amap-preview]');
+  const preview = root.querySelector('[data-amap-map]');
   const google = root.querySelector('[data-google-map]');
   let manuallySelected = false;
   function render(provider, reload = false) {
     const links = mapLinks(provider, root.dataset.address, root.dataset.location);
     preview.hidden = provider !== 'amap';
     google.hidden = provider !== 'google';
+    if (provider === 'amap' && !preview.hasAttribute('src')) preview.src = preview.dataset.src;
     // Switching back or clicking Google again retries a failed frame load.
     if (provider === 'google' && (reload || root.dataset.provider !== 'google' || !google.hasAttribute('src'))) google.src = links.embed;
     buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.mapProvider === provider)));

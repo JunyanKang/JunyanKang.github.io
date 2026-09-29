@@ -45,8 +45,8 @@ function mapFixture() {
     addEventListener(_, fn) { this.click = fn; },
   }));
   let source, loads = 0;
-  const preview = {}, google = { hasAttribute: () => Boolean(source), get src() { return source; }, set src(value) { source = value; loads++; } };
-  const root = { dataset: { address: 'Shanghai' }, querySelector: name => name === '[data-amap-preview]' ? preview : google, querySelectorAll: () => buttons };
+  const preview = {dataset:{src:'/assets/maps/amap.html'}, hasAttribute() {return Boolean(this.src);}}, google = { hasAttribute: () => Boolean(source), get src() { return source; }, set src(value) { source = value; loads++; } };
+  const root = { dataset: { address: 'Shanghai' }, querySelector: name => name === '[data-amap-map]' ? preview : google, querySelectorAll: () => buttons };
   return { root, buttons, preview, google, get loads() { return loads; } };
 }
 
@@ -55,6 +55,7 @@ test('manual logo selection wins over an in-flight country lookup and retries Go
   const f = mapFixture();
   const initialized = initContactMap(f.root, () => new Promise(resolve => { resolveCountry = resolve; }));
   assert.equal(f.root.dataset.provider, 'amap');
+  assert.equal(f.preview.src, '/assets/maps/amap.html');
   assert.equal(f.loads, 0);
   f.buttons[0].click();
   resolveCountry({ ok: true, json: async () => ({ country: 'US' }) });

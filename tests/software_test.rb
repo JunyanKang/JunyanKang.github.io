@@ -20,6 +20,8 @@ class SoftwareVisibilityTest
   end
 
   def render_page
+    # Each CMS edit represents a fresh build, not a mutation within a cached render.
+    @site.filter_cache.clear
     Liquid::Template.parse(@source).render!({'site' => {'data' => {'software' => @software}}}, filters: [Jekyll::Filters], registers: {site: @site})
   end
 
@@ -41,6 +43,20 @@ class SoftwareVisibilityTest
     @software['projects'].find { |p| p['title'] == 'Biomed Workbench' }['visible'] = false
     refute_includes render_page, 'Biomed Workbench'
     assert_equal 6, @software['projects'].size
+  end
+
+  def test_recommendation_badge_is_controlled_by_cms_without_changing_visibility
+    @software['projects'].each { |p| p.delete('recommended') }
+    refute_includes render_page, 'class="kl-recommended"'
+    project = @software['projects'].find { |p| p['title'] == 'SCENIC+ GRN Workflow' }
+    project['recommended'] = true
+    assert_equal 1, render_page.scan('class="kl-recommended"').size
+    assert_includes render_page, 'aria-label="Recommended"'
+    project['recommended'] = false
+    refute_includes render_page, 'class="kl-recommended"'
+    project['recommended'] = true
+    project['visible'] = false
+    refute_includes render_page, 'class="kl-recommended"'
   end
 
   def test_erg_viewer_is_in_imaging_and_can_be_hidden

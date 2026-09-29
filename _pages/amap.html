@@ -1,0 +1,32 @@
+---
+layout: null
+permalink: /assets/maps/amap.html
+sitemap: false
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <!-- AMap's renderer needs eval and blob workers; keep that permission inside this frame. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' https://*.amap.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; connect-src 'self' https:; worker-src blob:; font-src 'self' data:; object-src 'none'; base-uri 'none'">
+  <title>Kang Lab location on AMap</title>
+  <link rel="stylesheet" href="{{ '/assets/css/amap-embed.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+</head>
+{% assign contact = site.data.contact %}{% assign map = site.data.contact_map %}
+{% assign destination = contact.address_zh | uri_escape %}
+<body data-js-key="{{ site.data.map_provider.amap_public_js_key | escape }}" data-location="{{ map.location | escape }}">
+  <div id="amap" aria-label="Interactive map of Kang Lab"></div>
+  <aside class="place-card">
+    <strong>Kang Lab</strong>
+    <p>{{ contact.address_en | escape }}</p>
+    <div class="place-links"><a href="https://uri.amap.com/marker?position={{ map.location }}&amp;name={{ destination }}&amp;coordinate=gaode&amp;callnative=0&amp;src=KangLab" target="_blank" rel="noopener noreferrer">Open in AMap &#8599;</a><a href="https://uri.amap.com/navigation?to={{ map.location }},{{ destination }}&amp;mode=car&amp;coordinate=gaode&amp;callnative=0&amp;src=KangLab" target="_blank" rel="noopener noreferrer" aria-label="Directions to Kang Lab" title="Directions"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m12 2 10 10-10 10L2 12Z"/><path d="M8 16v-5h8m-3-3 3 3-3 3"/></svg></a></div>
+  </aside>
+  <div class="zoom-controls" aria-label="Map controls"><button data-zoom="in" aria-label="Zoom in" disabled>+</button><button data-zoom="out" aria-label="Zoom out" disabled>&minus;</button><button data-reset aria-label="Return to lab location" title="Return to lab location" disabled>&#8857;</button></div>
+  <button class="layer-toggle" data-satellite aria-pressed="false" disabled>Satellite</button>
+  <div class="map-status" role="status"><span>Loading interactive map...</span><button data-retry hidden>Retry</button></div>
+  <noscript><p class="no-script">Enable JavaScript for the interactive map, or use Open in AMap.</p></noscript>
+  <script type="module" src="{{ '/assets/js/amap-embed.mjs' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
+</body>
+</html>
