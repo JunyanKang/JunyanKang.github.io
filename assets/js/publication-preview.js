@@ -92,7 +92,8 @@
   window.addEventListener('resize', () => hide());
   window.addEventListener('scroll', () => {
     // Browser focus/scroll-into-view can finish after a Figure click.
-    if (pinned || document.activeElement === active?.title) position();
+    if (!active) return;
+    if (pinned || document.activeElement === active.title || active.title.matches(':hover')) position();
     else hide();
   }, { passive:true });
 })();

@@ -254,7 +254,22 @@
       "url": "https://doi.org/10.1242/dev.175547",
       "orcid_put_code": 114746678,
       "selected": false,
-      "hidden": false
+      "hidden": false,
+      "preview": {
+        "image": "/assets/img/publications/phf7-fig6.jpg",
+        "label": "Figure 6b · Promoter binding overlap",
+        "alt": "Venn diagram of gene promoters bound by PHF7 and H3K4me3, measured by ChIP-seq",
+        "source": "https://journals.biologists.com/dev/article/146/13/dev175547/19848/PHF7-is-a-novel-histone-H2A-E3-ligase-prior-to",
+        "credit": "Wang et al. · Development (2019) · The Company of Biologists",
+        "crop": {
+          "x": 790,
+          "y": 0,
+          "width": 490,
+          "height": 355,
+          "source_width": 1280,
+          "source_height": 963
+        }
+      }
     },
     {
       "title": "Ubiquitination-Deficient Mutations in Human Piwi Cause Male Infertility by Impairing Histone-to-Protamine Exchange during Spermiogenesis.",
