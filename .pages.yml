@@ -215,7 +215,7 @@ content:
     - name: author_entries
       label: Authors / 作者与身份
       type: object
-      description: 保持论文原始作者顺序。第一作者标记 *，通讯作者标记 #；支持多位共同作者，也可同时勾选两种身份。未勾选则不显示标记。
+      description: "* First author · # Corresponding author"
       list:
         collapsible:
           collapsed: true
@@ -228,9 +228,11 @@ content:
       - name: first_author
         label: First author (*) / 第一作者
         type: boolean
+        description: 支持多位共同第一作者；依据论文明确署名勾选。
       - name: corresponding_author
         label: Corresponding author (#) / 通讯作者
         type: boolean
+        description: 支持多位共同通讯作者，也可同时勾选第一作者。
     - name: url
       label: HTTPS link (only required without DOI)
       type: string

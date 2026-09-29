@@ -21,6 +21,7 @@ config = YAML.load_file('.pages.yml')
 items = config['content'].find { |c| c['name'] == 'publications' }['fields'].find { |f| f['name'] == 'items' }
 field = items['fields'].find { |f| f['name'] == 'author_entries' }
 raise 'CMS author list is not configured' unless field['type'] == 'object' && field['list']
+raise 'CMS author legend is truncated' unless field['description'].include?('# Corresponding author')
 %w[first_author corresponding_author].each do |role|
   raise "Missing CMS toggle #{role}" unless field['fields'].any? { |f| f['name'] == role && f['type'] == 'boolean' }
 end
