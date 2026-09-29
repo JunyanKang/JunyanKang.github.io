@@ -94,6 +94,6 @@ The separate **GitHub Actions repository secret** `AMAP_WEB_SERVICE_KEY` resolve
 
 ### Software recommendations
 
-In Pages CMS, open Software, expand a project and enable Recommended to show the gold star in its card's upper-right corner. Missing or false values show no badge. Recommendation does not publish a hidden project, change its order, or imply GitHub star counts. No projects are recommended automatically.
+In Pages CMS, open Software, expand a project and enable Recommended to show the thumbs-up icon in its card's upper-right corner. Missing or false values show no badge. Recommendation does not publish a hidden project, change its order, or imply GitHub star counts. New projects are not recommended automatically.
 
 al-folio is MIT-licensed; see [third-party notices](THIRD_PARTY_NOTICES.md). Dataset provenance is retained in the manifest. Public availability does not replace the source datasets' original citation and licensing requirements. Account information, private team records, environment files, and database dumps are not part of this repository.

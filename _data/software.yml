@@ -11,6 +11,7 @@ groups:
 projects:
   - title: Biomed Workbench
     visible: true
+    recommended: false
     group: productivity
     category: Codex plugin
     description: A Codex plugin connecting scientific questions, multi-omics analysis, evidence interpretation, and publication deliverables.
@@ -18,6 +19,7 @@ projects:
     license: Apache-2.0
   - title: Paper Voice
     visible: true
+    recommended: true
     group: productivity
     category: Zotero plugin
     description: Offline paper narration and synchronized translation for Zotero, with multilingual reading support.
@@ -26,6 +28,7 @@ projects:
     license: MIT
   - title: SCENIC+ GRN Workflow
     visible: true
+    recommended: false
     group: genomics
     category: Regulatory genomics
     description: Reproducible SCENIC+ workflows for matched snRNA/snATAC and scMultiome data, including environment setup, motif resources, and network analysis.
@@ -33,6 +36,7 @@ projects:
     license: MIT
   - title: SpatialPlexomera
     visible: true
+    recommended: false
     group: imaging
     category: Spatial image analysis
     description: Guided multiplex spatial image analysis, from composite visualization and cell typing to spatial measurements and figure exports.
@@ -41,6 +45,7 @@ projects:
     license: MIT
   - title: ERG Viewer
     visible: true
+    recommended: true
     group: imaging
     category: Visual electrophysiology
     description: A desktop workstation for OPTOPROBE ERG and FVEP recordings, with dual-eye waveform review, manual landmark annotation, cohort analysis, and figure and source-data exports.
@@ -49,6 +54,7 @@ projects:
     license: License not specified
   - title: MouseScope
     visible: true
+    recommended: false
     group: imaging
     category: Behavioral phenotyping
     description: A desktop platform for mouse behavioral video analysis, including open field, object recognition, maze, swim, and suspension assays.

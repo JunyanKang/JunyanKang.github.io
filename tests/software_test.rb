@@ -52,6 +52,7 @@ class SoftwareVisibilityTest
     project['recommended'] = true
     assert_equal 1, render_page.scan('class="kl-recommended"').size
     assert_includes render_page, 'aria-label="Recommended"'
+    assert_includes render_page, 'data-icon="thumbs-up"'
     project['recommended'] = false
     refute_includes render_page, 'class="kl-recommended"'
     project['recommended'] = true

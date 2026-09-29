@@ -314,7 +314,7 @@ content:
     - name: recommended
       label: 推荐 / Recommended
       type: boolean
-      description: 开启后在软件卡片右上角显示推荐星标；关闭则不显示，不影响软件排序。
+      description: 开启后在软件卡片右上角显示点赞推荐图标；关闭则不显示，不影响软件排序。
     - name: group
       label: Category
       type: select
