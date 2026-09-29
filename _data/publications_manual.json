@@ -372,12 +372,12 @@
         {
           "name": "Ying Huang",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         },
         {
           "name": "Mo-Fang Liu",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         }
       ],
       "url": "https://doi.org/10.1126/science.abj6647",
