@@ -52,17 +52,20 @@ footer { border-top: 1px solid var(--kl-border); background: transparent !import
 .kl-research-section { padding: 24px 0; border-top: 1px solid var(--kl-border); scroll-margin-top: 90px; }
 .kl-research-section h2 { margin-top: 20px; }
 .kl-research-section p { max-width: 780px; }
-.kl-resource-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; }
-.kl-resource-grid article { border: 1px solid var(--kl-border); border-radius: 6px; padding: 20px; display: flex; flex-direction: column; align-items: flex-start; background: #fff; }
-.kl-resource-grid h2 { margin-top: 20px; }
-.kl-software-title { display:flex; align-items:center; gap:10px; max-width:100%; }
+.kl-resource-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+.kl-resource-grid article { min-width:0; border: 1px solid var(--kl-border); border-radius: 5px; padding: 14px 16px; display: flex; flex-direction: column; align-items: flex-start; background: #fff; }
+.kl-resource-grid h2 { margin:8px 0; font-size:22px; line-height:1.2; }
+.kl-software-title { display:flex; align-items:center; gap:6px; max-width:100%; }
 .kl-software-title > span { min-width:0; overflow-wrap:anywhere; }
 .kl-software-actions { display:inline-flex; flex:none; align-items:center; gap:2px; }
-.kl-software-title .kl-software-icon { display:inline-flex; align-items:center; justify-content:center; flex:0 0 32px; width:32px; height:32px; color:#45675f; border:0; border-radius:4px; }
+.kl-software-title .kl-software-icon { display:inline-flex; align-items:center; justify-content:center; flex:0 0 28px; width:28px; height:28px; color:#45675f; border:0; border-radius:4px; }
+.kl-software-icon svg { width:18px; height:18px; }
 .kl-software-title .kl-software-icon:hover { color:#17645d; background:#edf3ee; }
-.kl-resource-grid article > p { font-size: 14px; color: #68746d; }
+.kl-resource-grid article > p { font-size: 13px; line-height:1.5; color: #68746d; margin:0 0 10px; }
+.kl-resource-grid article > .kl-note { margin:auto 0 0; font-size:11px; }
 .kl-resource-grid .kl-button, .kl-service-note { margin-top: auto; }
 .kl-resource-grid .kl-links { margin-top: auto; align-items: center; padding-top: 14px; }
+@media (min-width:701px) and (max-width:1000px) { .kl-resource-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 .kl-atlas-banner { display: flex; align-items: center; justify-content: space-between; gap: 32px; border: 1px solid #cbdcd2; border-radius: 6px; padding: 20px; margin-bottom: 22px; background: #f1f6f1; }
 .kl-atlas-banner h2 { margin: 14px 0; }
 .kl-atlas-banner p { font-size: 14px; max-width: 630px; margin-bottom: 0; }
@@ -178,10 +181,13 @@ footer { border-top: 1px solid var(--kl-border); background: transparent !import
 .kl-filter-buttons { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:30px; }
 .kl-filter-buttons button, .kl-region-button { font:inherit; font-size:13px; border:1px solid #d3dfd8; background:transparent; color:#31564c; border-radius:4px; padding:9px 13px; cursor:pointer; }
 .kl-filter-buttons button.is-active, .kl-region-button.is-active { background:#17645d; border-color:#17645d; color:#fff; }
-.kl-software-group { margin-top:24px; }
+.kl-software-group { margin-top:18px; }
+#software > .kl-section-heading { margin-bottom:12px; }
+#software > .kl-filter-buttons { margin-bottom:16px; gap:6px; }
+#software > .kl-filter-buttons button { padding:7px 11px; font-size:12px; }
 .kl-software-group[hidden], .kl-member[hidden], .kl-member-group[hidden] { display:none; }
-.kl-software-group-heading { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:8px 20px; margin-bottom:15px; }
-.kl-software-group-heading h3 { font:24px Georgia,serif; margin:0; }
+.kl-software-group-heading { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:6px 16px; margin-bottom:10px; }
+.kl-software-group-heading h3 { font:22px Georgia,serif; margin:0; }
 .kl-software-group-heading p { margin:0; font-size:13px; color:#697b70; }
 .kl-team-pi { display:grid; grid-template-columns:120px minmax(0,1fr); gap:24px; align-items:center; padding:18px; background:#edf3ee; }
 .kl-team-pi > img { display:block; width:120px; height:157px; object-fit:cover; border-radius:4px; }
