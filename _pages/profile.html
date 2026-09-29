@@ -14,8 +14,20 @@ nav_order: 3
 <details class="kl-training"><summary>PI academic background</summary>
 {% for item in site.data.profile.affiliations %}<article class="kl-profile-entry"><div class="kl-number">{{ item.start_year }}{% if item.end_year %}–{{ item.end_year }}{% else %}–present{% endif %}</div><div><h2>{{ item.organization | escape }}</h2>{% if item.role %}<p>{{ item.role | escape }}</p>{% endif %}</div></article>{% endfor %}
 </details>
+<section class="kl-section" id="members">
+  <div class="kl-section-heading"><h2>Researchers & students</h2><p class="kl-note" id="team-filter-status" role="status">All regions · {{ team.members.size }} members</p></div>
+  {% assign groups = 'researchers,doctoral,masters,alumni' | split: ',' %}
+  {% for group in groups %}{% assign members = team.members | where: 'group', group | sort: 'year' %}{% if members.size > 0 or group == 'alumni' %}
+  <section class="kl-member-group" data-member-group="{{ group }}"><h3>{% case group %}{% when 'researchers' %}Research staff{% when 'doctoral' %}Doctoral students{% when 'masters' %}Master's students{% when 'alumni' %}Alumni <span lang="zh" class="kl-note">毕业生</span>{% endcase %}</h3>
+    {% if members.size == 0 %}<p class="kl-note" data-empty-member-group>Alumni profiles will be added here.</p>{% endif %}
+    <div class="kl-member-grid">{% for member in members %}<article class="kl-member" data-member-region="{{ member.region }}">
+      {% if member.photo and member.photo != '' %}<div class="kl-member-portrait{% if member.photo_framing == 'upper-body' %} kl-member-portrait--upper-body{% endif %}"><img class="kl-member-photo" src="{{ member.photo | relative_url }}" alt="{{ member.name | escape }}" width="84" height="104" loading="lazy" decoding="async"></div>{% endif %}
+      <div class="kl-member-info"><h4 lang="zh">{{ member.name | escape }}</h4><p><span lang="zh">{{ member.role | escape }}</span><span class="kl-member-year">{{ member.year }}</span></p>{% if group == 'alumni' and member.graduation_year %}<p class="kl-member-origin">Graduated {{ member.graduation_year | escape }}</p>{% endif %}<p class="kl-member-origin" lang="zh">{{ member.hometown | escape }}</p>{% if member.bio %}<p>{{ member.bio | escape }}</p>{% endif %}</div>
+    </article>{% endfor %}</div>
+  </section>{% endif %}{% endfor %}
+</section>
 <section class="kl-section kl-team-origins" aria-labelledby="origins-title">
-  <div class="kl-section-heading"><div><p class="kl-eyebrow">WHERE WE COME FROM</p><h2 id="origins-title">Many places, one team</h2></div><a href="#members">Meet the members ↓</a></div>
+  <div class="kl-section-heading"><div><p class="kl-eyebrow">WHERE WE COME FROM</p><h2 id="origins-title">Many places, one team</h2></div><a href="#members">Meet the members ↑</a></div>
   <div class="kl-origins-layout">
     <figure class="kl-origin-map">
       <svg viewBox="0 0 1000 700" aria-labelledby="map-title map-desc" role="group">
@@ -38,16 +50,4 @@ nav_order: 3
       {% for region in site.data.china_map.regions %}{% assign regional_members = team.members | where: 'region', region.code %}{% if regional_members.size > 0 %}<button type="button" class="kl-region-button" data-region="{{ region.code }}" data-region-name="{{ region.name | escape }}" aria-pressed="false"><span lang="zh">{{ region.name | escape }}</span><span>{{ regional_members.size }}</span></button>{% endif %}{% endfor %}
     </div></div>
   </div>
-</section>
-<section class="kl-section" id="members">
-  <div class="kl-section-heading"><h2>Researchers & students</h2><p class="kl-note" id="team-filter-status" role="status">All regions · {{ team.members.size }} members</p></div>
-  {% assign groups = 'researchers,doctoral,masters,alumni' | split: ',' %}
-  {% for group in groups %}{% assign members = team.members | where: 'group', group | sort: 'year' %}{% if members.size > 0 or group == 'alumni' %}
-  <section class="kl-member-group" data-member-group="{{ group }}"><h3>{% case group %}{% when 'researchers' %}Research staff{% when 'doctoral' %}Doctoral students{% when 'masters' %}Master's students{% when 'alumni' %}Alumni <span lang="zh" class="kl-note">毕业生</span>{% endcase %}</h3>
-    {% if members.size == 0 %}<p class="kl-note" data-empty-member-group>Alumni profiles will be added here.</p>{% endif %}
-    <div class="kl-member-grid">{% for member in members %}<article class="kl-member" data-member-region="{{ member.region }}">
-      {% if member.photo and member.photo != '' %}<img class="kl-member-photo" src="{{ member.photo | relative_url }}" alt="{{ member.name | escape }}" width="84" height="104" loading="lazy" decoding="async">{% endif %}
-      <h4 lang="zh">{{ member.name | escape }}</h4><p><span lang="zh">{{ member.role | escape }}</span><span class="kl-member-year">{{ member.year }}</span></p>{% if group == 'alumni' and member.graduation_year %}<p class="kl-member-origin">Graduated {{ member.graduation_year | escape }}</p>{% endif %}<p class="kl-member-origin" lang="zh">{{ member.hometown | escape }}</p>{% if member.bio %}<p>{{ member.bio | escape }}</p>{% endif %}
-    </article>{% endfor %}</div>
-  </section>{% endif %}{% endfor %}
 </section>

@@ -23,5 +23,5 @@ createRoot(document.getElementById('root')!).render(<>
     <Route path="/internal-resources" element={<ResourcesRedirect />} />
     <Route path="*" element={<Navigate to="/expression-atlas/" replace />} />
   </Routes></BrowserRouter></AtlasBoundary></main>
-  <footer className="atlas-footer"><div><strong>Kang Lab</strong><p>Public expression atlas · Shanghai Ninth People's Hospital</p></div><div><a href="/assets/atlas/v1/manifest.json">Dataset manifest</a><a href="/contact/">Contact</a><a href="/admin/">Admin</a></div></footer>
+  <footer className="atlas-footer"><div><strong>Kang Lab</strong><p>Public expression atlas · Shanghai Ninth People's Hospital</p></div><div><a href="/assets/atlas/v1/manifest.json">Dataset manifest</a><a href="/admin/">Admin</a></div></footer>
 </>);

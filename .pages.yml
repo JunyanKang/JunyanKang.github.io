@@ -50,6 +50,16 @@ content:
       label: 头像照片 / Member photo
       type: image
       description: 上传本人照片，或从 Media 选择已有照片。可选；照片将在公开 Team 页面显示。
+    - name: photo_framing
+      label: 照片取景 / Framing
+      type: select
+      description: 全身或长幅照片选择上半身；已裁好的头像选择原比例。只改变展示取景，不修改原照片。
+      options:
+        values:
+        - name: portrait
+          label: 原比例头像
+        - name: upper-body
+          label: 上半身取景
     - name: year
       label: Entry year
       type: number
