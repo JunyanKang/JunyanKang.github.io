@@ -24,6 +24,7 @@ export function validateTeam(team, codes) {
     if(!member.name?.trim() || !member.role?.trim()) throw new Error('Member name and role are required.');
     if(!['researchers','doctoral','masters','alumni'].includes(member.group)) throw new Error(`Unknown member group: ${member.group}`);
     if(!Number.isInteger(member.year) || member.year < 1900 || member.year > 2100) throw new Error(`Invalid member year: ${member.name}`);
+    if(member.graduation_year != null && (!Number.isInteger(member.graduation_year) || member.graduation_year < member.year || member.graduation_year > 2100)) throw new Error(`Invalid graduation year: ${member.name}`);
     if(!codes.includes(String(member.region))) throw new Error(`Unknown home region: ${member.name}`);
     if(member.photo && !member.photo.startsWith('/assets/img/')) throw new Error('Member photo must be a local uploaded image.');
   }

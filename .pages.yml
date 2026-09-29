@@ -36,6 +36,7 @@ content:
   - name: members
     label: Members
     type: object
+    description: 点击成员姓名展开，在姓名下方上传或更换头像照片，完成后点击页面右上角 Save。
     list:
       collapsible:
         collapsed: true
@@ -45,6 +46,10 @@ content:
       label: 姓名
       type: string
       required: true
+    - name: photo
+      label: 头像照片 / Member photo
+      type: image
+      description: 上传本人照片，或从 Media 选择已有照片。可选；照片将在公开 Team 页面显示。
     - name: year
       label: Entry year
       type: number
@@ -66,7 +71,11 @@ content:
         - name: masters
           label: Master students / 硕士生
         - name: alumni
-          label: Alumni / 校友
+          label: Alumni / 毕业生
+    - name: graduation_year
+      label: 毕业年份 / Graduation year
+      type: number
+      description: 仅毕业生填写，可留空。将 Display group 设置为 Alumni 后显示在毕业生分类。
     - name: region
       label: Home region / 籍贯省份
       type: select
@@ -144,9 +153,6 @@ content:
     - name: hometown
       label: Hometown / 籍贯
       type: string
-    - name: photo
-      label: Portrait
-      type: image
     - name: bio
       label: Short biography
       type: text
@@ -215,6 +221,7 @@ content:
   - name: projects
     label: Projects
     type: object
+    description: 展开工具后设置“在网站显示”。新建工具请填写信息并开启此开关后保存；隐藏不等于保密，公共仓库仍可查看记录。
     list:
       collapsible:
         collapsed: true
@@ -224,6 +231,10 @@ content:
       label: Project name
       type: string
       required: true
+    - name: visible
+      label: 在网站显示 / Show on website
+      type: boolean
+      description: 关闭时从 Resources 隐藏，但保留后台记录，随时可以恢复。
     - name: group
       label: Category
       type: select
@@ -234,8 +245,8 @@ content:
           label: Genomics & data analysis
         - name: imaging
           label: Imaging & phenotyping
-        - name: literature
-          label: Literature & productivity
+        - name: productivity
+          label: Research productivity
     - name: category
       label: Specialty label
       type: string

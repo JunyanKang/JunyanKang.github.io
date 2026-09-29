@@ -5,30 +5,34 @@ groups:
   - id: imaging
     title: Imaging & phenotyping
     description: Spatial images, behavior, and quantitative phenotypes.
-  - id: literature
-    title: Literature & research productivity
-    description: Read, translate, and organize scientific information.
+  - id: productivity
+    title: Research productivity
+    description: Codex and Zotero plugins for research workflows and scientific reading.
 projects:
   - title: Biomed Workbench
-    group: genomics
-    category: Biomedical research
-    description: A research workflow connecting scientific questions, multi-omics analysis, evidence interpretation, and publication deliverables.
+    visible: true
+    group: productivity
+    category: Codex plugin
+    description: A Codex plugin connecting scientific questions, multi-omics analysis, evidence interpretation, and publication deliverables.
     url: https://github.com/JunyanKang/biomed-workbench
     license: Apache-2.0
   - title: Paper Voice
-    group: literature
-    category: Literature & accessibility
+    visible: true
+    group: productivity
+    category: Zotero plugin
     description: Offline paper narration and synchronized translation for Zotero, with multilingual reading support.
     url: https://github.com/JunyanKang/paper-voice
     releases: https://github.com/JunyanKang/paper-voice/releases
     license: MIT
   - title: SCENIC+ GRN Workflow
+    visible: true
     group: genomics
     category: Regulatory genomics
     description: Reproducible SCENIC+ workflows for matched snRNA/snATAC and scMultiome data, including environment setup, motif resources, and network analysis.
     url: https://github.com/JunyanKang/scenicplus-grn-workflow
     license: MIT
   - title: SpatialPlexomera
+    visible: true
     group: imaging
     category: Spatial image analysis
     description: Guided multiplex spatial image analysis, from composite visualization and cell typing to spatial measurements and figure exports.
@@ -36,16 +40,10 @@ projects:
     upstream: https://github.com/fengshuoliu/SpatialPlexomera
     license: MIT
   - title: MouseScope
+    visible: true
     group: imaging
     category: Behavioral phenotyping
     description: A desktop platform for mouse behavioral video analysis, including open field, object recognition, maze, swim, and suspension assays.
     url: https://github.com/JunyanKang/MouseScope
     upstream: https://github.com/aDarkMaker/MouseScope
     license: GPL-3.0
-  - title: MarkItDown
-    group: literature
-    category: Document workflows
-    description: Convert documents and other file formats into Markdown for downstream research workflows.
-    url: https://github.com/JunyanKang/markitdown
-    upstream: https://github.com/microsoft/markitdown
-    license: MIT

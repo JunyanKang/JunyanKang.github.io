@@ -11,11 +11,14 @@ nav_order: 4
 </section>
 <section class="kl-section" id="software">
   <div class="kl-section-heading"><h2>Research software</h2><a href="https://github.com/JunyanKang?tab=repositories">All repositories ↗</a></div>
-  <div class="kl-filter-buttons" role="group" aria-label="Software categories"><button type="button" class="is-active" data-software-filter="all" aria-pressed="true">All software</button>{% for group in site.data.software.groups %}<button type="button" data-software-filter="{{ group.id }}" aria-pressed="false">{{ group.title }}</button>{% endfor %}</div>
+  {% assign visible_projects = site.data.software.projects | where: 'visible', true %}
+  {% if visible_projects.size > 0 %}
+  <div class="kl-filter-buttons" role="group" aria-label="Software categories"><button type="button" class="is-active" data-software-filter="all" aria-pressed="true">All software</button>{% for group in site.data.software.groups %}{% assign grouped_projects = visible_projects | where: 'group', group.id %}{% if grouped_projects.size > 0 %}<button type="button" data-software-filter="{{ group.id }}" aria-pressed="false">{{ group.title | escape }}</button>{% endif %}{% endfor %}</div>
   {% for group in site.data.software.groups %}
+  {% assign projects = visible_projects | where: 'group', group.id %}
+  {% if projects.size > 0 %}
   <section class="kl-software-group" data-software-group="{{ group.id }}"><div class="kl-software-group-heading"><h3>{{ group.title | escape }}</h3><p>{{ group.description | escape }}</p></div>
   <div class="kl-resource-grid">
-  {% assign projects = site.data.software.projects | where: 'group', group.id %}
   {% for project in projects %}
     <article>
       <span class="kl-status">{{ project.category | escape }}</span>
@@ -27,5 +30,7 @@ nav_order: 4
   {% endfor %}
   </div>
   </section>
+  {% endif %}
   {% endfor %}
+  {% else %}<p class="kl-note">Research software will be listed here as it becomes available.</p>{% endif %}
 </section>

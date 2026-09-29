@@ -28,6 +28,7 @@ jobs:
       - run: npm ci --prefix atlas
       - run: npm test --prefix atlas
       - run: node --test tests/*.test.mjs
+      - run: bundle exec ruby tests/software_test.rb
       - run: node scripts/build.mjs
       - uses: actions/upload-pages-artifact@v3
         with:

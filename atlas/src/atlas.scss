@@ -150,3 +150,25 @@ h1, h2, h3 { font-family: Georgia, serif; font-weight: 400; }
 .expression-atlas-ortholog-item__symbols > div span { font-size: 10px; }
 .expression-atlas-ortholog-item__symbols em { font-size: 11px; }
 @media (max-width:420px) { .atlas-header nav { gap:12px; font-size:11px; } }
+/* Responsive plots and paged matrices never need nested scroll containers. */
+html { scrollbar-width:none; scrollbar-gutter:auto; }
+html::-webkit-scrollbar, body::-webkit-scrollbar { display:none; width:0; height:0; }
+.expression-atlas-line-chart__frame, .expression-atlas-table-wrap { overflow:visible; }
+.expression-atlas-line-chart__svg { width:auto; min-width:0; max-width:100%; height:auto; margin-inline:auto; }
+.expression-atlas-table { table-layout:fixed; min-width:0; }
+.expression-atlas-table th, .expression-atlas-table td { white-space:normal; overflow-wrap:anywhere; }
+.expression-atlas-table th:first-child { width:180px; }
+.expression-atlas-table--heatmap th:first-child { position:static; }
+.expression-atlas-heat-cell span { min-width:0; }
+.atlas-data-pagination { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+.atlas-data-pagination p { margin:0; font-size:12px; }
+.atlas-data-pagination > div { display:flex; align-items:center; gap:12px; font-size:11px; }
+@media (max-width:760px) {
+  .expression-atlas-dataset-tabs { flex-wrap:wrap; overflow:visible; }
+  .tab-button { flex:1 1 140px; max-width:none; }
+  .expression-atlas-plot-layout__figure { padding-inline:6px; }
+  .expression-atlas-table th:first-child { width:106px; }
+  .expression-atlas-table th, .expression-atlas-table td { padding:8px 5px; font-size:11px; }
+  .expression-atlas-legend__bar { width:60px; }
+}
+.expression-atlas-view-switch__button, .expression-atlas-cluster-toggle { transition:none; }

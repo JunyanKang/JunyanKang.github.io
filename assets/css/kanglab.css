@@ -223,3 +223,7 @@ footer { border-top: 1px solid var(--kl-border); background: transparent !import
 @media(max-width:700px){.kl-visit-layout{grid-template-columns:1fr;gap:25px;}.kl-visit-map iframe{height:310px;}}
 .kl-region-button.is-active span { color: inherit; }
 .kl-map-region .kl-map-sea { fill:#a3b7aa; stroke:#829a8a; stroke-width:.7; }
+/* Hide the page scrollbar without disabling wheel, touch or keyboard scrolling. */
+html { scrollbar-width:none; scrollbar-gutter:auto; }
+html::-webkit-scrollbar, body::-webkit-scrollbar { display:none; width:0; height:0; }
+.kl-member .kl-member-photo { width:84px; height:104px; display:block; object-fit:cover; object-position:center 25%; border-radius:4px; margin-bottom:16px; background:#e7eee6; }

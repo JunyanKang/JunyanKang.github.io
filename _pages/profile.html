@@ -42,11 +42,12 @@ nav_order: 3
 <section class="kl-section" id="members">
   <div class="kl-section-heading"><h2>Researchers & students</h2><p class="kl-note" id="team-filter-status" role="status">All regions · {{ team.members.size }} members</p></div>
   {% assign groups = 'researchers,doctoral,masters,alumni' | split: ',' %}
-  {% for group in groups %}{% assign members = team.members | where: 'group', group | sort: 'year' %}{% if members.size > 0 %}
-  <section class="kl-member-group" data-member-group><h3>{% case group %}{% when 'researchers' %}Research staff{% when 'doctoral' %}Doctoral students{% when 'masters' %}Master's students{% when 'alumni' %}Alumni{% endcase %}</h3>
+  {% for group in groups %}{% assign members = team.members | where: 'group', group | sort: 'year' %}{% if members.size > 0 or group == 'alumni' %}
+  <section class="kl-member-group" data-member-group="{{ group }}"><h3>{% case group %}{% when 'researchers' %}Research staff{% when 'doctoral' %}Doctoral students{% when 'masters' %}Master's students{% when 'alumni' %}Alumni <span lang="zh" class="kl-note">毕业生</span>{% endcase %}</h3>
+    {% if members.size == 0 %}<p class="kl-note" data-empty-member-group>Alumni profiles will be added here.</p>{% endif %}
     <div class="kl-member-grid">{% for member in members %}<article class="kl-member" data-member-region="{{ member.region }}">
-      {% if member.photo and member.photo != '' %}<img src="{{ member.photo | relative_url }}" alt="{{ member.name | escape }}" loading="lazy">{% endif %}
-      <h4 lang="zh">{{ member.name | escape }}</h4><p><span lang="zh">{{ member.role | escape }}</span><span class="kl-member-year">{{ member.year }}</span></p><p class="kl-member-origin" lang="zh">{{ member.hometown | escape }}</p>{% if member.bio %}<p>{{ member.bio | escape }}</p>{% endif %}
+      {% if member.photo and member.photo != '' %}<img class="kl-member-photo" src="{{ member.photo | relative_url }}" alt="{{ member.name | escape }}" width="84" height="104" loading="lazy" decoding="async">{% endif %}
+      <h4 lang="zh">{{ member.name | escape }}</h4><p><span lang="zh">{{ member.role | escape }}</span><span class="kl-member-year">{{ member.year }}</span></p>{% if group == 'alumni' and member.graduation_year %}<p class="kl-member-origin">Graduated {{ member.graduation_year | escape }}</p>{% endif %}<p class="kl-member-origin" lang="zh">{{ member.hometown | escape }}</p>{% if member.bio %}<p>{{ member.bio | escape }}</p>{% endif %}
     </article>{% endfor %}</div>
   </section>{% endif %}{% endfor %}
 </section>

@@ -1,5 +1,5 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, ChangeEvent, FormEvent, MouseEvent } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { queryExpressionAtlas } from '../api/modules';
@@ -11,6 +11,34 @@ import type {
 
 const valueFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 3 });
 const linePalette = ['#1f4e79', '#2f7d78', '#9c6b4e', '#9b8b3b', '#6b5b95', '#b65e5e', '#5a7c2f', '#566a86', '#8f5d38', '#2c6c8e'];
+
+const useAvailableWidth = () => {
+  const elementRef = useRef<HTMLDivElement | null>(null);
+  const [element, setElement] = useState<HTMLDivElement | null>(null);
+  const ref = useCallback((node: HTMLDivElement | null) => {
+    elementRef.current = node;
+    setElement(node);
+  }, []);
+  const [width, setWidth] = useState(0);
+  useLayoutEffect(() => {
+    if (!element) return;
+    setWidth(Math.floor(element.getBoundingClientRect().width));
+    const observer = new ResizeObserver(([entry]) => setWidth(Math.floor(entry.contentRect.width)));
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [element]);
+  return { ref, elementRef, width };
+};
+
+const wrapPlotLabel = (label: string, maxCharacters: number) => {
+  const lines: string[] = [];
+  for (const word of label.split(/\s+/)) {
+    const last = lines.length - 1;
+    if (last >= 0 && lines[last].length + word.length + 1 <= maxCharacters) lines[last] += ` ${word}`;
+    else lines.push(word);
+  }
+  return lines;
+};
 
 type HeatmapMatrix = {
   columns: string[];
@@ -188,6 +216,8 @@ const buildSvgForExport = (svgElement: SVGSVGElement, legendItems: LegendItem[] 
 
   const requiredHeight = baseHeight + Math.max(extraHeight, totalRows * rowGap + 40);
   cloned.setAttribute('viewBox', `0 0 ${baseWidth} ${requiredHeight}`);
+  cloned.setAttribute('width', String(baseWidth));
+  cloned.setAttribute('height', String(requiredHeight));
   cloned.appendChild(legendGroup);
   return cloned;
 };
@@ -840,27 +870,33 @@ const DatasetLineChart = ({
 }) => {
   const plot = isBulkDataset(dataset) ? buildBulkLinePlotData(dataset) : buildLinePlotData(dataset);
   const [tooltip, setTooltip] = useState<PlotTooltip | null>(null);
-  const frameRef = useRef<HTMLDivElement | null>(null);
+  const { ref: frameRef, elementRef: frameElementRef, width: availableWidth } = useAvailableWidth();
   const visibleSeries = isBulkDataset(dataset)
     ? plot.series
     : plot.series.filter((series) => selectedSeriesLabels.includes(series.label));
-  if (!visibleSeries.length) return <p className="text-muted">Select at least one cell type to render the bar plot.</p>;
+  if (!visibleSeries.length) return <div ref={frameRef}><p className="text-muted">Select at least one cell type to render the bar plot.</p></div>;
 
   const plotSettings = clampPlotSettings(settings);
-  const width = plotSettings.width;
+  const width = Math.min(plotSettings.width, availableWidth || plotSettings.width);
+  const compact = width < 620;
   const multiRow = visibleSeries.length > 1;
   const longestRowLabelLength = visibleSeries.reduce((maxLength, series) => Math.max(maxLength, series.label.length), 0);
   const fontFamily = 'Arial, Helvetica, sans-serif';
   const axisFontSize = plotSettings.fontSize;
-  const xFontSize = Math.max(plotSettings.fontSize - 1, 11);
-  const titleFontSize = plotSettings.fontSize + 5;
+  const xFontSize = compact ? Math.min(plotSettings.fontSize, 11) : Math.max(plotSettings.fontSize - 1, 11);
+  const titleFontSize = compact ? Math.min(plotSettings.fontSize + 3, 18) : plotSettings.fontSize + 5;
   const axisTitleFontSize = plotSettings.fontSize + 1;
   const estimatedRowLabelWidth = longestRowLabelLength * plotSettings.fontSize * 0.62;
-  const leftPad = Math.max(multiRow ? 190 : 112, Math.min(340, estimatedRowLabelWidth + 42));
-  const rightPad = multiRow ? Math.max(96, plotSettings.fontSize * 6.2) : Math.max(72, plotSettings.fontSize * 4.8);
-  const topPad = Math.max(62, plotSettings.fontSize * 4.4);
+  const leftPad = compact ? 60 : Math.max(multiRow ? 190 : 112, Math.min(340, estimatedRowLabelWidth + 42));
+  const tickLabelWidth = Math.max(...[plot.minValue, plot.maxValue, plot.maxValue / 3, plot.maxValue * 2 / 3].map(value => formatValue(value).length)) * axisFontSize * 0.62;
+  const rightPad = Math.max(76, tickLabelWidth + 26);
+  const titleLines = wrapPlotLabel(`${getDatasetDisplayTitle(dataset)} · ${dataset.matchedGene ?? getDatasetDisplayTitle(dataset)}`, Math.max(15, Math.floor((width - 30) / (titleFontSize * 0.58))));
+  const labelLines = visibleSeries.map(series => wrapPlotLabel(series.label, Math.max(12, Math.floor((width - 32) / (axisFontSize * 0.58)))));
+  const labelSpace = compact ? Math.max(...labelLines.map(lines => lines.length)) * (axisFontSize + 3) + 10 : 0;
+  const titleSpace = titleLines.length * (titleFontSize + 5) + 24;
+  const topPad = Math.max(62, titleSpace) + labelSpace;
   const bottomPad = Math.max(134, plotSettings.fontSize * 8.6);
-  const rowGap = multiRow ? Math.max(8, plotSettings.fontSize * 0.55) : 0;
+  const rowGap = multiRow ? Math.max(8, plotSettings.fontSize * 0.55) + labelSpace : 0;
   const minRowHeight = multiRow ? Math.max(28, plotSettings.fontSize * 2.1) : Math.max(180, plotSettings.fontSize * 10);
   const requiredHeight = topPad + bottomPad + visibleSeries.length * minRowHeight + Math.max(0, visibleSeries.length - 1) * rowGap;
   const height = Math.max(plotSettings.height, requiredHeight);
@@ -873,7 +909,8 @@ const DatasetLineChart = ({
     ? (chartHeight - Math.max(0, visibleSeries.length - 1) * rowGap) / visibleSeries.length
     : chartHeight;
   const categoryWidth = plot.xLabels.length ? chartWidth / plot.xLabels.length : chartWidth;
-  const barWidth = Math.max(multiRow ? 8 : 12, Math.min(multiRow ? 28 : 38, categoryWidth * (multiRow ? 0.46 : 0.56)));
+  const barWidth = Math.max(1, Math.min(multiRow ? 28 : 38, categoryWidth * 0.56));
+  const labelStep = Math.max(1, Math.ceil(plot.xLabels.length / Math.max(2, Math.floor(chartWidth / (compact ? 44 : 29)))));
   const getBarX = (index: number) => leftPad + index * categoryWidth + (categoryWidth - barWidth) / 2;
   const getPanelTop = (seriesIndex: number) => topPad + seriesIndex * (panelHeight + rowGap);
   const getPanelY = (seriesIndex: number, value: number) =>
@@ -885,7 +922,7 @@ const DatasetLineChart = ({
   const xTickLabelY = topPad + chartHeight + Math.max(22, plotSettings.fontSize * 1.55);
   const xAxisTitleY = height - Math.max(18, plotSettings.fontSize * 0.95);
   const updateTooltipPosition = (event: MouseEvent<SVGElement>, lines: string[]) => {
-    const frame = frameRef.current;
+    const frame = frameElementRef.current;
     if (!frame) return;
     const rect = frame.getBoundingClientRect();
     const rawX = event.clientX - rect.left + frame.scrollLeft + 12;
@@ -918,8 +955,8 @@ const DatasetLineChart = ({
           aria-label={`${dataset.title} plot`}
           preserveAspectRatio="xMidYMid meet"
         >
-          <text x={width / 2} y={topPad - 24} textAnchor="middle" className="expression-atlas-chart__title" style={titleStyle}>
-            {getDatasetDisplayTitle(dataset)} · {dataset.matchedGene ?? getDatasetDisplayTitle(dataset)}
+          <text x={width / 2} y={titleFontSize + 8} textAnchor="middle" className="expression-atlas-chart__title" style={titleStyle}>
+            {titleLines.map((line, index) => <tspan key={index} x={width / 2} dy={index ? titleFontSize + 5 : 0}>{line}</tspan>)}
           </text>
           <text
             x={leftPad + chartWidth / 2}
@@ -958,14 +995,15 @@ const DatasetLineChart = ({
                 })}
                 <line x1={leftPad} y1={panelTop} x2={leftPad} y2={panelBottom} className="expression-atlas-chart__axis" />
                 <line x1={leftPad} y1={panelBottom} x2={width - rightPad} y2={panelBottom} className="expression-atlas-chart__axis" />
+                {minValue < 0 ? <line x1={leftPad} x2={width - rightPad} y1={getPanelY(seriesIndex, 0)} y2={getPanelY(seriesIndex, 0)} stroke="#70847b" strokeWidth="1" strokeDasharray="3 3" /> : null}
                 <text
-                  x={leftPad - 18}
-                  y={panelTop + panelHeight / 2 + axisFontSize * 0.35}
-                  textAnchor="end"
+                  x={compact ? 8 : leftPad - 18}
+                  y={compact ? panelTop - labelSpace + axisFontSize : panelTop + panelHeight / 2 + axisFontSize * 0.35}
+                  textAnchor={compact ? 'start' : 'end'}
                   className="expression-atlas-chart__row-label"
                   style={axisTextStyle}
                 >
-                  {series.label}
+                  {(compact ? labelLines[seriesIndex] : [series.label]).map((line, index) => <tspan key={index} x={compact ? 8 : leftPad - 18} dy={index ? axisFontSize + 3 : 0}>{line}</tspan>)}
                 </text>
               </g>
             );
@@ -978,6 +1016,7 @@ const DatasetLineChart = ({
             className="expression-atlas-chart__axis"
           />
           {plot.xLabels.map((label, index) => {
+            if (index !== plot.xLabels.length - 1 && (index % labelStep !== 0 || (labelStep > 1 && plot.xLabels.length - 1 - index < labelStep))) return null;
             const x = leftPad + index * categoryWidth + categoryWidth / 2;
             return (
               <g key={label}>
@@ -1001,9 +1040,10 @@ const DatasetLineChart = ({
                 {series.points.map((point) => {
                   const xIndex = plot.xLabels.indexOf(point.xLabel);
                   const x = getBarX(xIndex);
-                  const y = getPanelY(seriesIndex, point.value);
-                  const baselineY = getPanelY(seriesIndex, minValue);
-                  const barHeight = Math.max(1.5, baselineY - y);
+                  const valueY = getPanelY(seriesIndex, point.value);
+                  const baselineY = getPanelY(seriesIndex, 0);
+                  const y = Math.min(valueY, baselineY);
+                  const barHeight = Math.abs(baselineY - valueY);
                   return (
                     <rect
                       key={`${series.label}-${point.xLabel}`}
@@ -1016,6 +1056,7 @@ const DatasetLineChart = ({
                       onMouseEnter={(event) => updateTooltipPosition(event, (point.tooltip ?? `${series.label}\n${point.xLabel}\n${formatValue(point.value)}`).split('\n'))}
                       onMouseMove={(event) => updateTooltipPosition(event, (point.tooltip ?? `${series.label}\n${point.xLabel}\n${formatValue(point.value)}`).split('\n'))}
                       onMouseLeave={() => setTooltip(null)}
+                      onClick={(event) => updateTooltipPosition(event, (point.tooltip ?? `${series.label}\n${point.xLabel}\n${formatValue(point.value)}`).split('\n'))}
                     />
                   );
                 })}
@@ -1060,9 +1101,14 @@ const DatasetHeatmap = ({
   onClusterOptionsChange: (nextOptions: HeatmapClusterOptions) => void;
   onExportData?: () => void;
 }) => {
+  const { ref: tableRef, width: tableWidth } = useAvailableWidth();
+  const [columnPage, setColumnPage] = useState(0);
+  const responsiveChunkSize = Math.max(1, Math.min(getHeatmapChunkSize(dataset), Math.floor(((tableWidth || 320) - (tableWidth < 600 ? 106 : 180)) / 78)));
+  const columnGroups = chunkColumns(matrix.columns, responsiveChunkSize);
+  const safePage = Math.min(columnPage, Math.max(0, columnGroups.length - 1));
+  useEffect(() => setColumnPage(0), [dataset.key, dataset.matchedGene, responsiveChunkSize, clusterOptions.columns]);
   if (!dataset.hasMatch) return <p className="text-muted">No matched gene was found in this dataset.</p>;
 
-  const columnGroups = chunkColumns(matrix.columns, getHeatmapChunkSize(dataset));
   return (
     <>
       <div className="expression-atlas-figure-meta">
@@ -1097,22 +1143,26 @@ const DatasetHeatmap = ({
           </div>
         </div>
       </div>
-      <div className="expression-atlas-table-stack">
-        {columnGroups.map((columns, index) => (
+      <div className="expression-atlas-table-stack" ref={tableRef}>
+        {columnGroups.length > 1 ? <div className="atlas-data-pagination" role="group" aria-label="Sample pages">
+          <p className="text-muted" aria-live="polite">Samples {safePage * responsiveChunkSize + 1}–{Math.min((safePage + 1) * responsiveChunkSize, matrix.columns.length)} of {matrix.columns.length}</p>
+          <div><button type="button" className="link-button" disabled={safePage === 0} onClick={() => setColumnPage(safePage - 1)}>Previous</button><span>{safePage + 1} / {columnGroups.length}</span><button type="button" className="link-button" disabled={safePage === columnGroups.length - 1} onClick={() => setColumnPage(safePage + 1)}>Next</button></div>
+        </div> : null}
+        {columnGroups.slice(safePage, safePage + 1).map((columns, index) => (
           <div key={`${dataset.key}-chunk-${index}`} className="expression-atlas-table-wrap">
             <table className="expression-atlas-table expression-atlas-table--heatmap">
               <thead>
                 <tr>
-                  <th>{matrix.rows.length === 1 ? 'Metric' : 'Cell / group'}</th>
+                  <th scope="col">{matrix.rows.length === 1 ? 'Metric' : 'Cell / group'}</th>
                   {columns.map((column) => (
-                    <th key={column}>{column}</th>
+                    <th scope="col" key={column}>{column}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {matrix.rows.map((row) => (
                   <tr key={`${row}-${index}`}>
-                    <th>{row}</th>
+                    <th scope="row">{row}</th>
                     {columns.map((column) => {
                       const value = matrix.values.get(`${row}::${column}`) ?? null;
                       const colors = getHeatColor(value, matrix);
@@ -1163,7 +1213,7 @@ const PlotControlPanel = ({
     settings.width === defaultSettings.width && settings.height === defaultSettings.height && settings.fontSize === defaultSettings.fontSize;
 
   const sliderConfig: Array<{ field: keyof PlotSettings; label: string; min: number; max: number; step: number; suffix: string }> = [
-    { field: 'width', label: 'Width', min: 720, max: 2200, step: 20, suffix: 'px' },
+    { field: 'width', label: 'Max width', min: 720, max: 2200, step: 20, suffix: 'px' },
     { field: 'height', label: 'Height', min: 260, max: 900, step: 20, suffix: 'px' },
     { field: 'fontSize', label: 'Font', min: 11, max: 26, step: 1, suffix: 'px' }
   ];

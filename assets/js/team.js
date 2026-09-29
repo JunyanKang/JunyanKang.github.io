@@ -8,7 +8,11 @@
     const region = control.dataset.region;
     let count = 0;
     cards.forEach(card => { card.hidden = region !== 'all' && card.dataset.memberRegion !== region; if (!card.hidden) count++; });
-    groups.forEach(group => { group.hidden = ![...group.querySelectorAll('[data-member-region]')].some(card => !card.hidden); });
+    groups.forEach(group => {
+      const hasMembers = [...group.querySelectorAll('[data-member-region]')].some(card => !card.hidden);
+      const showEmptyAlumni = region === 'all' && group.dataset.memberGroup === 'alumni' && group.querySelector('[data-empty-member-group]');
+      group.hidden = !hasMembers && !showEmptyAlumni;
+    });
     controls.forEach(button => { const active = button.dataset.region === region; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); });
     status.textContent = `${region === 'all' ? 'All regions' : control.dataset.regionName} · ${count} members`;
   };
