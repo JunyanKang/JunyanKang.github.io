@@ -27,6 +27,9 @@ content:
     - name: position
       label: Position
       type: string
+    - name: primary_affiliation
+      label: 第一单位 / Primary affiliation
+      type: string
     - name: affiliation
       label: Affiliation
       type: text

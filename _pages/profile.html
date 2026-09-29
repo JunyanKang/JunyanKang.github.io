@@ -8,12 +8,8 @@ nav_order: 3
 <header class="kl-page-heading"><p class="kl-eyebrow">PEOPLE & COLLABORATION</p><h1>Our team</h1><p>Different beginnings. Shared questions about the retina.</p></header>
 <section class="kl-team-pi">
   <img src="{{ team.pi.photo | relative_url }}" alt="{{ team.pi.name | escape }}" width="588" height="770">
-  <div><p class="kl-eyebrow">{{ team.pi.position | escape }}</p><h2>{{ team.pi.name | escape }} <span lang="zh">{{ team.pi.name_zh | escape }}</span></h2><p>{{ team.pi.affiliation | escape }}</p><div class="kl-links"><a href="{{ team.pi.orcid | escape }}">ORCID ↗</a><a href="{{ '/publications/' | relative_url }}">Publications ↗</a></div></div>
-  <div class="kl-team-totals"><strong>{{ team.members.size }}</strong><span>researchers & students</span><strong>{{ team.members | map: 'region' | uniq | size }}</strong><span>home regions</span></div>
+  <div><p class="kl-eyebrow">{{ team.pi.position | escape }}</p><div class="kl-pi-name"><h2>{{ team.pi.name | escape }} <span lang="zh">{{ team.pi.name_zh | escape }}</span></h2><a href="{{ team.pi.orcid | escape }}">ORCID ↗</a></div><p class="kl-pi-affiliation">{% if team.pi.primary_affiliation and team.pi.primary_affiliation != '' %}{{ team.pi.primary_affiliation | escape }}<br>{% endif %}{{ team.pi.affiliation | escape }}</p></div>
 </section>
-<details class="kl-training"><summary>PI academic background</summary>
-{% for item in site.data.profile.affiliations %}<article class="kl-profile-entry"><div class="kl-number">{{ item.start_year }}{% if item.end_year %}–{{ item.end_year }}{% else %}–present{% endif %}</div><div><h2>{{ item.organization | escape }}</h2>{% if item.role %}<p>{{ item.role | escape }}</p>{% endif %}</div></article>{% endfor %}
-</details>
 <section class="kl-section" id="members">
   <div class="kl-section-heading"><h2>Researchers & students</h2><p class="kl-note" id="team-filter-status" role="status">All regions · {{ team.members.size }} members</p></div>
   {% assign groups = 'researchers,doctoral,masters,alumni' | split: ',' %}
