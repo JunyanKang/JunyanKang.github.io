@@ -69,8 +69,20 @@ content:
       required: true
     - name: role
       label: Role / 培养类型
-      type: string
+      type: select
       required: true
+      options:
+        values:
+        - name: Direct-entry PhD student
+          label: Direct-entry PhD student / 直博生
+        - name: PhD student
+          label: PhD student / 普博生
+        - name: Master's student
+          label: Master's student / 硕士生
+        - name: Postdoctoral fellow
+          label: Postdoctoral fellow / 博士后
+        - name: Research assistant
+          label: Research assistant / 助研
     - name: group
       label: Display group
       type: select
@@ -164,11 +176,13 @@ content:
         - name: '820000'
           label: 澳门特别行政区
     - name: hometown
-      label: Hometown / 籍贯
+      label: Hometown (English) / 籍贯英文
       type: string
+      description: 使用英文，例如 Shaoxing, Zhejiang；只提供省份时不补写城市。
     - name: bio
-      label: Short biography
+      label: Research interests / Short biography (English)
       type: text
+      description: 使用英文，例如 Retinal development 或 Retinal aging。
 - name: publications
   label: 论文 / Publications
   type: file
@@ -198,10 +212,25 @@ content:
     - name: journal
       label: Journal
       type: string
-    - name: author_names
-      label: Authors, one full name per entry
-      type: string
-      list: true
+    - name: author_entries
+      label: Authors / 作者与身份
+      type: object
+      description: 保持论文原始作者顺序。第一作者标记 *，通讯作者标记 #；支持多位共同作者，也可同时勾选两种身份。未勾选则不显示标记。
+      list:
+        collapsible:
+          collapsed: true
+          summary: "{name}"
+      fields:
+      - name: name
+        label: Full name / 作者姓名
+        type: string
+        required: true
+      - name: first_author
+        label: First author (*) / 第一作者
+        type: boolean
+      - name: corresponding_author
+        label: Corresponding author (#) / 通讯作者
+        type: boolean
     - name: url
       label: HTTPS link (only required without DOI)
       type: string

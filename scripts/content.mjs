@@ -1,3 +1,15 @@
+export function publicationAuthors(paper) {
+  const entries = paper.author_entries ?? paper.author_names?.map(name => ({ name }));
+  if (entries == null) return null;
+  if (!Array.isArray(entries)) throw new Error('Publication authors must be a list.');
+  return entries.map(author => {
+    if (!author || typeof author.name !== 'string' || !author.name.trim()) throw new Error('Every author needs a full name.');
+    for (const role of ['first_author', 'corresponding_author']) {
+      if (author[role] != null && typeof author[role] !== 'boolean') throw new Error(`Invalid author flag: ${role}`);
+    }
+    return { name: author.name.trim(), first_author: author.first_author === true, corresponding_author: author.corresponding_author === true };
+  });
+}
 export function mergePublications(imported, manual) {
   const records = new Map();
   for (const paper of [...imported, ...manual]) {
@@ -10,7 +22,12 @@ export function mergePublications(imported, manual) {
     if (doi && !/^10\.\d{4,9}\/\S+$/.test(doi)) throw new Error(`Invalid DOI: ${doi}`);
     merged.url = doi ? `https://doi.org/${doi}` : merged.url;
     if (!/^https:\/\//.test(merged.url || '')) throw new Error(`Publication URL must use HTTPS: ${key}`);
-    if (Array.isArray(paper.author_names)) merged.authors = paper.author_names.join(', ');
+    const authors = publicationAuthors(paper.author_entries != null || Array.isArray(paper.author_names) ? paper : merged);
+    if (authors) {
+      merged.author_entries = authors;
+      merged.author_names = authors.map(author => author.name);
+      merged.authors = merged.author_names.join(', ');
+    }
     if (merged.preview?.image) {
       const p = merged.preview;
       if (!/^\/assets\/img\/[a-zA-Z0-9_./ -]+\.(png|jpe?g|webp)$/i.test(p.image) || p.image.includes('..')) throw new Error(`Invalid preview image: ${key}`);
@@ -35,7 +52,7 @@ export function addNewImportedPublications(previousImported, imported, catalog) 
   for (const paper of imported) {
     const identities = keys(paper);
     if (identities.some(key => known.has(key))) continue;
-    result.push({ ...paper, year: Number(paper.year) });
+    result.push({ ...paper, author_entries: publicationAuthors(paper) || [], year: Number(paper.year) });
     identities.forEach(key => known.add(key));
   }
   return result;

@@ -14,7 +14,7 @@
       group.hidden = !hasMembers && !showEmptyAlumni;
     });
     controls.forEach(button => { const active = button.dataset.region === region; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); });
-    status.textContent = `${region === 'all' ? 'All regions' : control.dataset.regionName} · ${count} members`;
+    status.textContent = `${region === 'all' ? 'All regions' : control.dataset.regionName} · ${count} ${count === 1 ? 'member' : 'members'}`;
   };
   controls.forEach(control => {
     control.addEventListener('click', () => select(control));

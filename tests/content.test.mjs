@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { mergePublications, validateTeam, bibliography, addNewImportedPublications } from '../scripts/content.mjs';
+import { mergePublications, validateTeam, bibliography, addNewImportedPublications, publicationAuthors } from '../scripts/content.mjs';
 const paper={title:'Test paper',year:'2025',doi:'10.1234/TEST',authors:'A, B',author_names:['A','B'],url:'https://doi.org/10.1234/TEST'};
 test('refresh preserves CMS edits, hidden papers and deletions while adding new works',()=>{
   const hidden={...paper,hidden:true,title:'Edited'};
@@ -15,6 +15,39 @@ test('catalog author edits including clearing authors affect rendering and BibTe
   const edited=mergePublications([],[{...paper,author_names:['C']}]);
   assert.equal(edited[0].authors,'C');assert.match(bibliography(edited),/author = \{\{C\}\}/);
   assert.equal(mergePublications([],[{...paper,author_names:[]}])[0].authors,'');
+});
+test('author flags support multiple first authors, corresponding authors and both roles',()=>{
+  const entries=[{name:'A',first_author:true},{name:'B',first_author:true,corresponding_author:true},{name:'C',corresponding_author:true}];
+  const [result]=mergePublications([],[{...paper,author_entries:entries}]);
+  assert.deepEqual(result.author_names,['A','B','C']);
+  assert.equal(result.authors,'A, B, C');
+  assert.equal(result.author_entries.filter(a=>a.first_author).length,2);
+  assert.equal(result.author_entries.filter(a=>a.corresponding_author).length,2);
+  assert.match(bibliography([result]),/author = \{\{A\} and \{B\} and \{C\}\}/);
+  assert.equal(mergePublications([],[{...paper,author_entries:[]}])[0].authors,'');
+  const [updated]=mergePublications([{...paper,author_entries:entries}],[{...paper,author_names:['D']}]);
+  assert.equal(updated.authors,'D');
+  assert.equal(updated.author_entries[0].first_author,false);
+});
+test('refresh preserves author flags and adds new authors without inferring roles',()=>{
+  const edited={...paper,author_entries:[{name:'B',corresponding_author:true}]};
+  const added={...paper,doi:'10.1234/new'};
+  const result=addNewImportedPublications([paper],[paper,added],[edited]);
+  assert.deepEqual(result[0],edited);
+  assert.equal(result[1].author_entries.length,2);
+  assert.ok(result[1].author_entries.every(a=>!a.first_author&&!a.corresponding_author));
+  assert.throws(()=>publicationAuthors({author_entries:[{name:'',first_author:true}]}));
+  assert.throws(()=>publicationAuthors({author_entries:[{name:'A',first_author:'false'}]}));
+});
+test('team descriptions and every map region have English text without inventing missing bios',async()=>{
+  const team=JSON.parse(await readFile(new URL('../_data/team.json',import.meta.url),'utf8'));
+  const names=JSON.parse(await readFile(new URL('../_data/region_names_en.json',import.meta.url),'utf8'));
+  const geo=JSON.parse(await readFile(new URL('../assets/geo/china-provinces.geojson',import.meta.url),'utf8'));
+  for(const member of team.members) for(const key of ['role','hometown','bio']) assert.doesNotMatch(member[key]||'',/[\u3400-\u9fff]/);
+  for(const feature of geo.features) {
+    const label=names[feature.properties.adcode];
+    assert.ok(label); assert.doesNotMatch(label,/[\u3400-\u9fff]/);
+  }
 });
 test('CMS catalog has valid, unique publications and preview files',async()=>{
   const catalog=JSON.parse(await readFile(new URL('../_data/publications_manual.json',import.meta.url),'utf8'));
