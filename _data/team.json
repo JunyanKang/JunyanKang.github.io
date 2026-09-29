@@ -11,91 +11,92 @@
   "members": [
     {
       "name": "丁陆玥",
+      "photo": "/assets/img/team/ding-luyue.jpg",
+      "photo_framing": "upper-body",
       "year": 2023,
       "role": "直博生",
       "group": "doctoral",
       "region": "330000",
-      "hometown": "浙江 · 绍兴",
-      "photo": "/assets/img/team/ding-luyue.jpg",
-      "photo_framing": "upper-body"
+      "hometown": "浙江 · 绍兴"
     },
     {
       "name": "刘昱彤",
       "year": 2023,
       "role": "硕士生",
       "group": "alumni",
+      "graduation_year": 2026,
       "region": "500000",
       "hometown": "重庆"
     },
     {
       "name": "刘雨",
+      "photo": "/assets/img/team/liu-yu.jpg",
+      "photo_framing": "upper-body",
       "year": 2023,
       "role": "普博生",
       "group": "alumni",
       "region": "320000",
-      "hometown": "江苏 · 通州",
-      "photo": "/assets/img/team/liu-yu.jpg",
-      "photo_framing": "upper-body"
+      "hometown": "江苏 · 通州"
     },
     {
       "name": "童玲",
+      "photo": "/assets/img/team/tong-ling.jpg",
+      "photo_framing": "upper-body",
       "year": 2024,
       "role": "硕士生",
       "group": "masters",
       "region": "360000",
-      "hometown": "江西 · 上饶",
-      "photo": "/assets/img/team/tong-ling.jpg",
-      "photo_framing": "upper-body"
+      "hometown": "江西 · 上饶"
     },
     {
       "name": "蒙春仁",
+      "photo": "/assets/img/team/meng-chunren.jpg",
+      "photo_framing": "upper-body",
       "year": 2024,
       "role": "普博生",
       "group": "doctoral",
       "region": "450000",
-      "hometown": "广西 · 河池",
-      "photo": "/assets/img/team/meng-chunren.jpg",
-      "photo_framing": "upper-body"
+      "hometown": "广西 · 河池"
     },
     {
       "name": "郭远融",
+      "photo": "/assets/img/team/guo-yuanrong.jpg",
+      "photo_framing": "upper-body",
       "year": 2024,
       "role": "直博生",
       "group": "doctoral",
       "region": "310000",
-      "hometown": "上海",
-      "photo": "/assets/img/team/guo-yuanrong.jpg",
-      "photo_framing": "upper-body"
+      "hometown": "上海"
     },
     {
       "name": "于兴海",
+      "photo": "/assets/img/team/yu-xinghai.jpg",
+      "photo_framing": "upper-body",
       "year": 2024,
       "role": "博士后",
       "group": "researchers",
       "region": "150000",
-      "hometown": "内蒙古",
-      "photo": "/assets/img/team/yu-xinghai.jpg",
-      "photo_framing": "upper-body"
+      "hometown": "内蒙古"
     },
     {
       "name": "钱思危",
+      "photo": "/assets/img/team/qian-siwei.jpg",
+      "photo_framing": "upper-body",
       "year": 2024,
       "role": "直博生",
       "group": "doctoral",
       "region": "330000",
-      "hometown": "浙江 · 温州",
-      "photo": "/assets/img/team/qian-siwei.jpg",
-      "photo_framing": "upper-body"
+      "hometown": "浙江 · 温州"
     },
     {
       "name": "刘嘉琪",
+      "photo": "/assets/img/team/liu-jiaqi.jpg",
+      "photo_framing": "upper-body",
       "year": 2024,
       "role": "直博生",
       "group": "doctoral",
       "region": "210000",
-      "hometown": "辽宁 · 大连",
-      "photo": "/assets/img/team/liu-jiaqi.jpg",
-      "photo_framing": "upper-body"
+      "hometown": "辽宁 · 大连"
     },
     {
       "name": "刘砚秋",
@@ -107,23 +108,23 @@
     },
     {
       "name": "宋亦婷",
+      "photo": "/assets/img/team/song-yiting.jpg",
+      "photo_framing": "upper-body",
       "year": 2025,
       "role": "硕士生",
       "group": "masters",
       "region": "320000",
-      "hometown": "江苏 · 苏州",
-      "photo": "/assets/img/team/song-yiting.jpg",
-      "photo_framing": "upper-body"
+      "hometown": "江苏 · 苏州"
     },
     {
       "name": "王子午",
+      "photo": "/assets/img/team/wang-ziwu.jpg",
+      "photo_framing": "upper-body",
       "year": 2025,
       "role": "助研",
       "group": "researchers",
       "region": "130000",
-      "hometown": "河北 · 保定",
-      "photo": "/assets/img/team/wang-ziwu.jpg",
-      "photo_framing": "upper-body"
+      "hometown": "河北 · 保定"
     },
     {
       "name": "童滨",
