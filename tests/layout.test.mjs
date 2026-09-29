@@ -48,3 +48,8 @@ test('contact details show only the English address and no legacy map caption/bu
   assert.match(template, /data-map-provider="google"/);
   assert.doesNotMatch(template, /<select|value="auto"/);
 });
+
+test('contact information and map share their vertical center', async () => {
+  const css = await readFile(new URL('../assets/css/kanglab.css', import.meta.url), 'utf8');
+  assert.match(css, /\.kl-visit-layout\s*\{[^}]*align-items:\s*center/);
+});
