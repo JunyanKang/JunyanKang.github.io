@@ -165,23 +165,23 @@
       "author_entries": [
         {
           "name": "Yuhan Zhang",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Jun-Yan Kang",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Mofang Liu",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         },
         {
           "name": "Ying Huang",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         }
       ],
       "url": "https://doi.org/10.1080/15476286.2023.2275108",
@@ -203,12 +203,12 @@
       "author_entries": [
         {
           "name": "Jun- Kang",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Ai Zhong",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
@@ -227,8 +227,8 @@
           "corresponding_author": false
         },
         {
-          "name": "Mo- Liu",
-          "first_author": false,
+          "name": "Mo-Fang Liu",
+          "first_author": true,
           "corresponding_author": false
         }
       ],
@@ -251,37 +251,37 @@
       "author_entries": [
         {
           "name": "Jun-Yan Kang",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Ze Wen",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Duo Pan",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Yuhan Zhang",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Qing Li",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Ai Zhong",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Xinghai Yu",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
@@ -372,12 +372,12 @@
         {
           "name": "Ying Huang",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         },
         {
           "name": "Mo-Fang Liu",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         }
       ],
       "url": "https://doi.org/10.1126/science.abj6647",
@@ -638,17 +638,17 @@
       "author_entries": [
         {
           "name": "Peng Zhang",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Jun-Yan Kang",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Lan-Tao Gou",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
