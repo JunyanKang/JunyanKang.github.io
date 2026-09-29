@@ -1,0 +1,74 @@
+title: Kang Lab
+theme: al_folio_core
+first_name: Kang
+last_name: Lab
+description: Kang Lab studies retinal development, aging and evolution through molecular biology and single-cell genomics. Explore our research, publications and open expression atlas.
+url: https://kanglab.cool
+baseurl: ''
+lang: en
+icon: kanglab.png
+max_width: 1180px
+navbar_fixed: true
+footer_fixed: false
+enable_darkmode: false
+search_enabled: false
+socials_in_search: false
+enable_math: false
+enable_masonry: false
+enable_tooltips: false
+last_updated: false
+back_to_top: false
+serve_og_meta: true
+serve_schema_org: true
+footer_text: >-
+  Built with <a href="https://github.com/alshedivat/al-folio">al-folio</a> ·
+  <a href="https://github.com/JunyanKang">GitHub</a>
+plugins:
+  - jekyll-cache-bust
+  - al_folio_core
+  - jekyll-socials
+  - jekyll-sitemap
+al_folio:
+  api_version: 1
+  style_engine: tailwind
+  tailwind:
+    version: 4.1.18
+    preflight: false
+    css_entry: assets/tailwind/app.css
+  distill:
+    engine: distillpub-template
+    source: al-org-dev/distill-template#al-folio
+  features:
+    cv:
+      enabled: false
+    distill:
+      enabled: false
+  compat:
+    bootstrap:
+      enabled: false
+include:
+  - _pages
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - docs
+  - scripts
+  - tools
+  - atlas
+  - node_modules
+  - vendor
+  - package.json
+  - package-lock.json
+  - tests
+  - THIRD_PARTY_NOTICES.md
+  - .al-folio-overrides.yml
+  - assets/atlas/*.previous-*
+  - assets/atlas/*.staging-*
+sass:
+  style: compressed
+defaults:
+  - scope:
+      path: ''
+    values:
+      layout: kanglab

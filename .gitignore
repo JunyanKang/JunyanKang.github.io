@@ -1,0 +1,15 @@
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.bundle/
+vendor/
+node_modules/
+.DS_Store
+.playwright-cli/
+.env
+.env.*
+tools/dist/
+atlas/dist/
+assets/atlas/*.previous-*/
+assets/atlas/*.staging-*/
+output/

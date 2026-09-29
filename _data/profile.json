@@ -1,0 +1,29 @@
+{
+  "orcid": "0000-0001-5191-5217",
+  "retrieved_at": "2026-09-29",
+  "affiliations": [
+    {
+      "organization": "Shanghai Jiao Tong University School of Medicine Affiliated Ninth People's Hospital",
+      "role": null,
+      "city": "Shanghai",
+      "country": "CN",
+      "start_year": "2023"
+    },
+    {
+      "organization": "Center for Excellence in Molecular Cell Science, Chinese Academy of Sciences",
+      "role": "Postdoc",
+      "city": "Shanghai",
+      "country": "CN",
+      "start_year": "2018",
+      "end_year": "2023"
+    },
+    {
+      "organization": "Chinese Academy",
+      "role": "Ph.D",
+      "city": "Shanghai",
+      "country": "CN",
+      "start_year": "2012",
+      "end_year": "2018"
+    }
+  ]
+}

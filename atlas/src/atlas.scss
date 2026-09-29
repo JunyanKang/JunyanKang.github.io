@@ -1,0 +1,13 @@
+:root { --color-primary: #17645d; --color-primary-dark: #104f49; --font-family-sans: 'Avenir Next', 'Segoe UI', sans-serif; --font-family-heading: Georgia, serif; --radius-lg: 10px; }
+html, body { background: #fcfcfa; }
+.atlas-header { max-width: 1360px; margin: auto; padding: 20px 28px; display: flex; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid #dfe5e1; }
+.atlas-brand { font-family: Georgia, serif; font-size: 25px; color: #273b32; }
+.atlas-brand img { display: block; width: 175px; height: auto; }
+.atlas-header nav { display: flex; gap: 24px; font-size: 13px; }
+.atlas-header + main { min-height: 75vh; }
+.atlas-footer { border-top: 1px solid #dfe5e1; padding: 22px 28px; font-size: 12px; color: #68776d; text-align: center; }
+.atlas-footer a { margin-left: 12px; }
+.section-title { font-family: Georgia, serif; }
+.link-button { box-shadow: none; }
+@media (max-width: 700px) { .atlas-header { padding: 16px; } .atlas-header nav { gap: 12px; font-size: 12px; } }
+@media (max-width: 500px) { .atlas-header { flex-direction: column; gap: 0; padding: 4px 16px 12px; } .atlas-brand img { width: 150px; } }

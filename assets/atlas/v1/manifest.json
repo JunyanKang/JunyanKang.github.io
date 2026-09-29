@@ -1,0 +1,1598 @@
+{
+  "schemaVersion": 1,
+  "exportedAt": "2026-09-29T08:22:28.279Z",
+  "source": "Kang Lab expression database; public release approved by the data owner",
+  "datasets": [
+    {
+      "key": "mouse_tissue_rna",
+      "title": "Mouse tissue RNA",
+      "species": "Mouse",
+      "modality": "Bulk RNA-seq",
+      "unit": "RPKM",
+      "description": "Bulk RNA expression across mouse tissues with an eye-focused panel.",
+      "citation": "Immunome Research 2008;4:5",
+      "sampleNames": [
+        "heart",
+        "liver",
+        "spleen",
+        "lung",
+        "kidney",
+        "cerebral_cortex",
+        "skeletal_muscle",
+        "testis",
+        "retina",
+        "RPE",
+        "cornea",
+        "iris",
+        "lens",
+        "eyecup",
+        "ciliary_bodies",
+        "cerebellum",
+        "hippocampus",
+        "hypothalamus",
+        "pituitary",
+        "spinal_cord",
+        "olfactory_bulb",
+        "ovary",
+        "bone",
+        "bone_marrow",
+        "intestine_large",
+        "intestine_small",
+        "adipose_brown",
+        "adipose_white",
+        "adipose_gland",
+        "epidermis"
+      ],
+      "sampleCount": 30,
+      "geneCount": 22730
+    },
+    {
+      "key": "mouse_tissue_protein",
+      "title": "Mouse tissue protein",
+      "species": "Mouse",
+      "modality": "Bulk proteomics",
+      "unit": "iBAQ",
+      "description": "Protein abundance across replicated mouse tissues.",
+      "citation": "Kang Lab internal proteomics dataset",
+      "sampleNames": [
+        "Heart_1",
+        "Heart_2",
+        "Liver_1",
+        "Liver_2",
+        "Spleen_1",
+        "Spleen_2",
+        "Lung_1",
+        "Lung_2",
+        "Kidney_1",
+        "Kidney_2",
+        "Brain_1",
+        "Brain_2",
+        "Muscle_1",
+        "Muscle_2",
+        "Testis_1",
+        "Testis_2",
+        "Epididymis_1",
+        "Epididymis_2",
+        "Eye_1",
+        "Eye_2",
+        "Retina_1",
+        "Retina_2"
+      ],
+      "sampleCount": 22,
+      "geneCount": 12399
+    },
+    {
+      "key": "mouse_retina_scrna",
+      "title": "Mouse retina scRNA-seq",
+      "species": "Mouse",
+      "modality": "Single-cell RNA-seq",
+      "unit": "TPM",
+      "description": "Mouse retinal cell-type expression across developmental timepoints.",
+      "citation": "Neuron 2019;102(6):1111-1126.e5",
+      "sampleNames": [
+        "E12_Amacrine Cells",
+        "E14_Amacrine Cells",
+        "E16_Amacrine Cells",
+        "E18_Amacrine Cells",
+        "P0_Amacrine Cells",
+        "P14_Amacrine Cells",
+        "P2_Amacrine Cells",
+        "P5_Amacrine Cells",
+        "P8_Amacrine Cells",
+        "E12_Bipolar Cells",
+        "P14_Bipolar Cells",
+        "P5_Bipolar Cells",
+        "P8_Bipolar Cells",
+        "E14_Cones",
+        "E16_Cones",
+        "E18_Cones",
+        "P0_Cones",
+        "P14_Cones",
+        "P2_Cones",
+        "P5_Cones",
+        "P8_Cones",
+        "E12_Doublets",
+        "E14_Doublets",
+        "E16_Doublets",
+        "E18_Doublets",
+        "P0_Doublets",
+        "P14_Doublets",
+        "P2_Doublets",
+        "P5_Doublets",
+        "P8_Doublets",
+        "E11_Early RPCs",
+        "E12_Early RPCs",
+        "E14_Early RPCs",
+        "E16_Early RPCs",
+        "E18_Early RPCs",
+        "P0_Early RPCs",
+        "P14_Early RPCs",
+        "P2_Early RPCs",
+        "P5_Early RPCs",
+        "P8_Early RPCs",
+        "E14_Horizontal Cells",
+        "E16_Horizontal Cells",
+        "E18_Horizontal Cells",
+        "P0_Horizontal Cells",
+        "P14_Horizontal Cells",
+        "P2_Horizontal Cells",
+        "P5_Horizontal Cells",
+        "E14_Late RPCs",
+        "E16_Late RPCs",
+        "E18_Late RPCs",
+        "P0_Late RPCs",
+        "P2_Late RPCs",
+        "P5_Late RPCs",
+        "P8_Late RPCs",
+        "E14_Muller Glia",
+        "E16_Muller Glia",
+        "E18_Muller Glia",
+        "P0_Muller Glia",
+        "P14_Muller Glia",
+        "P2_Muller Glia",
+        "P5_Muller Glia",
+        "P8_Muller Glia",
+        "E11_Neurogenic Cells",
+        "E12_Neurogenic Cells",
+        "E14_Neurogenic Cells",
+        "E16_Neurogenic Cells",
+        "E18_Neurogenic Cells",
+        "P0_Neurogenic Cells",
+        "P2_Neurogenic Cells",
+        "P5_Neurogenic Cells",
+        "P8_Neurogenic Cells",
+        "E12_Photoreceptor Precursors",
+        "E14_Photoreceptor Precursors",
+        "E16_Photoreceptor Precursors",
+        "E18_Photoreceptor Precursors",
+        "P0_Photoreceptor Precursors",
+        "P2_Photoreceptor Precursors",
+        "P5_Photoreceptor Precursors",
+        "P8_Photoreceptor Precursors",
+        "E11_Red Blood Cells",
+        "E12_Red Blood Cells",
+        "E14_Red Blood Cells",
+        "E16_Red Blood Cells",
+        "P14_Red Blood Cells",
+        "P8_Red Blood Cells",
+        "E12_Retinal Ganglion Cells",
+        "E14_Retinal Ganglion Cells",
+        "E16_Retinal Ganglion Cells",
+        "E18_Retinal Ganglion Cells",
+        "P0_Retinal Ganglion Cells",
+        "P14_Retinal Ganglion Cells",
+        "P2_Retinal Ganglion Cells",
+        "P5_Retinal Ganglion Cells",
+        "E14_Rods",
+        "E16_Rods",
+        "E18_Rods",
+        "P0_Rods",
+        "P14_Rods",
+        "P2_Rods",
+        "P5_Rods",
+        "P8_Rods",
+        "E11_RPE/Margin/Periocular Mesenchyme/Lens Epithelial Cells",
+        "E12_RPE/Margin/Periocular Mesenchyme/Lens Epithelial Cells",
+        "E14_RPE/Margin/Periocular Mesenchyme/Lens Epithelial Cells",
+        "E16_RPE/Margin/Periocular Mesenchyme/Lens Epithelial Cells",
+        "E18_RPE/Margin/Periocular Mesenchyme/Lens Epithelial Cells",
+        "P0_RPE/Margin/Periocular Mesenchyme/Lens Epithelial Cells",
+        "P14_RPE/Margin/Periocular Mesenchyme/Lens Epithelial Cells",
+        "P2_RPE/Margin/Periocular Mesenchyme/Lens Epithelial Cells",
+        "P5_RPE/Margin/Periocular Mesenchyme/Lens Epithelial Cells",
+        "P8_RPE/Margin/Periocular Mesenchyme/Lens Epithelial Cells"
+      ],
+      "sampleCount": 111,
+      "geneCount": 27996
+    },
+    {
+      "key": "human_retina_scrna",
+      "title": "Human retina scRNA-seq",
+      "species": "Human",
+      "modality": "Single-cell RNA-seq",
+      "unit": "TPM",
+      "description": "Human retinal cell-type expression across developmental timepoints.",
+      "citation": "Developmental Cell 2020;53(4):473-491.e9",
+      "sampleNames": [
+        "42_Day_AC/HC_Precurs",
+        "59_Day_AC/HC_Precurs",
+        "Hgw11_AC/HC_Precurs",
+        "Hgw12_AC/HC_Precurs",
+        "Hgw13_AC/HC_Precurs",
+        "Hgw14_AC/HC_Precurs",
+        "Hgw15_AC/HC_Precurs",
+        "Hgw16_AC/HC_Precurs",
+        "Hgw17_AC/HC_Precurs",
+        "Hgw18_AC/HC_Precurs",
+        "Hgw19_AC/HC_Precurs",
+        "Hgw20_AC/HC_Precurs",
+        "Hgw22_AC/HC_Precurs",
+        "Hgw24_AC/HC_Precurs",
+        "Hgw27_AC/HC_Precurs",
+        "Hgw9_AC/HC_Precurs",
+        "42_Day_Amacrine Cells",
+        "59_Day_Amacrine Cells",
+        "Adult_Amacrine Cells",
+        "Hgw11_Amacrine Cells",
+        "Hgw12_Amacrine Cells",
+        "Hgw13_Amacrine Cells",
+        "Hgw14_Amacrine Cells",
+        "Hgw15_Amacrine Cells",
+        "Hgw16_Amacrine Cells",
+        "Hgw17_Amacrine Cells",
+        "Hgw18_Amacrine Cells",
+        "Hgw19_Amacrine Cells",
+        "Hgw20_Amacrine Cells",
+        "Hgw22_Amacrine Cells",
+        "Hgw24_Amacrine Cells",
+        "Hgw27_Amacrine Cells",
+        "Hgw9_Amacrine Cells",
+        "42_Day_BC/Photo_Precurs",
+        "59_Day_BC/Photo_Precurs",
+        "Hgw11_BC/Photo_Precurs",
+        "Hgw12_BC/Photo_Precurs",
+        "Hgw13_BC/Photo_Precurs",
+        "Hgw14_BC/Photo_Precurs",
+        "Hgw15_BC/Photo_Precurs",
+        "Hgw16_BC/Photo_Precurs",
+        "Hgw17_BC/Photo_Precurs",
+        "Hgw18_BC/Photo_Precurs",
+        "Hgw19_BC/Photo_Precurs",
+        "Hgw20_BC/Photo_Precurs",
+        "Hgw22_BC/Photo_Precurs",
+        "Hgw24_BC/Photo_Precurs",
+        "Hgw27_BC/Photo_Precurs",
+        "Hgw9_BC/Photo_Precurs",
+        "59_Day_Bipolar Cells",
+        "Adult_Bipolar Cells",
+        "Hgw11_Bipolar Cells",
+        "Hgw12_Bipolar Cells",
+        "Hgw13_Bipolar Cells",
+        "Hgw14_Bipolar Cells",
+        "Hgw15_Bipolar Cells",
+        "Hgw16_Bipolar Cells",
+        "Hgw17_Bipolar Cells",
+        "Hgw18_Bipolar Cells",
+        "Hgw19_Bipolar Cells",
+        "Hgw20_Bipolar Cells",
+        "Hgw22_Bipolar Cells",
+        "Hgw24_Bipolar Cells",
+        "Hgw27_Bipolar Cells",
+        "30_Day_Cones",
+        "42_Day_Cones",
+        "59_Day_Cones",
+        "Adult_Cones",
+        "Hgw11_Cones",
+        "Hgw12_Cones",
+        "Hgw13_Cones",
+        "Hgw14_Cones",
+        "Hgw15_Cones",
+        "Hgw16_Cones",
+        "Hgw17_Cones",
+        "Hgw18_Cones",
+        "Hgw19_Cones",
+        "Hgw20_Cones",
+        "Hgw22_Cones",
+        "Hgw24_Cones",
+        "Hgw27_Cones",
+        "Hgw9_Cones",
+        "42_Day_Horizontal Cells",
+        "59_Day_Horizontal Cells",
+        "Adult_Horizontal Cells",
+        "Hgw11_Horizontal Cells",
+        "Hgw12_Horizontal Cells",
+        "Hgw13_Horizontal Cells",
+        "Hgw14_Horizontal Cells",
+        "Hgw15_Horizontal Cells",
+        "Hgw16_Horizontal Cells",
+        "Hgw17_Horizontal Cells",
+        "Hgw18_Horizontal Cells",
+        "Hgw19_Horizontal Cells",
+        "Hgw20_Horizontal Cells",
+        "Hgw22_Horizontal Cells",
+        "Hgw24_Horizontal Cells",
+        "Hgw27_Horizontal Cells",
+        "Hgw9_Horizontal Cells",
+        "Adult_Muller Glia",
+        "Hgw14_Muller Glia",
+        "Hgw17_Muller Glia",
+        "Hgw18_Muller Glia",
+        "Hgw19_Muller Glia",
+        "Hgw20_Muller Glia",
+        "Hgw22_Muller Glia",
+        "Hgw24_Muller Glia",
+        "Hgw27_Muller Glia",
+        "30_Day_Neurogenic Cells",
+        "42_Day_Neurogenic Cells",
+        "59_Day_Neurogenic Cells",
+        "Hgw11_Neurogenic Cells",
+        "Hgw12_Neurogenic Cells",
+        "Hgw13_Neurogenic Cells",
+        "Hgw14_Neurogenic Cells",
+        "Hgw15_Neurogenic Cells",
+        "Hgw16_Neurogenic Cells",
+        "Hgw17_Neurogenic Cells",
+        "Hgw18_Neurogenic Cells",
+        "Hgw19_Neurogenic Cells",
+        "Hgw20_Neurogenic Cells",
+        "Hgw22_Neurogenic Cells",
+        "Hgw24_Neurogenic Cells",
+        "Hgw27_Neurogenic Cells",
+        "Hgw9_Neurogenic Cells",
+        "24_Day_Retinal Ganglion Cells",
+        "30_Day_Retinal Ganglion Cells",
+        "42_Day_Retinal Ganglion Cells",
+        "59_Day_Retinal Ganglion Cells",
+        "Adult_Retinal Ganglion Cells",
+        "Hgw11_Retinal Ganglion Cells",
+        "Hgw12_Retinal Ganglion Cells",
+        "Hgw13_Retinal Ganglion Cells",
+        "Hgw14_Retinal Ganglion Cells",
+        "Hgw15_Retinal Ganglion Cells",
+        "Hgw16_Retinal Ganglion Cells",
+        "Hgw17_Retinal Ganglion Cells",
+        "Hgw18_Retinal Ganglion Cells",
+        "Hgw19_Retinal Ganglion Cells",
+        "Hgw20_Retinal Ganglion Cells",
+        "Hgw22_Retinal Ganglion Cells",
+        "Hgw9_Retinal Ganglion Cells",
+        "Adult_Rods",
+        "Hgw11_Rods",
+        "Hgw12_Rods",
+        "Hgw13_Rods",
+        "Hgw14_Rods",
+        "Hgw15_Rods",
+        "Hgw16_Rods",
+        "Hgw17_Rods",
+        "Hgw18_Rods",
+        "Hgw19_Rods",
+        "Hgw20_Rods",
+        "Hgw22_Rods",
+        "Hgw24_Rods",
+        "Hgw27_Rods",
+        "24_Day_RPCs",
+        "30_Day_RPCs",
+        "42_Day_RPCs",
+        "59_Day_RPCs",
+        "Adult_RPCs",
+        "Hgw11_RPCs",
+        "Hgw12_RPCs",
+        "Hgw13_RPCs",
+        "Hgw14_RPCs",
+        "Hgw15_RPCs",
+        "Hgw16_RPCs",
+        "Hgw17_RPCs",
+        "Hgw18_RPCs",
+        "Hgw19_RPCs",
+        "Hgw20_RPCs",
+        "Hgw22_RPCs",
+        "Hgw24_RPCs",
+        "Hgw27_RPCs",
+        "Hgw9_RPCs"
+      ],
+      "sampleCount": 175,
+      "geneCount": 33691
+    },
+    {
+      "key": "human_retina_rpe_rna",
+      "title": "Human retina and RPE RNA",
+      "species": "Human",
+      "modality": "Bulk RNA-seq",
+      "unit": "TPM",
+      "description": "Retina and RPE developmental bulk RNA expression.",
+      "citation": "PLoS Biology 2019;17(7):e3000365",
+      "sampleNames": [
+        "RET_5W",
+        "RET_6W",
+        "RET_7W",
+        "RET_8W",
+        "RET_9W",
+        "RET_11W",
+        "RET_13W",
+        "RET_17W",
+        "RET_23W",
+        "RET_24W",
+        "RPE_5W",
+        "RPE_6W",
+        "RPE_7W",
+        "RPE_8W",
+        "RPE_9W",
+        "RPE_11W",
+        "RPE_13W",
+        "RPE_17W",
+        "RPE_23W",
+        "RPE_24W"
+      ],
+      "sampleCount": 20,
+      "geneCount": 58828
+    },
+    {
+      "key": "monkey_retina_aging_scrna",
+      "title": "Monkey retina scRNA-seq aging",
+      "species": "Monkey",
+      "modality": "Single-cell RNA-seq",
+      "unit": "TPM",
+      "description": "Aging-associated retinal cell-type expression atlas across monkey lifespan stages.",
+      "citation": "Kang Lab internal monkey retina aging dataset",
+      "sampleNames": [
+        "1y_Rod1",
+        "5y_Rod1",
+        "10y_Rod1",
+        "15y_Rod1",
+        "20y_Rod1",
+        "1y_Rod2",
+        "5y_Rod2",
+        "10y_Rod2",
+        "15y_Rod2",
+        "20y_Rod2",
+        "1y_Cone",
+        "5y_Cone",
+        "10y_Cone",
+        "15y_Cone",
+        "20y_Cone",
+        "1y_BC",
+        "5y_BC",
+        "10y_BC",
+        "15y_BC",
+        "20y_BC",
+        "1y_HC",
+        "5y_HC",
+        "10y_HC",
+        "15y_HC",
+        "20y_HC",
+        "1y_AC",
+        "5y_AC",
+        "10y_AC",
+        "15y_AC",
+        "20y_AC",
+        "1y_RGC",
+        "5y_RGC",
+        "10y_RGC",
+        "15y_RGC",
+        "20y_RGC",
+        "1y_Muller",
+        "5y_Muller",
+        "10y_Muller",
+        "15y_Muller",
+        "20y_Muller",
+        "1y_Micro",
+        "5y_Micro",
+        "10y_Micro",
+        "15y_Micro",
+        "20y_Micro",
+        "1y_EC",
+        "5y_EC",
+        "10y_EC",
+        "15y_EC",
+        "20y_EC"
+      ],
+      "sampleCount": 50,
+      "geneCount": 27273
+    },
+    {
+      "key": "mouse_retina_dev_scrna",
+      "title": "Mouse retina Stereo-seq development",
+      "species": "Mouse",
+      "modality": "Single-cell RNA-seq",
+      "unit": "Scaled expression",
+      "description": "Developmental retinal cell-state expression atlas spanning embryonic to postnatal stages.",
+      "citation": "Kang Lab internal mouse retina development dataset",
+      "sampleNames": [
+        "E10.5_RPC",
+        "E11.5_RPC",
+        "E14_RPC",
+        "E17_RPC",
+        "P0_RPC",
+        "P5_RPC",
+        "P7_RPC",
+        "E10.5_RPE",
+        "E11.5_RPE",
+        "E14_RPE",
+        "E17_RPE",
+        "P0_RPE",
+        "P5_RPE",
+        "P7_RPE",
+        "P21_RPE",
+        "E11.5_RGC",
+        "E14_RGC",
+        "E17_RGC",
+        "P0_RGC",
+        "P5_RGC",
+        "P7_RGC",
+        "P21_RGC",
+        "E14_Horizontal cell",
+        "E17_Horizontal cell",
+        "P0_Horizontal cell",
+        "P5_Horizontal cell",
+        "P7_Horizontal cell",
+        "P21_Horizontal cell",
+        "E11.5_Amacrine cell",
+        "E14_Amacrine cell",
+        "E17_Amacrine cell",
+        "P0_Amacrine cell",
+        "P5_Amacrine cell",
+        "P7_Amacrine cell",
+        "P21_Amacrine cell",
+        "E14_Bipolar cell",
+        "E17_Bipolar cell",
+        "P0_Bipolar cell",
+        "P5_Bipolar cell",
+        "P7_Bipolar cell",
+        "P21_Bipolar cell",
+        "E14_Cone",
+        "E17_Cone",
+        "P0_Cone",
+        "P5_Cone",
+        "P7_Cone",
+        "P21_Cone",
+        "E17_Rod",
+        "P0_Rod",
+        "P5_Rod",
+        "P7_Rod",
+        "P21_Rod",
+        "E17_photoreceptor/bipolar precursors",
+        "P0_photoreceptor/bipolar precursors",
+        "P5_photoreceptor/bipolar precursors",
+        "P7_photoreceptor/bipolar precursors",
+        "P0_Muller cell",
+        "P5_Muller cell",
+        "P7_Muller cell"
+      ],
+      "sampleCount": 59,
+      "geneCount": 3000
+    }
+  ],
+  "recordCount": 185917,
+  "orthologCount": 24546,
+  "shardCount": 256,
+  "files": {
+    "genes/00.json.gz": {
+      "bytes": 154256,
+      "sha256": "b384a071ca21b62d0a6873ef1b7f2da7273b612d6c47e2390cbed719eb27b316"
+    },
+    "genes/01.json.gz": {
+      "bytes": 132763,
+      "sha256": "abae04e73e2c95491caa29041f768c60c24b762d520a22f60345efa7beee38e2"
+    },
+    "genes/02.json.gz": {
+      "bytes": 149948,
+      "sha256": "e08c4ee4cd669a372c9a485b254a64809b8f5262a53788c6aca366f79523ef7f"
+    },
+    "genes/03.json.gz": {
+      "bytes": 127929,
+      "sha256": "9db8323a8bdbcb5903fb8b2d3c1e889d8da43f657b933807b9220f48c11679a5"
+    },
+    "genes/04.json.gz": {
+      "bytes": 125463,
+      "sha256": "e4fd3a7e5b9c38adde86c6b343c6ad560b10f1b7ab1b1b644ef627d526ea3ce6"
+    },
+    "genes/05.json.gz": {
+      "bytes": 137843,
+      "sha256": "8ab56a9cd81cfe7a2f71548573ab3f0920c95fa2a6d1945e0fa0f90cb0dc19f1"
+    },
+    "genes/06.json.gz": {
+      "bytes": 135242,
+      "sha256": "6e529f9aa6472e921e1c063fe7caac56bb287ade0d1a0f8e9ebaf14475acaf68"
+    },
+    "genes/07.json.gz": {
+      "bytes": 147261,
+      "sha256": "ab6203db8bd5abc306f43048cf2f1c3794e8119372d8fa38fbae64994af9a55b"
+    },
+    "genes/08.json.gz": {
+      "bytes": 121222,
+      "sha256": "db1a93ebea2d1e89870baf0bf5aa55899efb8d7146bd5448f92c3eb2134a28fd"
+    },
+    "genes/09.json.gz": {
+      "bytes": 145565,
+      "sha256": "c8507ec730233081d7d449493d6876a849c2f8a8e57ffcb1678026a969d556c8"
+    },
+    "genes/0a.json.gz": {
+      "bytes": 143062,
+      "sha256": "f9b2885ff0f2e4f6df799c056cbd48bb1ffe256cd18f6e78ea26ac8227f15cf7"
+    },
+    "genes/0b.json.gz": {
+      "bytes": 122559,
+      "sha256": "d9c2a809140cc393efce47c0de790abae3bcca15d9f1a3bb319b1d1d2f16037d"
+    },
+    "genes/0c.json.gz": {
+      "bytes": 133045,
+      "sha256": "0e2d3038ff6b3db4ac1b002c349a1a1cb835bafa7a31c76f26c96f56b9759aaf"
+    },
+    "genes/0d.json.gz": {
+      "bytes": 154814,
+      "sha256": "9aff3411c8f98f22eb7c4f4e70e0d27ae604f0993b1861d7c83ad7fbc93e5538"
+    },
+    "genes/0e.json.gz": {
+      "bytes": 138252,
+      "sha256": "aa7ca45eb374addf256589c756c666172c81f8443ec9714213209aa11005ddc3"
+    },
+    "genes/0f.json.gz": {
+      "bytes": 156610,
+      "sha256": "59584a24a88f416434db74bee55630d78cd619158c838ceecde6d3b1488c3cab"
+    },
+    "genes/10.json.gz": {
+      "bytes": 109622,
+      "sha256": "58c87fcec2791b467f08ab0ad42bee9c3d688fae55e9db348eb910ebe786c190"
+    },
+    "genes/11.json.gz": {
+      "bytes": 129499,
+      "sha256": "602626213be760f2429f159dc342496f5dc9a4bb6ff83f605eb212d84db0a3fc"
+    },
+    "genes/12.json.gz": {
+      "bytes": 155987,
+      "sha256": "ddde1db06571de644b9ab2774c114a17a6b2cbf8e57646f19a80db49fe221092"
+    },
+    "genes/13.json.gz": {
+      "bytes": 117412,
+      "sha256": "b29f1ad40f6b45566929a1c9be041d6aeb1b28047d985e94fe168d0c06127a7a"
+    },
+    "genes/14.json.gz": {
+      "bytes": 127392,
+      "sha256": "33b99585cd41454e7121e42a951d1226dd3f1e3bb58c83fef0579515f08887ea"
+    },
+    "genes/15.json.gz": {
+      "bytes": 135380,
+      "sha256": "b1c62675c919c87af7d119bee55cd71f15e8b2ff61c8bdf0605802dc87aa2bcb"
+    },
+    "genes/16.json.gz": {
+      "bytes": 140180,
+      "sha256": "e769a89ec7a36cccf1cbb6ae22e671522ede4fc34a1bd60085494cc69549663b"
+    },
+    "genes/17.json.gz": {
+      "bytes": 158283,
+      "sha256": "85440036c837c221860e37a03a2ac4a42a2e6a532719e9f054c9ef5daa1fbdfa"
+    },
+    "genes/18.json.gz": {
+      "bytes": 137485,
+      "sha256": "3eda43e5829483eb901c4cb5aa1595f037a87064eba82f4e6ac11a5f003dff38"
+    },
+    "genes/19.json.gz": {
+      "bytes": 119773,
+      "sha256": "8fce5837ca1ee8c8d2880d3f2300c213ce40ca001c62849b6823ec2567c1dc0b"
+    },
+    "genes/1a.json.gz": {
+      "bytes": 105643,
+      "sha256": "f3d0c892a7f65d1668894fe4d6a79819e5ccf2888e67aea5bf72b175d4e6e2f5"
+    },
+    "genes/1b.json.gz": {
+      "bytes": 118484,
+      "sha256": "c854e9ee661df3868de31bebe1c2693a77dba5b408c6b18d36e5f231fbb5424a"
+    },
+    "genes/1c.json.gz": {
+      "bytes": 119092,
+      "sha256": "cfd580170790e7feea1309d7cf64882f5f87e4b0a745f7b3f10231bc1ea15c2e"
+    },
+    "genes/1d.json.gz": {
+      "bytes": 135092,
+      "sha256": "686982d61e5af33f3bd9a845cce29d54165750008e941d751e9c4ffd3726217e"
+    },
+    "genes/1e.json.gz": {
+      "bytes": 115837,
+      "sha256": "5d16c2b8417ae4bb9c9eae14c57159250bf4bd8c7bf28ab3899275eaaca7016a"
+    },
+    "genes/1f.json.gz": {
+      "bytes": 136937,
+      "sha256": "c52b6cebdb5293bb99bba93aecb19ee0dd2e8ebadd1ebab2b1e434163a6dddf2"
+    },
+    "genes/20.json.gz": {
+      "bytes": 125057,
+      "sha256": "f9702210914ce9a388119da5382d14b3554caf4a181749d895f70545bf9705c1"
+    },
+    "genes/21.json.gz": {
+      "bytes": 126873,
+      "sha256": "d4f93c9f09b30c3b1318d17e1c750e847df83fbea7ae4824f84a2faf89f5e64a"
+    },
+    "genes/22.json.gz": {
+      "bytes": 121618,
+      "sha256": "7703717e60e21f72b1797ce9f3f61c85d1f32d936a2c133f646b405878d6e936"
+    },
+    "genes/23.json.gz": {
+      "bytes": 133654,
+      "sha256": "ff21e79c6c234cf7348cf7a03b9ccfbd01d9ff2f3b7fff2a14095e9ee11cf200"
+    },
+    "genes/24.json.gz": {
+      "bytes": 111709,
+      "sha256": "fe21255311fe36ce7848aa90b06cd7ddd4ccf32431e6f9ac648e60877dc0e3b4"
+    },
+    "genes/25.json.gz": {
+      "bytes": 136243,
+      "sha256": "ffec4585b5d9fb4b2c72a62ada8b57c32f1d3ad6c583e831dc62dd51b4f6c1b3"
+    },
+    "genes/26.json.gz": {
+      "bytes": 116950,
+      "sha256": "39b8bfc652ccc28d5c24b802512773a02a9d0c431311636c4929ac1770ae6010"
+    },
+    "genes/27.json.gz": {
+      "bytes": 119844,
+      "sha256": "645177f48381774a81ff7eeed6b6595b3b59d333cd3eef8f62b3cb6384f01cd2"
+    },
+    "genes/28.json.gz": {
+      "bytes": 145757,
+      "sha256": "73e93e1395c4a8e4acdfe58e1f3f453bcd115860502e64adfb62e8e6a4e471e3"
+    },
+    "genes/29.json.gz": {
+      "bytes": 136281,
+      "sha256": "eba9cd7536d7b531478344d96ea3d25be710c4533caa348064740bcbcf4e9e8c"
+    },
+    "genes/2a.json.gz": {
+      "bytes": 131577,
+      "sha256": "ed1ae96859fbe263ad8ce38086ada840130a7006a64787735bb2e12820973b6d"
+    },
+    "genes/2b.json.gz": {
+      "bytes": 123080,
+      "sha256": "9a5e78f6fe277c6f205bd47d77ba532039c24a738c3415c0922bb5ef1e140a22"
+    },
+    "genes/2c.json.gz": {
+      "bytes": 127931,
+      "sha256": "cd4b38714f80bd3d354dc61021169c8495722d1b347c8da4e59102d73555466b"
+    },
+    "genes/2d.json.gz": {
+      "bytes": 120096,
+      "sha256": "af32d420f40e710b1e34222c6337f0a01ebd39bd348a0fff41bf32546e1ec025"
+    },
+    "genes/2e.json.gz": {
+      "bytes": 146291,
+      "sha256": "16767f718203dbce81c23bb00dae4c80559bf273980274d90c60eadf57cc2cdf"
+    },
+    "genes/2f.json.gz": {
+      "bytes": 118852,
+      "sha256": "4d13359ee540e209f7b2e51fb43c29701dde8bc0f624280284edae79b50b9051"
+    },
+    "genes/30.json.gz": {
+      "bytes": 145735,
+      "sha256": "304843fe2dc7e351d02378747ec23cc8a2c9ab6a02499a0ecf7170aa7b3bc85a"
+    },
+    "genes/31.json.gz": {
+      "bytes": 130985,
+      "sha256": "c169a13dd3e1769b64a3893a89f69641820ec214e4ddeb07da2641d2d1517a9f"
+    },
+    "genes/32.json.gz": {
+      "bytes": 115418,
+      "sha256": "24aad88d7d6df65651ae123e245b058304c650d3dbf2698b1ea40698986cf9dc"
+    },
+    "genes/33.json.gz": {
+      "bytes": 150514,
+      "sha256": "1bf2b29442d0977287fb9fa3e6368bd6c260a0710e7346459aa90f42d87592af"
+    },
+    "genes/34.json.gz": {
+      "bytes": 129335,
+      "sha256": "5fc1d71fb3f033672cb71c69dbcc08f03facb1aaf38fc9d0d655a4b352b49f3c"
+    },
+    "genes/35.json.gz": {
+      "bytes": 143776,
+      "sha256": "bdf7693c9db3e0a90b7dcc41a6474ee33ee2e6f0171a2cc0b588ff8e2b6949d7"
+    },
+    "genes/36.json.gz": {
+      "bytes": 131497,
+      "sha256": "b92face4d14859e8aec2b8593776c95690d9af381192f64d546c022389f2f0d6"
+    },
+    "genes/37.json.gz": {
+      "bytes": 115542,
+      "sha256": "d0f11d005971367c8d835131a32cb39f8e482b1b7afef9ddabc3f47eb65c8003"
+    },
+    "genes/38.json.gz": {
+      "bytes": 143732,
+      "sha256": "a965fc45262f930cd7419a6a02bab8104830a1280b5bd12e309cbff5d7b992da"
+    },
+    "genes/39.json.gz": {
+      "bytes": 122922,
+      "sha256": "bffef878225cfa7ff8e2238fda83df1804e6cb78697a3ec22178ed2479a0baab"
+    },
+    "genes/3a.json.gz": {
+      "bytes": 120101,
+      "sha256": "f417eb91966ef73d838734f5c7eea64f4039c5dc252a1e6114f78a23d644c82b"
+    },
+    "genes/3b.json.gz": {
+      "bytes": 112435,
+      "sha256": "36b0dd4070092137f40d0654fca8676550316d52d9567a3bcbd16ae65401a57b"
+    },
+    "genes/3c.json.gz": {
+      "bytes": 133103,
+      "sha256": "5cbc9a26df8d1d73bf09f788cea4689a09f23cf483fa4f4a379d61ec2914f8db"
+    },
+    "genes/3d.json.gz": {
+      "bytes": 156340,
+      "sha256": "d54cfc22175b75ce67366d6d06f0af7c14841b961f2163ca46f8fd09c34d6558"
+    },
+    "genes/3e.json.gz": {
+      "bytes": 143989,
+      "sha256": "4ccd393dfab674fa5d6bf96866de47b4b78e91aec86d81cf97c24e49571a7cf8"
+    },
+    "genes/3f.json.gz": {
+      "bytes": 131002,
+      "sha256": "d7237b450182313a20b574025b2449bee1bf3176b1c7bf50130661331faff4d4"
+    },
+    "genes/40.json.gz": {
+      "bytes": 120063,
+      "sha256": "ec2ad127e83ae40c09a290b38d1ddd1a138727b2378535e37630f40e9de56fa8"
+    },
+    "genes/41.json.gz": {
+      "bytes": 133734,
+      "sha256": "8bbf4dded654f610ea50356458c2df7477cbee12039d8159ea75d5c7c89a5a18"
+    },
+    "genes/42.json.gz": {
+      "bytes": 153707,
+      "sha256": "c9faac9eb11f49c7f02d47a6bed9b7157635debcf545071319076b90727aab8c"
+    },
+    "genes/43.json.gz": {
+      "bytes": 118421,
+      "sha256": "34ee7a22a40aaa33aa4d074a47215c4243d4d1a7a1b4ba208fa06de44ec6f7d8"
+    },
+    "genes/44.json.gz": {
+      "bytes": 127426,
+      "sha256": "e5ad64c729eec36a1336cec498c79459bd0e9207dc46a79eb89d1ef1b8b27fec"
+    },
+    "genes/45.json.gz": {
+      "bytes": 121233,
+      "sha256": "5d9745166b66d78846adf1299e5b3ef8d1fe6f8ddf3c83adeeb5c981aa4820af"
+    },
+    "genes/46.json.gz": {
+      "bytes": 127894,
+      "sha256": "fe9947493ad5359bd101b71d853fd651210ca7086ded68a1748b6ac71f950ab9"
+    },
+    "genes/47.json.gz": {
+      "bytes": 114785,
+      "sha256": "977d239cd8afbff78a618eda0bdc52848578c29228331880f4e31ca392ce1273"
+    },
+    "genes/48.json.gz": {
+      "bytes": 125837,
+      "sha256": "b4e9942c1145c21f7e348f89fe482a12554f35e0b6fe78373c22a0716b890a06"
+    },
+    "genes/49.json.gz": {
+      "bytes": 137819,
+      "sha256": "ba8dbdd6bbf09205dc08011ec46250cce80ac39e9bc67f08f920766ce85c716b"
+    },
+    "genes/4a.json.gz": {
+      "bytes": 155051,
+      "sha256": "d66a6779af9f980c7c7b1239f4d15e4fa1759aa32748c195648ab93a897848e5"
+    },
+    "genes/4b.json.gz": {
+      "bytes": 147967,
+      "sha256": "896f3b305b86a4cb13b36d8912749fa360ab880e1abd1e85ecfa52e1f361e51f"
+    },
+    "genes/4c.json.gz": {
+      "bytes": 166575,
+      "sha256": "7002135f36b0318cbd7af6fef7500445b917a1bfe54d70935589f059628c4638"
+    },
+    "genes/4d.json.gz": {
+      "bytes": 134873,
+      "sha256": "ca965bfb6a4fdd796a173e2743de8a3185573b408312e9845eeca0e53a1e134b"
+    },
+    "genes/4e.json.gz": {
+      "bytes": 129345,
+      "sha256": "b07825890f73d24c8cab08620bc1f84f5d1a3db134a3cb1ee284726a415ecb37"
+    },
+    "genes/4f.json.gz": {
+      "bytes": 127627,
+      "sha256": "7e188e4680da0f7fd7269f7dd48b5d9268a80014c40180ef557a941b7643a57d"
+    },
+    "genes/50.json.gz": {
+      "bytes": 158535,
+      "sha256": "dea7737d71ec0e9b660d746a536489786e122e994fc3380377f879ab82a69ea1"
+    },
+    "genes/51.json.gz": {
+      "bytes": 131228,
+      "sha256": "8e02d2a4ac97e5a7bdff1ccc8a42515b77d1395e44b17bf1838946bb71bc58bb"
+    },
+    "genes/52.json.gz": {
+      "bytes": 124887,
+      "sha256": "5b86129cc7d0be0da27b98b68b7012620fb14ee6094302ea186bd670d298e952"
+    },
+    "genes/53.json.gz": {
+      "bytes": 128196,
+      "sha256": "c93db64c0edbfcafc7d53cdf78506dc5a9a295e5bd2cddcb39835b1beee7f771"
+    },
+    "genes/54.json.gz": {
+      "bytes": 151793,
+      "sha256": "fe7728f231cdbd10a5a7a88adec38c501fe23452a72711e3cd6c018a6e793483"
+    },
+    "genes/55.json.gz": {
+      "bytes": 115595,
+      "sha256": "a1513dcbb1eac32767cada64ebfca78bd992864346859d4fdf48fe344536803f"
+    },
+    "genes/56.json.gz": {
+      "bytes": 125891,
+      "sha256": "5e0ddd1ee3161e1cc95ae0ad15fa974ed41483847e11a40967e668c48ffc2238"
+    },
+    "genes/57.json.gz": {
+      "bytes": 126833,
+      "sha256": "1a23c38bc7e8e77ca3906173e14d7cc6b0d42b81cbf090603a68cb3d1d3cea1e"
+    },
+    "genes/58.json.gz": {
+      "bytes": 133321,
+      "sha256": "a4e5471df8cabc0aec261eb700c0dd57857d7efb2e0df8e64c0374ad0c9f376a"
+    },
+    "genes/59.json.gz": {
+      "bytes": 129936,
+      "sha256": "a4f2ebce9df5047e333a48d3d9d2258e84daabe2a65277c4f2a623109940c07f"
+    },
+    "genes/5a.json.gz": {
+      "bytes": 140534,
+      "sha256": "e7c346715c9f4b1161c709c738005de417e871f9f231cbbe8e49d08fe01e54d2"
+    },
+    "genes/5b.json.gz": {
+      "bytes": 150170,
+      "sha256": "d57734e582000898ca77188984a96cb4d7b1782c89eeae04fb43f004fde7a581"
+    },
+    "genes/5c.json.gz": {
+      "bytes": 123740,
+      "sha256": "3cc7bec671b58a94b15473d4630a6d44d938ec00efa0b92cedce2facac651999"
+    },
+    "genes/5d.json.gz": {
+      "bytes": 134484,
+      "sha256": "adda1b001bab61db4dd329672cfd973061318e0b4204da33921b340c2f5763f2"
+    },
+    "genes/5e.json.gz": {
+      "bytes": 151584,
+      "sha256": "f879e3634e5a7ae609916a491e06ab619ba3c75674c2c715ba6dcdc3de73c1bd"
+    },
+    "genes/5f.json.gz": {
+      "bytes": 129895,
+      "sha256": "1c161a4ea240e01886c2d22ced6ffc383d4f8a4059fd821499288e0e33868ba4"
+    },
+    "genes/60.json.gz": {
+      "bytes": 114134,
+      "sha256": "dab77db702e93852d37c1f8668c8915beed8034008ba1b7003e34ea997742640"
+    },
+    "genes/61.json.gz": {
+      "bytes": 109596,
+      "sha256": "ffc2c511f818acc3dd94c0e04ab178ed8c7d14eca8f21d02c6fcefc726ce8f67"
+    },
+    "genes/62.json.gz": {
+      "bytes": 128935,
+      "sha256": "574e6d316c9446061be4cada75cb1d064b05cf8326d01a3bfa77e019e8e036ca"
+    },
+    "genes/63.json.gz": {
+      "bytes": 115918,
+      "sha256": "b328b455eca8cbcbdd52ec178d991328d2ab0ccb715b394169e87c826945467b"
+    },
+    "genes/64.json.gz": {
+      "bytes": 145396,
+      "sha256": "2a577c06d22ea8615a081234c533777f8c18f6bf5a240a09087d8ffa3534b919"
+    },
+    "genes/65.json.gz": {
+      "bytes": 146211,
+      "sha256": "55936e10197b470487cd8e31266f2a6c4117cdcc6068ac0e95f57b732cb8a4bc"
+    },
+    "genes/66.json.gz": {
+      "bytes": 118840,
+      "sha256": "d59f9adeed84ed919939870d2c585c0422f5f242c04fa8b176998ca3890504a9"
+    },
+    "genes/67.json.gz": {
+      "bytes": 165824,
+      "sha256": "8dfa3a20bef1b3551b10126c590ae6d48471d39d9566b10f92eee6ec6ca44405"
+    },
+    "genes/68.json.gz": {
+      "bytes": 117517,
+      "sha256": "d4dbd23185b15aa1eb987ef3670af11db6c3ca21180009ea8725a4d61ea345ed"
+    },
+    "genes/69.json.gz": {
+      "bytes": 142718,
+      "sha256": "ef5660defc41027bfa2ede99be598acee9d569851bc67d900acfd13838161545"
+    },
+    "genes/6a.json.gz": {
+      "bytes": 122260,
+      "sha256": "cac9adb36d4275b0291b6438cbe14df5c625a5e3e40f0e4158c8f658a9e61719"
+    },
+    "genes/6b.json.gz": {
+      "bytes": 120634,
+      "sha256": "fc5c523590e934f9710e428bb1f3e132639a74f463d73f195544c03877f5a4f8"
+    },
+    "genes/6c.json.gz": {
+      "bytes": 125480,
+      "sha256": "324c0cf1604218b9c8dd635ae09a5753fa2f85dd302e706c5ca5aaa61cd67085"
+    },
+    "genes/6d.json.gz": {
+      "bytes": 140360,
+      "sha256": "d5498036b139b097ed2343871123a5bb08bed5c715e8df3f387e98bdc99f4d75"
+    },
+    "genes/6e.json.gz": {
+      "bytes": 122993,
+      "sha256": "b0fef74f2cb25507a7eb12c690af7876c279bcdc0170d9fb533c8143843a60f9"
+    },
+    "genes/6f.json.gz": {
+      "bytes": 131793,
+      "sha256": "9b71e6fb4f6ad37d7caab67dd781095e050d9927d190c520c2b2b2eda0b433fc"
+    },
+    "genes/70.json.gz": {
+      "bytes": 137401,
+      "sha256": "c89b941dfa3a8e078373e7d89ce688c4a21e1e8ba6cf20304d644d67e463c70a"
+    },
+    "genes/71.json.gz": {
+      "bytes": 157308,
+      "sha256": "6f857ef61404aed3c5f346ce9c1207dcc35c8d081153c0c9c1c282fe64d9e126"
+    },
+    "genes/72.json.gz": {
+      "bytes": 127552,
+      "sha256": "07a13c693f8815d1d947d898b522275980755b6bc6416435579d33681d320fcb"
+    },
+    "genes/73.json.gz": {
+      "bytes": 147215,
+      "sha256": "4068ceca2496b0006b53368c889dff1cb598020c3f8d9f5e16c6d61e73e1ff07"
+    },
+    "genes/74.json.gz": {
+      "bytes": 153479,
+      "sha256": "042440845d28e60dcaee795475592bd0db2913f0dcca0ae8c6b0b683030240fb"
+    },
+    "genes/75.json.gz": {
+      "bytes": 147110,
+      "sha256": "2c73e580c7ce567a1e782fdd8ed0557a91774b1335280dbbc1020929fbba3ca7"
+    },
+    "genes/76.json.gz": {
+      "bytes": 152178,
+      "sha256": "454c5bcf6ec74015068f75f1da749e05d6aa4cb387451531db2b4b5ab120db44"
+    },
+    "genes/77.json.gz": {
+      "bytes": 125865,
+      "sha256": "54ca37fcb5367587b2f0a953097338c047b4836cc40139cf21453456cffe0a57"
+    },
+    "genes/78.json.gz": {
+      "bytes": 121389,
+      "sha256": "06ee50a3efc2f0dbde27fdb919c77b3b3baa53dae0384f422a8cec343517cc7c"
+    },
+    "genes/79.json.gz": {
+      "bytes": 145252,
+      "sha256": "82c51caf87077aae67f8e768b2fae11415bc85a2e87da57666e97a8f79ecb3c4"
+    },
+    "genes/7a.json.gz": {
+      "bytes": 132066,
+      "sha256": "249c5146ad58198999a5f78e84411640ed0553922a31aacc371096aae4ff7dab"
+    },
+    "genes/7b.json.gz": {
+      "bytes": 136529,
+      "sha256": "92bf6c313bc366df93abeef1d9d4451ee94db93b3ee05c5afecbfa29a8a4f23e"
+    },
+    "genes/7c.json.gz": {
+      "bytes": 142064,
+      "sha256": "cc0240754eb919b7389b07bbfb669da4ec501fb9400deacbadd87c65eeed3b51"
+    },
+    "genes/7d.json.gz": {
+      "bytes": 140116,
+      "sha256": "fc85b018258893d6626e413add3f11c14de575e1013501046946f815d0b406de"
+    },
+    "genes/7e.json.gz": {
+      "bytes": 128959,
+      "sha256": "65e3f4a45307c738a213f9c1566aab974c27abde59026bc7b47120fd87493402"
+    },
+    "genes/7f.json.gz": {
+      "bytes": 138617,
+      "sha256": "2c9163e3d8bd34646ca747577ffeb24488645e58f726aab6194d4489f9ab5c44"
+    },
+    "genes/80.json.gz": {
+      "bytes": 135759,
+      "sha256": "53fd733a45cf97c941b3e993f97704c7b33b3d7a6d2ecb4b1e1adeb54a4af4f0"
+    },
+    "genes/81.json.gz": {
+      "bytes": 143920,
+      "sha256": "cad84435de993bee0bdee8ad37f49019e0b61b3761f81dbab4f4373e0d61a28b"
+    },
+    "genes/82.json.gz": {
+      "bytes": 125363,
+      "sha256": "f404b9d60eaf9c48b688871c61ece95a9708a9da9ae3c29d2e8bded4e10424b9"
+    },
+    "genes/83.json.gz": {
+      "bytes": 121619,
+      "sha256": "2a0bcd8f8c35c33a1743e268f0e8bafd31c289b4607dc3097e9d6609df7cb5a1"
+    },
+    "genes/84.json.gz": {
+      "bytes": 154680,
+      "sha256": "efdb473e9e393f3a7e786f6030c34c34740a6b307fbebce599e2f29c1c18fce3"
+    },
+    "genes/85.json.gz": {
+      "bytes": 137079,
+      "sha256": "ea4d06c04c401f8ef88b597332c29518e4755d660c3f8cf08bfa28e02aecd180"
+    },
+    "genes/86.json.gz": {
+      "bytes": 112313,
+      "sha256": "8144d1f596f7a2c7ea8eabee69437659fb126e90092ccd9b41780a63e22d8e83"
+    },
+    "genes/87.json.gz": {
+      "bytes": 113211,
+      "sha256": "51987acb5c033cea04f3bda136711afe5281957a90265c777b2a578d7e61e39d"
+    },
+    "genes/88.json.gz": {
+      "bytes": 135500,
+      "sha256": "34e27fd7e14cd9c0c75286bc54e0a226fb457669b365415ce11db863adcb5965"
+    },
+    "genes/89.json.gz": {
+      "bytes": 113219,
+      "sha256": "2c1838178d43ce3a8437cd6202adf35a9c26590ae7529bcb3a3eb79b4cd77f0d"
+    },
+    "genes/8a.json.gz": {
+      "bytes": 148024,
+      "sha256": "a47fda235370415b3d1a9eb9dff90688ec73dccebb3cb8f4510f6e436fecb275"
+    },
+    "genes/8b.json.gz": {
+      "bytes": 117180,
+      "sha256": "097262f8ec9e17a27311e23aaa45bb0f1e9faea1dcfa2d97aa0cd64fa0ed7436"
+    },
+    "genes/8c.json.gz": {
+      "bytes": 131347,
+      "sha256": "24511f5f56cc6370f9daf17fd9d59e0e1c9b6f427bdaec3d84db64b4deed509a"
+    },
+    "genes/8d.json.gz": {
+      "bytes": 139754,
+      "sha256": "3cce7e5eb0cdc334f63afa0ea9bba22a6f1c88563f73a6aa4c01eb5a8e67268e"
+    },
+    "genes/8e.json.gz": {
+      "bytes": 143667,
+      "sha256": "aeefc7e719019331d11a0cde4c7f3cc82dbc798072070e12043ab6f109c9c064"
+    },
+    "genes/8f.json.gz": {
+      "bytes": 108695,
+      "sha256": "8bd9fa08771fff2aefaf966592ad60bfdc291c8615647ebd64192ef4e11a07b8"
+    },
+    "genes/90.json.gz": {
+      "bytes": 141089,
+      "sha256": "bbf6d7e608713331cdf24a5cd694702983a5013116874e2e55da213bb494218a"
+    },
+    "genes/91.json.gz": {
+      "bytes": 111664,
+      "sha256": "330213538c526565dfbe3d880f30bf1e3e312ad4f2771d30dde40ac38386625e"
+    },
+    "genes/92.json.gz": {
+      "bytes": 120974,
+      "sha256": "493c12ffd8b2d5284261b36ac8112f6359ccc535e3921be45b1313ea365cbbbf"
+    },
+    "genes/93.json.gz": {
+      "bytes": 129172,
+      "sha256": "844bb391648ba9959f0a4f7bd4eecb3d07bb35eb2725242d987f9c032742ca9c"
+    },
+    "genes/94.json.gz": {
+      "bytes": 109317,
+      "sha256": "4e847011c3f22b6e1770b1b37f82274903dafabba3388a44ac59fb7353dda74d"
+    },
+    "genes/95.json.gz": {
+      "bytes": 139926,
+      "sha256": "34267a88cefe808575d4cf83116df8026578794c677571e78d93d3c301de3b3f"
+    },
+    "genes/96.json.gz": {
+      "bytes": 128583,
+      "sha256": "51b1b18b41932f0dfb5ac042fe3dd0198cc6101439dad7b697881a600498713d"
+    },
+    "genes/97.json.gz": {
+      "bytes": 121094,
+      "sha256": "dcc4c5edf6d2cf85af39b8102be01df6db8b2a23f851058cb38689a112267ef8"
+    },
+    "genes/98.json.gz": {
+      "bytes": 123623,
+      "sha256": "6863b9e1c9e763b4c55bf20c8570c81d987eb347812de8cfa1beb3afd1b1b7c6"
+    },
+    "genes/99.json.gz": {
+      "bytes": 139791,
+      "sha256": "7b56804a1c5fbdd153143ce15b748e161064507e769eb72f51caf3727842b42e"
+    },
+    "genes/9a.json.gz": {
+      "bytes": 124866,
+      "sha256": "09bea36de7ac5f3ea0e039c6cf6c9bff14de493651472a68c437979209e0c742"
+    },
+    "genes/9b.json.gz": {
+      "bytes": 151327,
+      "sha256": "81d9b6861251cbc26ef105a999114974b3c1730a848dc5b4d0ff734790a09756"
+    },
+    "genes/9c.json.gz": {
+      "bytes": 110920,
+      "sha256": "e74f7b4558b098e7341b2462e606892591061e8735b3b548534ce6cf4d8b5205"
+    },
+    "genes/9d.json.gz": {
+      "bytes": 143494,
+      "sha256": "4982ba5378c75f5659633431c5c17b673e913a4e64d06f9f309f5e962c8e5241"
+    },
+    "genes/9e.json.gz": {
+      "bytes": 109526,
+      "sha256": "51fbf87105d15a460502a47abb39f4f0870349de74bfca0c56b3286226e1fcb8"
+    },
+    "genes/9f.json.gz": {
+      "bytes": 141049,
+      "sha256": "71f770cdf52166dae2eef2621818f09d6322ba1842ed4975966cf5ab40da5e41"
+    },
+    "genes/a0.json.gz": {
+      "bytes": 128308,
+      "sha256": "ecf0c4187f7571e5d3b70699fbe06a1fde3ada1e70fdfa99d42ee477bdbebca9"
+    },
+    "genes/a1.json.gz": {
+      "bytes": 133152,
+      "sha256": "d64258665f32163473feb044d85006860aef772d15b0e87e632afe8c528b5bf5"
+    },
+    "genes/a2.json.gz": {
+      "bytes": 155091,
+      "sha256": "c813dfee51b22d0782df0e9186d22d31dba93b1f1109c9cf85918d3253affce6"
+    },
+    "genes/a3.json.gz": {
+      "bytes": 118297,
+      "sha256": "f7b9a6957ab4b953d7744864d8412b188c7417259123a67b09dc8b619601ef8f"
+    },
+    "genes/a4.json.gz": {
+      "bytes": 109779,
+      "sha256": "702bb9e5cc9a6cae9b1b3b93feb85aae4dddab9c557ad479af563ef6a17930f6"
+    },
+    "genes/a5.json.gz": {
+      "bytes": 138685,
+      "sha256": "0b6ac1249fa430e7e3c88ca76c5962d98f864b42664807b79291fd7bb5856806"
+    },
+    "genes/a6.json.gz": {
+      "bytes": 129967,
+      "sha256": "2812aa919ca6194c8728f9bdb8a722a5d0ecfaf687af7d37f8c1e057e6b73ea8"
+    },
+    "genes/a7.json.gz": {
+      "bytes": 142478,
+      "sha256": "a65d3b56231e0e7ed71262c03bcfdcba9af17e37d7e9e181832ca804e87a2516"
+    },
+    "genes/a8.json.gz": {
+      "bytes": 99878,
+      "sha256": "f3d40266067d900715b8d49fae3d1faf9f22f76fe425866a899d43ad6b6cd935"
+    },
+    "genes/a9.json.gz": {
+      "bytes": 130086,
+      "sha256": "18c02245a8d7aa76b8efe238f468ed2f275fc0d9f7c98d1fbb5e12dfef99d57f"
+    },
+    "genes/aa.json.gz": {
+      "bytes": 166522,
+      "sha256": "af62e1e3f3100bbdcf679539c1a16e14b3362669723f4657b293b5716e4ead80"
+    },
+    "genes/ab.json.gz": {
+      "bytes": 152915,
+      "sha256": "1f996cd2857f5fb9162e4a1b1a2c10dbcdec4a62df7e40d5a319dd9d2ae97093"
+    },
+    "genes/ac.json.gz": {
+      "bytes": 143861,
+      "sha256": "614e19fcd87fc557b94747d0f080caea169ead2cdb2148c9e26cbd13813713d0"
+    },
+    "genes/ad.json.gz": {
+      "bytes": 115998,
+      "sha256": "7abeaef6d13b482c46c6d2e40d2db1070087d2d94a21f6db6238993280bff9ad"
+    },
+    "genes/ae.json.gz": {
+      "bytes": 148861,
+      "sha256": "c40ada291caa7f7a573a8eb5bd462d87807ed27c11a839ff9d8e6f3b0330672f"
+    },
+    "genes/af.json.gz": {
+      "bytes": 131928,
+      "sha256": "cf7b1f702a28402ebe3f0bd767923ceb134f5c7af2ff34d86c982021389eb648"
+    },
+    "genes/b0.json.gz": {
+      "bytes": 125269,
+      "sha256": "96a317b2d4a3e0669330a9aac1b4b3852218ba9cca6a6094291d4098ea93ca69"
+    },
+    "genes/b1.json.gz": {
+      "bytes": 96226,
+      "sha256": "10d7a31282e71491aa63cb7a605fd2ba2313bb73cf835fc097d835a9f8167392"
+    },
+    "genes/b2.json.gz": {
+      "bytes": 145602,
+      "sha256": "53afe7987573ad83c875329e86ec3738ef8dafbb7b37619db7d81b14dcbb5a0f"
+    },
+    "genes/b3.json.gz": {
+      "bytes": 106205,
+      "sha256": "30278f95405000f4cab8b1022ede1656edbbb97f8fbb4a920ed8cb50071971d8"
+    },
+    "genes/b4.json.gz": {
+      "bytes": 140205,
+      "sha256": "d61a21bf1ce910fe65f2bc69e73ed00da3749538c0be35b24b0aaeac63c8e698"
+    },
+    "genes/b5.json.gz": {
+      "bytes": 112060,
+      "sha256": "f57a9ce6c510f6fe53da34b6797945fab4f07b5de3917767728b132ae6c52bb8"
+    },
+    "genes/b6.json.gz": {
+      "bytes": 129744,
+      "sha256": "ef4def030023a93cda5f10166c1ce817f6cd8fc585e54307b3ca3320d7ebcf7d"
+    },
+    "genes/b7.json.gz": {
+      "bytes": 121967,
+      "sha256": "a804b9aa4ae70db3cfb23f65fe7feefcbb4bfdb9a5e27450e5151c54c26fa69c"
+    },
+    "genes/b8.json.gz": {
+      "bytes": 147333,
+      "sha256": "02d6013ae0c0b8f7657309d8e49ed47e9a1986da6081b1ad3f1324703bdcc7ed"
+    },
+    "genes/b9.json.gz": {
+      "bytes": 132522,
+      "sha256": "d3fb75ca3f026506824d8ee868e3198318d1279f6e284de8b1710beaa0966132"
+    },
+    "genes/ba.json.gz": {
+      "bytes": 142102,
+      "sha256": "3a8ad3afc92a852ce9f7688b2fc0483ea713700ee4aa9e660cabc2d484a689a0"
+    },
+    "genes/bb.json.gz": {
+      "bytes": 142197,
+      "sha256": "a37096eb2187455329acf01e09e5203218490efbd56208b9d5c80e784062e6fc"
+    },
+    "genes/bc.json.gz": {
+      "bytes": 130355,
+      "sha256": "6d76fa1fdac65bfa7591149a0b6c76f1a0f1f94f2d11a5213599cc15fdabb09f"
+    },
+    "genes/bd.json.gz": {
+      "bytes": 138356,
+      "sha256": "1c2267177cceb921896de94f562c355c1caf51a4fd1027e4b1eb3af821f96159"
+    },
+    "genes/be.json.gz": {
+      "bytes": 130414,
+      "sha256": "e128a8db337f268498d09335272d4e0823c847a0bd1ec0c6b156ff20d4e32466"
+    },
+    "genes/bf.json.gz": {
+      "bytes": 131722,
+      "sha256": "d84ad7aff6cdf0ea9f6197744067a14fac740d2b1c74f79aa3dcf730179dcbc4"
+    },
+    "genes/c0.json.gz": {
+      "bytes": 131517,
+      "sha256": "d898c03acaa73ec24e340788b5faf547d39bd9bd0aea0fa52fe06b03a98614e9"
+    },
+    "genes/c1.json.gz": {
+      "bytes": 141449,
+      "sha256": "52e3725dca983a499988de8ba8a33d8684c3ba8c23ed013ffe96fdab9efd33dc"
+    },
+    "genes/c2.json.gz": {
+      "bytes": 122499,
+      "sha256": "a335549741cdd45cf177cfa603f02b523aad19a605db1e63f00ad9800cde1896"
+    },
+    "genes/c3.json.gz": {
+      "bytes": 138250,
+      "sha256": "de150517ff2ccc662017397d64a4d110eb3a5fe9e151c57ecd4e2d444fe359a5"
+    },
+    "genes/c4.json.gz": {
+      "bytes": 107526,
+      "sha256": "0d04fc19a24be18f0c75eac9b9307f9187726137c8468df454a9aad0e63c88d4"
+    },
+    "genes/c5.json.gz": {
+      "bytes": 133639,
+      "sha256": "b01428a3abe1409597984badcb07f691191b7f55a87a85eeed9de020e8a74e9f"
+    },
+    "genes/c6.json.gz": {
+      "bytes": 153227,
+      "sha256": "68a21d2f0fb7269de77e5dfe38b18d4a493fd221c577e92931634ca9fbc2332f"
+    },
+    "genes/c7.json.gz": {
+      "bytes": 146704,
+      "sha256": "5d5b78d047fb4b456a90af28b02c851df0ca34e7036fd4a3a4bbe3616dd203b5"
+    },
+    "genes/c8.json.gz": {
+      "bytes": 125193,
+      "sha256": "5f1d3b5d526fb8e08edf8f29d7646f1cf55deebf44e332cfe79c405b1b59f8f7"
+    },
+    "genes/c9.json.gz": {
+      "bytes": 119498,
+      "sha256": "2c0bc9d4a371d2de625be64359ee8c35d26ac5676a268d7c9d70b7988fe3cda8"
+    },
+    "genes/ca.json.gz": {
+      "bytes": 117688,
+      "sha256": "d6a4087d833fb0e1e01de82a697f38fa5863ea1020232219de81611e902ec2b4"
+    },
+    "genes/cb.json.gz": {
+      "bytes": 151936,
+      "sha256": "0c8cb33dcb63e4e4d659e78344c1e2de6eb6630c0b8b252d899a99207a016904"
+    },
+    "genes/cc.json.gz": {
+      "bytes": 130207,
+      "sha256": "c620583b2c63748c96fc430e13d1722351808c5eb626f116dcef002378713e3f"
+    },
+    "genes/cd.json.gz": {
+      "bytes": 124854,
+      "sha256": "c5f7f50773ea2d8fa83d0478f8aff5f1e34d82085865bb5cd988e0d2a8c7f762"
+    },
+    "genes/ce.json.gz": {
+      "bytes": 123213,
+      "sha256": "7dc69c4c539411bb7f5b116c3b8a5023ef5d800360985d8b4476dc214efc4f10"
+    },
+    "genes/cf.json.gz": {
+      "bytes": 158621,
+      "sha256": "abdbf036aef615ea5d87c1687de130d74ac6421c47a5b8f3ed178ad679ff8495"
+    },
+    "genes/d0.json.gz": {
+      "bytes": 120073,
+      "sha256": "93e9cf4609cf329b1479abf927fa7344d73f32d9387d23dd229ed62c0e8f36b2"
+    },
+    "genes/d1.json.gz": {
+      "bytes": 133271,
+      "sha256": "d15e55b4398f0dcbda141e3d7d31d528d2a489d8472506ef735b786185d45dfe"
+    },
+    "genes/d2.json.gz": {
+      "bytes": 132755,
+      "sha256": "dad4870bde46c3cecefbf5910d31acca68085f25dc8ed63e17c8cd1e4077a1bc"
+    },
+    "genes/d3.json.gz": {
+      "bytes": 121342,
+      "sha256": "ac2096538c74023c26cc7db3d0ae970c808ac88a20811214db9faeefdf885d70"
+    },
+    "genes/d4.json.gz": {
+      "bytes": 135060,
+      "sha256": "628c0703a65163f60ab15f106fef6f9e284ad1833d537f6d9c0dd1fa8eda7777"
+    },
+    "genes/d5.json.gz": {
+      "bytes": 137126,
+      "sha256": "044b8b5775a526597522bd631a3484133b462b9e48da95c1c335e9310eea0b98"
+    },
+    "genes/d6.json.gz": {
+      "bytes": 115666,
+      "sha256": "b3a05d6942357c1808e37e941ae4f7787c3aeabd0ddf8ec30142843420dc1f48"
+    },
+    "genes/d7.json.gz": {
+      "bytes": 114026,
+      "sha256": "684bdcf1d7909b04c550b826eed03512234448e6a62ed3e254d0c7f178469fc7"
+    },
+    "genes/d8.json.gz": {
+      "bytes": 145152,
+      "sha256": "a41a6d2daf669248e0dcf3414bb6baf0399927f6c2fc83189fb52e756d04166a"
+    },
+    "genes/d9.json.gz": {
+      "bytes": 125384,
+      "sha256": "861b13863488440f357e7b0a67e50cd64a175347477bfc1ebb621e14fd9828e2"
+    },
+    "genes/da.json.gz": {
+      "bytes": 117911,
+      "sha256": "73b2b7b3e1dba06241d71bb326fd2042cfd679092148d8cd5ba5f2313ec30d2f"
+    },
+    "genes/db.json.gz": {
+      "bytes": 108628,
+      "sha256": "f4e76ac2d4d3a226bc6afb5e544a9d90e7c95486ee80d46ba64945094a6884a5"
+    },
+    "genes/dc.json.gz": {
+      "bytes": 130876,
+      "sha256": "2bff1fe5d5bd8be79513ab7979dd8f402d23a2b40882acfaf55bf0d9e69e7a05"
+    },
+    "genes/dd.json.gz": {
+      "bytes": 118757,
+      "sha256": "d9d0e9b15db96eacd0c1211bee61d6e1c52ccec09419078ff2e40ba9978311a8"
+    },
+    "genes/de.json.gz": {
+      "bytes": 133859,
+      "sha256": "6109f2f32b28d083321a918d9e87476fac681f00538c6af9f3d5295899a4651e"
+    },
+    "genes/df.json.gz": {
+      "bytes": 158157,
+      "sha256": "4aa394dff4b628ba3b20e1bfb1c55244144b262b787ca72cede2a3a3f03330fe"
+    },
+    "genes/e0.json.gz": {
+      "bytes": 118722,
+      "sha256": "421b4da99342bdc4894a883a684882063b6114d943a890e88fa45244103a1d55"
+    },
+    "genes/e1.json.gz": {
+      "bytes": 143736,
+      "sha256": "2e1bef456dcff94b1016ac10aa8c2b7ea8298325bcecb35661f015a0e0ce22d3"
+    },
+    "genes/e2.json.gz": {
+      "bytes": 139958,
+      "sha256": "e5c3cb1441de62067a72b70da9980921d7c10ec230f2d36293a1f2ec63d39aa7"
+    },
+    "genes/e3.json.gz": {
+      "bytes": 136362,
+      "sha256": "d2575e4ff789c9ba3c5e1124a5ae10f0a420923974b6a1ea8f904c9b73ec2736"
+    },
+    "genes/e4.json.gz": {
+      "bytes": 138188,
+      "sha256": "e1c15e1aca5bfe7d01d97ecaa19c7ebb678b8f596be8982f0a7423ac22c726f8"
+    },
+    "genes/e5.json.gz": {
+      "bytes": 142119,
+      "sha256": "dbeeb0e975d8ae3e71e0a86dead701b5d358724fc63b430c2aa9ae1a59f89e06"
+    },
+    "genes/e6.json.gz": {
+      "bytes": 124300,
+      "sha256": "0c7b5cec5e9ff5b862f23033d915b257c3dd3ace71d8d727b981ea9593aa2ad9"
+    },
+    "genes/e7.json.gz": {
+      "bytes": 150078,
+      "sha256": "b5afb57036681f14812510ef2dadf674ea15a9785cb9b3f28e0ce883159bae84"
+    },
+    "genes/e8.json.gz": {
+      "bytes": 124596,
+      "sha256": "d0c4434737225b4e731840bf25694bb4b55f82d16e61e41acea0e7ddad775042"
+    },
+    "genes/e9.json.gz": {
+      "bytes": 157897,
+      "sha256": "4dbd42482f41e201d9c1001d4698a0fb5636c2899000d6c19268d83b0a474cb8"
+    },
+    "genes/ea.json.gz": {
+      "bytes": 129975,
+      "sha256": "e843012497fad322ec3ff465fad4b9572ea87f832ee940a22b82814c7f0b0657"
+    },
+    "genes/eb.json.gz": {
+      "bytes": 116524,
+      "sha256": "a82028927ba7f23bb31f366775acb760052487ba7b6cab2c837ca79741152c54"
+    },
+    "genes/ec.json.gz": {
+      "bytes": 134740,
+      "sha256": "f4a2486cda0bbcd784f7e994a5d77c2cf15da8ea6ce6e531477052b16c31be08"
+    },
+    "genes/ed.json.gz": {
+      "bytes": 118867,
+      "sha256": "4064d944dab45b41040cd3fb5c6a2ec610489e81fd0f1362eb2c8b77047a8749"
+    },
+    "genes/ee.json.gz": {
+      "bytes": 141071,
+      "sha256": "4476426ad25bd19535c78c87880d20b784a5e0709368ce0a807b6ab459446e4c"
+    },
+    "genes/ef.json.gz": {
+      "bytes": 130755,
+      "sha256": "3c787dcf7f000f92e9e15851923dee10c9e15e8fb256ce726527bcbcb10ac488"
+    },
+    "genes/f0.json.gz": {
+      "bytes": 155233,
+      "sha256": "9c3be4296b233cbd7f67a1dbfe5fdda10d34ec172e1e42df20edeec689d25811"
+    },
+    "genes/f1.json.gz": {
+      "bytes": 140703,
+      "sha256": "36b314ac552ebdc2355319643e211b5af819759c7bdffaaf06b792d60172226f"
+    },
+    "genes/f2.json.gz": {
+      "bytes": 133009,
+      "sha256": "1222c2b832d40d7d91c8c3c08670a292ea710fab694f39150fb45ebd64c18d07"
+    },
+    "genes/f3.json.gz": {
+      "bytes": 125802,
+      "sha256": "321c2bc7eec5e12369effd7ee8c65740e134cd561f3c659e8a10142bfe7016e3"
+    },
+    "genes/f4.json.gz": {
+      "bytes": 136725,
+      "sha256": "57bf5986045c5fdc4b112f2b2c2733b737499aff67615387d6de7d988c5f95ed"
+    },
+    "genes/f5.json.gz": {
+      "bytes": 126374,
+      "sha256": "269a12f9c9ead9193f818c0b85f9cdc7668b82d4d657eb31f277c81bbdbf6334"
+    },
+    "genes/f6.json.gz": {
+      "bytes": 135513,
+      "sha256": "65bc3502c5aab3d97c27eed842ed0b20f5508a862c6b41b0367c3df5961135e0"
+    },
+    "genes/f7.json.gz": {
+      "bytes": 161335,
+      "sha256": "0fe9735e68317758d9409a8155bae124efc847d0854f285c8e72840f01647592"
+    },
+    "genes/f8.json.gz": {
+      "bytes": 95815,
+      "sha256": "564966315fc00d1be85590e10e1888d14f39d60ebbf1a81cea1c9b4e6b268bac"
+    },
+    "genes/f9.json.gz": {
+      "bytes": 86698,
+      "sha256": "7412c9e295aeee5961546d855fd8488cc9942e71c00dcd9436d7867bede5e537"
+    },
+    "genes/fa.json.gz": {
+      "bytes": 141801,
+      "sha256": "1657af1db34c6a3a48eee35221be3013d2a7c0b7132811feb126e67e5dabe25c"
+    },
+    "genes/fb.json.gz": {
+      "bytes": 123558,
+      "sha256": "cc7d60027978d9eccdb4ef5024f54f2fa6483c216bbf60d6b5fef2564481eaaf"
+    },
+    "genes/fc.json.gz": {
+      "bytes": 135871,
+      "sha256": "7a4123ac9af0e3b5e82d7da19d0e84c0af9052ff3d9b69ebfa187ca9132ed1ad"
+    },
+    "genes/fd.json.gz": {
+      "bytes": 113114,
+      "sha256": "180c6ad893699bf1f2f677d0e3ffc92eff2af6592372ca831d5df4c9de6c1592"
+    },
+    "genes/fe.json.gz": {
+      "bytes": 129298,
+      "sha256": "4dfcec43f0410c3a6bc18616fb60163c26b2dd2e0b2ba0db401a376a7cbe0a01"
+    },
+    "genes/ff.json.gz": {
+      "bytes": 127855,
+      "sha256": "d81bf9cb64297aa4b5a32f4a0b5308fa5d26557d5c466745e6d99235515a65d3"
+    },
+    "orthologs.json.gz": {
+      "bytes": 733939,
+      "sha256": "b479d7afd2b3abf1f880a0c9a418930fac401f07333ac2d456e92debdf8823b7"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+---
+title: Team
+permalink: /team/
+nav: true
+nav_order: 3
+---
+<header class="kl-page-heading"><p class="kl-eyebrow">PEOPLE & COLLABORATION</p><h1>Our team</h1><p>Connecting molecular biology, retinal research, and computational approaches.</p></header>
+<section class="kl-pi-card"><p class="kl-eyebrow">PRINCIPAL INVESTIGATOR</p><h2>Jun-Yan Kang</h2><p>Shanghai Ninth People's Hospital<br>Shanghai Jiao Tong University School of Medicine</p><div class="kl-links"><a href="https://orcid.org/0000-0001-5191-5217">ORCID ↗</a><a href="{{ '/publications/' | relative_url }}">Publications ↗</a></div></section>
+<details class="kl-training"><summary>PI academic background</summary>
+{% for item in site.data.profile.affiliations %}
+<article class="kl-profile-entry"><div class="kl-number">{{ item.start_year }}{% if item.end_year %}–{{ item.end_year }}{% else %}–present{% endif %}</div><div><h2>{{ item.organization | escape }}</h2>{% if item.role %}<p>{{ item.role | escape }}</p>{% endif %}<p class="kl-note">{{ item.city | escape }}, {{ item.country | escape }}</p></div></article>
+{% endfor %}
+<div class="kl-links"><a href="https://orcid.org/0000-0001-5191-5217">Full ORCID profile ↗</a><a href="https://github.com/JunyanKang">Software on GitHub ↗</a></div>
+<p class="kl-note">Affiliation details reflect the public ORCID record, retrieved {{ site.data.profile.retrieved_at }}.</p>
+</details>
+<section class="kl-section kl-team-banner"><div><h2>Connect with the lab</h2><p>Interested in retinal biology, shared datasets or research software?</p></div><a class="kl-button kl-button--secondary" href="{{ '/contact/' | relative_url }}">Contact & collaboration ↗</a></section>

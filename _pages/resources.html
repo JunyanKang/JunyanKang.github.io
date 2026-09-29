@@ -1,0 +1,25 @@
+---
+title: Resources
+permalink: /resources/
+nav: true
+nav_order: 4
+---
+<header class="kl-page-heading"><p class="kl-eyebrow">OPEN RESEARCH</p><h1>Software & data</h1><p>Open-source software, reproducible workflows, and expression resources.</p></header>
+<section class="kl-atlas-banner">
+  <div><span class="kl-status">OPEN DATA RESOURCE</span><h2>Expression atlas</h2><p>Explore gene expression across bulk, single-cell, and spatial datasets, with cross-species ortholog mapping.</p></div>
+  <a class="kl-button" href="{{ '/expression-atlas/' | relative_url }}">Open atlas ↗</a>
+</section>
+<section class="kl-section" id="software">
+  <div class="kl-section-heading"><h2>Research software</h2><a href="https://github.com/JunyanKang?tab=repositories">All repositories ↗</a></div>
+  <div class="kl-resource-grid">
+  {% for project in site.data.software.projects %}
+    <article>
+      <span class="kl-status">{{ project.category | escape }}</span>
+      <h2>{{ project.title | escape }}</h2>
+      <p>{{ project.description | escape }}</p>
+      <p class="kl-note">{{ project.license | escape }}{% if project.upstream %} · Fork · <a href="{{ project.upstream }}">Original project</a>{% else %} · Original repository{% endif %}</p>
+      <div class="kl-links"><a class="kl-button kl-button--secondary" href="{{ project.url }}">View on GitHub ↗</a>{% if project.releases %}<a href="{{ project.releases }}">Releases ↗</a>{% endif %}</div>
+    </article>
+  {% endfor %}
+  </div>
+</section>

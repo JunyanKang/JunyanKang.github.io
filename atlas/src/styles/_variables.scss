@@ -1,0 +1,52 @@
+:root {
+  --color-primary: #1e4f7a;
+  --color-primary-dark: #123755;
+  --color-primary-light: #3d7397;
+  --color-secondary: #b18842;
+  --color-accent: #2d7f79;
+  --color-success: #2f855a;
+  --color-danger: #c44747;
+  --color-warning: #bd7f28;
+
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-surface-alt: #f4f6f2;
+  --color-surface-muted: #eef2ec;
+  --color-border: #d8e1e5;
+  --color-border-strong: #bcc9d1;
+
+  --color-text: #1e2a33;
+  --color-text-secondary: #4a5b67;
+  --color-muted: #7d8e9b;
+
+  --color-primary-soft-05: rgba(30, 79, 122, 0.05);
+  --color-primary-soft-08: rgba(30, 79, 122, 0.08);
+  --color-primary-soft-12: rgba(30, 79, 122, 0.12);
+  --color-primary-soft-16: rgba(30, 79, 122, 0.16);
+  --color-primary-soft-20: rgba(30, 79, 122, 0.2);
+  --color-primary-soft-border: rgba(30, 79, 122, 0.3);
+  --color-primary-focus-ring: rgba(30, 79, 122, 0.25);
+
+  --font-family-sans: 'Manrope', 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-family-heading: 'Noto Serif SC', 'Cormorant Garamond', Georgia, serif;
+  --font-family-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
+
+  --shadow-sm: 0 10px 24px rgba(12, 29, 43, 0.08);
+  --shadow-md: 0 24px 56px rgba(12, 29, 43, 0.12);
+  --shadow-lg: 0 42px 90px rgba(12, 29, 43, 0.16);
+  --shadow-focus: 0 0 0 4px var(--color-primary-focus-ring);
+
+  --radius-xs: 10px;
+  --radius-sm: 14px;
+  --radius-md: 22px;
+  --radius-lg: 30px;
+  --radius-xl: 40px;
+  --radius-pill: 999px;
+
+  --layout-max-width: 1360px;
+  --layout-gutter: clamp(14px, 2.4vw, 34px);
+
+  --transition-fast: 180ms ease;
+  --transition-base: 280ms ease;
+  --transition-slow: 460ms cubic-bezier(0.2, 0.7, 0.1, 1);
+}

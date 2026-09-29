@@ -1,0 +1,13 @@
+# Retinal K wordmark, version 3
+
+Generated using the built-in image_gen tool, editing the preceding K wordmark. Transparent PNG; not a vector file. The previous variants are retained, not overwritten.
+
+Prompt:
+
+Redesign the referenced Kang Lab logo in response to two specific corrections: the standalone K symbol plus the K of KANG is redundant, and parallel stripes do not clearly communicate retina. Create a SINGLE cohesive horizontal wordmark that reads exactly 'KANG LAB', with only ONE K total. The illustrated K IS the first letter of KANG, followed immediately by ANG LAB on the same typographic baseline. Absolutely no separate emblem, no extra K, no duplicated initials. Make this first K a clean recognizable typographic capital K whose interior contains a simplified but anatomically recognizable RETINAL CROSS SECTION: a compact row of elongated rod outer segments and distinctly tapered cone outer segments, small round cell bodies in layered rows, a few bipolar connectors and two ganglion-cell dendritic shapes. These recognizably different retinal cell silhouettes are essential, not just generic stripes or a tree. Keep the K's outer contour bold and legible; internal anatomy uses economical flat shapes with clear negative space, no more than 6 photoreceptors so it is not intricate or noisy. The K is only modestly taller than the remaining uppercase letters, not a huge detached illustration. ANG in matching medium-weight humanist sans serif, LAB lighter, careful spacing so it reads as one brand name. Restrained deep teal and desaturated sage, tiny muted ochre cone accent, transparent background. Scholarly biological lab identity. No eye outline, no iris, no DNA, no generic circuit, no repeated letters, no shadow, no glow, no 3D, no badge, no tagline, no anatomical labels. One polished logo, not variations or a presentation sheet.
+
+Output: kang-lab-retinal-k-v3.png. Project copy: academic-site/assets/img/kang-lab-retinal-k-v3.png.
+
+The hero image is an AI-assisted conceptual illustration of retinal layers, not experimental data or a claim of anatomical completeness. It is labeled as conceptual on the homepage. Generated with the built-in image_gen tool; its prompt specified rods and cones, layered neuronal cell bodies and ganglion-cell connections, an ivory background, teal, sage and ochre flat editorial illustration, and no labels or pseudo-data.
+
+The favicon was generated from the approved-direction retinal K wordmark, with the remaining letters removed and the K centered on a square transparent canvas. Generated raster assets are not represented as editable vectors.
