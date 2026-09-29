@@ -56,12 +56,12 @@
       "author_entries": [
         {
           "name": "Yu-Tong Liu",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Qing Li",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
@@ -72,12 +72,12 @@
         {
           "name": "Zi-Wu Wang",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         },
         {
           "name": "Jun-Yan Kang",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         }
       ],
       "url": "https://doi.org/10.1186/s12967-026-07769-z",
