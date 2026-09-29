@@ -37,6 +37,10 @@ The Actions deployment does not configure a domain merely from a `CNAME` file. T
 
 ## Validation and recovery
 
+Deployment verified on 2026-09-29: `https://kanglab.cool` is live, the certificate covers both the apex and `www`, and HTTPS enforcement is enabled. HTTP and `www` redirect to the canonical HTTPS domain. Actions release `82ac56a` passed build, all six atlas data tests, and deployment.
+
+Browser checks confirmed Epha5 matches all seven datasets, Pax6 matches six, PDF and CSV downloads work, and the ortholog panel opens the expected annotation links. The public snapshot was compared against the original database for seven test queries plus an alias. The local post-release checks also exercised a simulated HTTP 503 followed by Retry and explicit no-match messages. Desktop and 390-pixel mobile layouts were inspected; all 148 local asset/page references in the built HTML resolved. These are release-time checks, not a guarantee of future third-party availability.
+
 Check home, publications, resources, and `/expression-atlas/?gene=Pax6`; also reload the atlas URL directly. Query a nonexistent gene to verify the no-match state. Test Plot/Data, CSV export, PDF export, and mobile navigation.
 
 If a build fails, the previously deployed site remains available. Fix the failure and push again. To roll back a content change, revert the relevant commit and let Actions redeploy. Do not delete the existing database or its source tables when updating the public snapshot.
