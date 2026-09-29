@@ -684,17 +684,17 @@
         {
           "name": "Xiang-Dong Fu",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         },
         {
           "name": "Mo-Fang Liu",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         },
         {
           "name": "Shunmin He",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         }
       ],
       "url": "https://doi.org/10.1038/cr.2015.4",
