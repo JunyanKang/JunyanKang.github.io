@@ -638,17 +638,17 @@
       "author_entries": [
         {
           "name": "Peng Zhang",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Jun-Yan Kang",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Lan-Tao Gou",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
