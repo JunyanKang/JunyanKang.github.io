@@ -203,12 +203,12 @@
       "author_entries": [
         {
           "name": "Jun- Kang",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Ai Zhong",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
@@ -227,8 +227,8 @@
           "corresponding_author": false
         },
         {
-          "name": "Mo- Liu",
-          "first_author": false,
+          "name": "Mo-fang Liu",
+          "first_author": true,
           "corresponding_author": false
         }
       ],
