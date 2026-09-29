@@ -530,27 +530,27 @@
       "author_entries": [
         {
           "name": "Lan-Tao Gou",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Jun-Yan Kang",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Peng Dai",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Xin Wang",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Feng Li",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
@@ -611,12 +611,12 @@
         {
           "name": "Hui-Juan Shi",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         },
         {
           "name": "Mo-Fang Liu",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         }
       ],
       "url": "https://doi.org/10.1016/j.cell.2017.04.034",
