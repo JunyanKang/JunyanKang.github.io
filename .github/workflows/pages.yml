@@ -27,6 +27,7 @@ jobs:
           cache-dependency-path: atlas/package-lock.json
       - run: npm ci --prefix atlas
       - run: npm test --prefix atlas
+      - run: node --test tests/*.test.mjs
       - run: node scripts/build.mjs
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -11,8 +11,12 @@ nav_order: 4
 </section>
 <section class="kl-section" id="software">
   <div class="kl-section-heading"><h2>Research software</h2><a href="https://github.com/JunyanKang?tab=repositories">All repositories ↗</a></div>
+  <div class="kl-filter-buttons" role="group" aria-label="Software categories"><button type="button" class="is-active" data-software-filter="all" aria-pressed="true">All software</button>{% for group in site.data.software.groups %}<button type="button" data-software-filter="{{ group.id }}" aria-pressed="false">{{ group.title }}</button>{% endfor %}</div>
+  {% for group in site.data.software.groups %}
+  <section class="kl-software-group" data-software-group="{{ group.id }}"><div class="kl-software-group-heading"><h3>{{ group.title | escape }}</h3><p>{{ group.description | escape }}</p></div>
   <div class="kl-resource-grid">
-  {% for project in site.data.software.projects %}
+  {% assign projects = site.data.software.projects | where: 'group', group.id %}
+  {% for project in projects %}
     <article>
       <span class="kl-status">{{ project.category | escape }}</span>
       <h2>{{ project.title | escape }}</h2>
@@ -22,4 +26,6 @@ nav_order: 4
     </article>
   {% endfor %}
   </div>
+  </section>
+  {% endfor %}
 </section>

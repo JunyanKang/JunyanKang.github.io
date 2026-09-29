@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ExpressionAtlasPage } from './pages/ExpressionAtlasPage';
 import { registerWebComponents } from './web-components/register';
-import './styles/global.scss';
 import './atlas.scss';
 
 class AtlasBoundary extends Component<{ children: ReactNode }, { error: boolean }> {
@@ -17,11 +16,12 @@ class AtlasBoundary extends Component<{ children: ReactNode }, { error: boolean 
 function ResourcesRedirect() { window.location.replace('/resources/'); return <a href="/resources/">Back to resources</a>; }
 registerWebComponents();
 createRoot(document.getElementById('root')!).render(<>
-  <header className="atlas-header"><a href="/" className="atlas-brand"><img src="/assets/img/kang-lab-retinal-k-v3.png" width="2070" height="760" alt="Kang Lab" /></a><nav aria-label="Main navigation"><a href="/research/">Research</a><a href="/publications/">Publications</a><a href="/resources/">Resources</a></nav></header>
-  <main><AtlasBoundary><BrowserRouter><Routes>
+  <a className="atlas-skip" href="#atlas-main">Skip to content</a>
+  <header className="atlas-header"><div className="atlas-header-inner"><a href="/" className="atlas-brand"><img src="/assets/img/kang-lab-retinal-k-v3.png" width="2070" height="760" alt="Kang Lab" /></a><nav aria-label="Main navigation"><a href="/">Home</a><a href="/research/">Research</a><a href="/publications/">Publications</a><a href="/team/">Team</a><a href="/resources/" aria-current="true">Resources</a><a href="/contact/">Contact</a></nav></div></header>
+  <main id="atlas-main"><AtlasBoundary><BrowserRouter><Routes>
     <Route path="/expression-atlas/" element={<ExpressionAtlasPage />} />
     <Route path="/internal-resources" element={<ResourcesRedirect />} />
     <Route path="*" element={<Navigate to="/expression-atlas/" replace />} />
   </Routes></BrowserRouter></AtlasBoundary></main>
-  <footer className="atlas-footer">Kang Lab · Public expression atlas. <a href="/assets/atlas/v1/manifest.json">Dataset manifest</a> · <a href="/resources/">All resources</a></footer>
+  <footer className="atlas-footer"><div><strong>Kang Lab</strong><p>Public expression atlas · Shanghai Ninth People's Hospital</p></div><div><a href="/assets/atlas/v1/manifest.json">Dataset manifest</a><a href="/contact/">Contact</a><a href="/admin/">Admin</a></div></footer>
 </>);

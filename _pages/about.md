@@ -12,7 +12,7 @@ nav: false
     <div class="kl-links kl-hero-actions"><a class="kl-button" href="{{ '/research/' | relative_url }}">Explore our research <span aria-hidden="true">↗</span></a><a class="kl-text-link" href="{{ '/expression-atlas/' | relative_url }}">Query the expression atlas <span aria-hidden="true">↗</span></a></div>
     <p class="kl-affiliation">Shanghai Ninth People's Hospital<br>Shanghai Jiao Tong University School of Medicine</p>
   </div>
-  <figure class="kl-hero-figure"><img src="{{ '/assets/img/retinal-layers-concept.png' | relative_url }}" width="1448" height="1086" alt="Conceptual illustration of layered retinal cells, including rods, cones and retinal neurons" fetchpriority="high"><figcaption>Retinal cell diversity <span>Conceptual illustration · AI-assisted</span></figcaption></figure>
+  <figure class="kl-hero-figure"><img src="{{ '/assets/img/retinal-layers-concept.png' | relative_url }}" width="1448" height="1086" alt="Conceptual illustration of layered retinal cells, including rods, cones and retinal neurons" fetchpriority="high"><figcaption>Retinal cell diversity <span>Conceptual illustration</span></figcaption></figure>
 </section>
 
 <section class="kl-section">
@@ -26,7 +26,7 @@ nav: false
 
 <section class="kl-section">
   <div class="kl-section-heading"><div><p class="kl-eyebrow">SELECTED WORK</p><h2>From questions to discoveries</h2></div><a href="{{ '/publications/' | relative_url }}">All publications ↗</a></div>
-  {% assign selected = site.data.publications.items | where: 'selected', true %}
+  {% assign selected = site.data.publications_all.items | where: 'selected', true %}
   {% for paper in selected %}{% include kanglab-publication.liquid paper=paper compact=true %}{% endfor %}
 </section>
 

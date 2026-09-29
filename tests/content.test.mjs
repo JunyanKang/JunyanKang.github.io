@@ -1,0 +1,9 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { mergePublications, validateTeam, bibliography } from '../scripts/content.mjs';
+const paper={title:'Test paper',year:'2025',doi:'10.1234/TEST',authors:'A, B',author_names:['A','B'],url:'https://doi.org/10.1234/TEST'};
+test('manual edits override ORCID records without duplicate DOIs',()=>{ const papers=mergePublications([paper],[{...paper,doi:'https://doi.org/10.1234/test',title:'Corrected title'}]);assert.equal(papers.length,1);assert.equal(papers[0].title,'Corrected title'); });
+test('new manual records survive refresh and hidden records are excluded',()=>{ const papers=mergePublications([paper],[{...paper,doi:'10.1234/new',title:'Manual work'},{doi:paper.doi,hidden:true}]);assert.equal(papers.length,1);assert.equal(papers[0].title,'Manual work');assert.match(bibliography(papers),/Manual work/); });
+test('unsafe publication links are rejected',()=>{assert.throws(()=>mergePublications([],[{...paper,doi:null,url:'javascript:alert(1)'}]));});
+test('public team roster excludes private fields and has valid regional assignments',async()=>{const team=JSON.parse(await readFile(new URL('../_data/team.json',import.meta.url),'utf8'));const geo=JSON.parse(await readFile(new URL('../assets/geo/china-provinces.geojson',import.meta.url),'utf8'));const codes=geo.features.map(f=>String(f.properties.adcode));validateTeam(team,codes);assert.throws(()=>validateTeam({...team,advisor:'hidden'},codes));assert.throws(()=>validateTeam({...team,members:[{...team.members[0],region:'invalid'}]},codes));});

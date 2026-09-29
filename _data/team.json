@@ -1,0 +1,21 @@
+{
+  "pi": {"name":"Jun-Yan Kang","name_zh":"康俊炎","photo":"/assets/img/team/jun-yan-kang.jpg","position":"Principal investigator","affiliation":"Shanghai Ninth People's Hospital · Shanghai Jiao Tong University School of Medicine","orcid":"https://orcid.org/0000-0001-5191-5217"},
+  "members": [
+    {"name":"丁陆玥","year":2023,"role":"直博生","group":"doctoral","region":"330000","hometown":"浙江 · 绍兴"},
+    {"name":"刘昱彤","year":2023,"role":"硕士生","group":"masters","region":"500000","hometown":"重庆"},
+    {"name":"刘雨","year":2023,"role":"普博生","group":"doctoral","region":"320000","hometown":"江苏 · 通州"},
+    {"name":"童玲","year":2024,"role":"硕士生","group":"masters","region":"360000","hometown":"江西 · 上饶"},
+    {"name":"蒙春仁","year":2024,"role":"普博生","group":"doctoral","region":"450000","hometown":"广西 · 河池"},
+    {"name":"郭远融","year":2024,"role":"直博生","group":"doctoral","region":"310000","hometown":"上海"},
+    {"name":"于兴海","year":2024,"role":"博士后","group":"researchers","region":"150000","hometown":"内蒙古"},
+    {"name":"钱思危","year":2024,"role":"直博生","group":"doctoral","region":"330000","hometown":"浙江 · 温州"},
+    {"name":"刘嘉淇","year":2024,"role":"直博生","group":"doctoral","region":"210000","hometown":"辽宁 · 大连"},
+    {"name":"刘砚秋","year":2025,"role":"直博生","group":"doctoral","region":"510000","hometown":"四川 · 隆昌"},
+    {"name":"宋亦婷","year":2025,"role":"硕士生","group":"masters","region":"320000","hometown":"江苏 · 苏州"},
+    {"name":"王子午","year":2025,"role":"助研","group":"researchers","region":"130000","hometown":"河北 · 保定"},
+    {"name":"童滨","year":2026,"role":"直博生","group":"doctoral","region":"360000","hometown":"江西 · 宜春"},
+    {"name":"邓负笈","year":2026,"role":"普博生","group":"doctoral","region":"500000","hometown":"重庆"},
+    {"name":"刑敏钰","year":2026,"role":"硕士生","group":"masters","region":"140000","hometown":"山西 · 运城"},
+    {"name":"巩韩","year":2026,"role":"硕士生","group":"masters","region":"370000","hometown":"山东"}
+  ]
+}

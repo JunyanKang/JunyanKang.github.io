@@ -3,9 +3,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, ChangeEvent, FormEvent, MouseEvent } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { queryExpressionAtlas } from '../api/modules';
-import { ErrorState } from '../components/common/ErrorState.tsx';
-import { LoadingState } from '../components/common/LoadingState.tsx';
-import { KlCard } from '../components/ui/KlCard.tsx';
 import type {
   ExpressionAtlasDatasetResult,
   ExpressionAtlasOrtholog,
@@ -705,21 +702,21 @@ const toLinePoints = (items: { xLabel: string; value: number | null; tooltip?: s
 
 const getDefaultPlotSettings = (dataset: ExpressionAtlasDatasetResult): PlotSettings => {
   if (dataset.key === 'mouse_tissue_rna') {
-    return { width: 1180, height: 400, fontSize: 15 };
+    return { width: 880, height: 400, fontSize: 15 };
   }
   if (dataset.key === 'mouse_tissue_protein') {
-    return { width: 1100, height: 340, fontSize: 13 };
+    return { width: 880, height: 340, fontSize: 13 };
   }
   if (dataset.key === 'human_retina_scrna') {
-    return { width: 1180, height: 420, fontSize: 15 };
+    return { width: 880, height: 420, fontSize: 15 };
   }
   if (dataset.key === 'monkey_retina_aging_scrna' || dataset.key === 'mouse_retina_dev_scrna') {
-    return { width: 1080, height: 340, fontSize: 13 };
+    return { width: 880, height: 340, fontSize: 13 };
   }
   if (dataset.key === 'human_retina_rpe_rna') {
-    return { width: 980, height: 360, fontSize: 14 };
+    return { width: 880, height: 360, fontSize: 14 };
   }
-  return { width: 1040, height: 400, fontSize: 14 };
+  return { width: 880, height: 400, fontSize: 14 };
 };
 
 const buildLinePlotData = (dataset: ExpressionAtlasDatasetResult): LinePlotData => {
@@ -859,9 +856,7 @@ const DatasetLineChart = ({
   const titleFontSize = plotSettings.fontSize + 5;
   const axisTitleFontSize = plotSettings.fontSize + 1;
   const estimatedRowLabelWidth = longestRowLabelLength * plotSettings.fontSize * 0.62;
-  const leftPad = multiRow
-    ? Math.max(190, Math.min(340, estimatedRowLabelWidth + 84))
-    : Math.max(112, plotSettings.fontSize * 6.4);
+  const leftPad = Math.max(multiRow ? 190 : 112, Math.min(340, estimatedRowLabelWidth + 42));
   const rightPad = multiRow ? Math.max(96, plotSettings.fontSize * 6.2) : Math.max(72, plotSettings.fontSize * 4.8);
   const topPad = Math.max(62, plotSettings.fontSize * 4.4);
   const bottomPad = Math.max(134, plotSettings.fontSize * 8.6);
@@ -916,6 +911,8 @@ const DatasetLineChart = ({
         ) : null}
         <svg
           className="expression-atlas-line-chart__svg"
+          width={width}
+          height={height}
           viewBox={`0 0 ${width} ${height}`}
           role="img"
           aria-label={`${dataset.title} plot`}
@@ -938,8 +935,8 @@ const DatasetLineChart = ({
             const panelBottom = panelTop + panelHeight;
             return (
               <g key={`${series.label}-panel`}>
-                {Array.from({ length: 4 }).map((_, tickIndex) => {
-                  const ratio = tickIndex / 3;
+                {Array.from({ length: multiRow ? 2 : 4 }).map((_, tickIndex) => {
+                  const ratio = tickIndex / (multiRow ? 1 : 3);
                   const value = minValue + yRange * ratio;
                   const y = getPanelY(seriesIndex, value);
                   return (
@@ -1222,11 +1219,11 @@ const DatasetPanelToolbar = ({
 }) => (
   <div className="expression-atlas-panel-toolbar">
     <div className="expression-atlas-panel-toolbar__actions">
-      <div className="expression-atlas-view-switch" role="tablist" aria-label={`${label} view mode`}>
-        <button type="button" className={`expression-atlas-view-switch__button ${viewMode === 'plot' ? 'is-active' : ''}`} onClick={() => onViewChange('plot')}>
+      <div className="expression-atlas-view-switch" role="group" aria-label={`${label} view mode`}>
+        <button type="button" aria-pressed={viewMode === 'plot'} className={`expression-atlas-view-switch__button ${viewMode === 'plot' ? 'is-active' : ''}`} onClick={() => onViewChange('plot')}>
           Plot
         </button>
-        <button type="button" className={`expression-atlas-view-switch__button ${viewMode === 'data' ? 'is-active' : ''}`} onClick={() => onViewChange('data')}>
+        <button type="button" aria-pressed={viewMode === 'data'} className={`expression-atlas-view-switch__button ${viewMode === 'data' ? 'is-active' : ''}`} onClick={() => onViewChange('data')}>
           Data
         </button>
       </div>
@@ -1497,10 +1494,8 @@ const OrthologPanel = ({
           return (
             <div key={ortholog.id} className="expression-atlas-ortholog-item">
               <div className="expression-atlas-ortholog-item__symbols">
-                <strong>{ortholog.humanSymbol ?? '—'}</strong>
-                <span>human</span>
-                <strong>{ortholog.mouseSymbol ?? '—'}</strong>
-                <span>mouse</span>
+                <div><span>Human</span><strong>{ortholog.humanSymbol ?? '—'}</strong></div>
+                <div><span>Mouse</span><strong>{ortholog.mouseSymbol ?? '—'}</strong></div>
                 {ortholog.alias ? <em>{ortholog.alias}</em> : <em>No alias</em>}
               </div>
               <div className="expression-atlas-ortholog-item__actions">
@@ -1681,81 +1676,54 @@ export const ExpressionAtlasPage = () => {
   return (
     <div className="section">
       <div className="container">
-        <div className="expression-atlas-page-header">
+        <header className="expression-atlas-page-header">
           <div>
-            <h2 className="section-title">Expression atlas</h2>
-            <p className="section-subtitle">
-              Query bulk and single-cell eye-related expression datasets from our public expression collection.
+            <p className="atlas-eyebrow">RESOURCES / EXPRESSION</p>
+            <h1>Expression atlas</h1>
+            <p className="section-subtitle">Explore retinal development, aging and tissue expression, one gene at a time.</p>
+          </div>
+          <a href="/resources/" className="atlas-back-link">Back to resources</a>
+        </header>
+
+        <section className="atlas-query" aria-label="Gene search">
+          <form className="expression-atlas-form" onSubmit={handleSubmit}>
+            <label htmlFor="atlas-gene">Gene symbol</label>
+            <div className="expression-atlas-form__row">
+              <input id="atlas-gene" type="search" value={queryInput}
+                onChange={(event) => setQueryInput(event.target.value)} placeholder="e.g. Pax6" required
+                autoComplete="off" spellCheck={false} />
+              <button type="submit" className="link-button atlas-query-button">Query</button>
+            </div>
+            <div className="atlas-suggestions"><span>Try</span>{['Pax6', 'Rax', 'Vsx2', 'Otx2', 'Crx', 'Rho'].map((gene) => (
+              <button type="button" key={gene} onClick={() => {
+                setQueryInput(gene);
+                setSearchParams({ gene }, { replace: true });
+                if (gene === submittedGene) setQueryAttempt((attempt) => attempt + 1);
+              }}>{gene}</button>
+            ))}</div>
+          </form>
+          <div className="atlas-query-context">
+            <p className="atlas-query-result" aria-live="polite">
+              {queryState.loading ? 'Searching expression datasets…' : queryState.data ? <><strong>{queryState.data.query}</strong><span>{matchedDatasetCount} of {queryState.data.datasets.length} datasets matched</span></> : 'Search the public collection'}
             </p>
+            {externalLinks ? <div className="expression-atlas-hero-links" aria-label="External gene annotations">
+              <a href={externalLinks.summaryHref} target="_blank" rel="noreferrer">Summary ↗</a>
+              <a href={externalLinks.phenotypeHref} target="_blank" rel="noreferrer">Phenotype ↗</a>
+              <a href={externalLinks.structureHref} target="_blank" rel="noreferrer">Structure ↗</a>
+              <a href={externalLinks.referenceHref} target="_blank" rel="noreferrer">Reference ↗</a>
+            </div> : null}
           </div>
-          <a href="/resources/" className="link-button link-button--outline">
-            Back to resources
-          </a>
-        </div>
-
-        <KlCard className="expression-atlas-intro expression-atlas-intro--hero">
-          <div className="expression-atlas-hero-main">
-            <div className="expression-atlas-hero-copy">
-              <div className="expression-atlas-hero-topline">
-                <span className="badge">Expression atlas</span>
-                {queryState.data ? (
-                  <p className="text-muted expression-atlas-query-meta">
-                    Matched {matchedDatasetCount} / {queryState.data.datasets.length} datasets for <strong>{queryState.data.query}</strong>
-                  </p>
-                ) : null}
-              </div>
-              <h3 className="card__title">Gene-centric bulk and single-cell expression viewer</h3>
-              <p className="card__excerpt">
-                Search retina-centered datasets and cross-species ortholog mappings from one page. Plot mode focuses on
-                comparison-ready figures, while data mode keeps the heatmap-style matrix for exact inspection.
-              </p>
-            </div>
-            <div className="expression-atlas-hero-side">
-              <form className="expression-atlas-form" onSubmit={handleSubmit}>
-                <label htmlFor="atlas-gene">Gene symbol</label>
-                <div className="expression-atlas-form__row">
-                  <input
-                    id="atlas-gene"
-                    type="search"
-                    value={queryInput}
-                    onChange={(event) => setQueryInput(event.target.value)}
-                    placeholder="e.g. Pax6"
-                  />
-                  <button type="submit" className="link-button">
-                    Query
-                  </button>
-                </div>
-                <p className="text-muted">Suggested: Pax6, Rax, Vsx2, Otx2, Crx, Rho</p>
-              </form>
-              {externalLinks ? (
-                <div className="expression-atlas-hero-links">
-                  <a href={externalLinks.summaryHref} target="_blank" rel="noreferrer" className="link-button">
-                    Summary
-                  </a>
-                  <a href={externalLinks.phenotypeHref} target="_blank" rel="noreferrer" className="link-button link-button--outline">
-                    Phenotype
-                  </a>
-                  <a href={externalLinks.structureHref} target="_blank" rel="noreferrer" className="link-button link-button--outline">
-                    Structure
-                  </a>
-                  <a href={externalLinks.referenceHref} target="_blank" rel="noreferrer" className="link-button link-button--outline">
-                    Reference
-                  </a>
-                </div>
-              ) : null}
-            </div>
-          </div>
-        </KlCard>
-
-        {queryState.loading ? <LoadingState message="Querying expression atlas..." /> : null}
-        {queryState.error ? <ErrorState description={queryState.error} onRetry={() => setQueryAttempt((attempt) => attempt + 1)} /> : null}
+        </section>
+        {queryState.error ? <div className="atlas-error" role="alert"><p>{queryState.error}</p><button type="button" className="link-button" onClick={() => setQueryAttempt((attempt) => attempt + 1)}>Retry</button></div> : null}
+        <p className="atlas-reading-note">Compare patterns within each dataset. Assays and units differ across datasets; a missing value is not zero expression.</p>
 
         {queryState.data ? (
           <div className="expression-atlas-stack">
-            <div className="tab-switch expression-atlas-dataset-tabs">
+            <div className="tab-switch expression-atlas-dataset-tabs" role="group" aria-label="Datasets">
               {datasetPanels.map((panel) => (
                 <button
                   key={panel.key}
+                  aria-pressed={activePanel?.key === panel.key}
                   type="button"
                   className={`tab-button ${activePanel?.key === panel.key ? 'is-active' : ''}`}
                   onClick={() => setSelectedDatasetKey(panel.key)}
@@ -1766,7 +1734,7 @@ export const ExpressionAtlasPage = () => {
             </div>
 
             {activePanel ? (
-              <KlCard className="expression-atlas-dataset-card">
+              <section className="expression-atlas-dataset-card" aria-busy={queryState.loading}>
                 <div className="expression-atlas-dataset-card__header">
                   <h3 className="card__title expression-atlas-dataset-card__title">{activePanel.title}</h3>
                   <p className="text-muted expression-atlas-dataset-card__subtitle">
@@ -1844,7 +1812,7 @@ export const ExpressionAtlasPage = () => {
                     matched={activePanel.hasMatch}
                   />
                 )}
-              </KlCard>
+              </section>
             ) : null}
           </div>
         ) : null}

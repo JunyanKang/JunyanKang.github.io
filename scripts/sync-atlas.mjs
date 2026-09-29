@@ -2,6 +2,9 @@ import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const site = fileURLToPath(new URL('../', import.meta.url));
+if (!process.argv.includes('--replace-public-ui')) {
+  throw new Error('Legacy UI import disabled: this would overwrite the redesigned public atlas. Use export-atlas.mjs to refresh data. For an intentional legacy UI replacement only, pass --replace-public-ui and review every change.');
+}
 const source = resolve(site, '../frontend/src');
 const files = [
   'pages/ExpressionAtlasPage.tsx', 'types/index.ts',

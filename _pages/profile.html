@@ -4,13 +4,49 @@ permalink: /team/
 nav: true
 nav_order: 3
 ---
-<header class="kl-page-heading"><p class="kl-eyebrow">PEOPLE & COLLABORATION</p><h1>Our team</h1><p>Connecting molecular biology, retinal research, and computational approaches.</p></header>
-<section class="kl-pi-card"><p class="kl-eyebrow">PRINCIPAL INVESTIGATOR</p><h2>Jun-Yan Kang</h2><p>Shanghai Ninth People's Hospital<br>Shanghai Jiao Tong University School of Medicine</p><div class="kl-links"><a href="https://orcid.org/0000-0001-5191-5217">ORCID ↗</a><a href="{{ '/publications/' | relative_url }}">Publications ↗</a></div></section>
+{% assign team = site.data.team %}
+<header class="kl-page-heading"><p class="kl-eyebrow">PEOPLE & COLLABORATION</p><h1>Our team</h1><p>Different beginnings. Shared questions about the retina.</p></header>
+<section class="kl-team-pi">
+  <img src="{{ team.pi.photo | relative_url }}" alt="{{ team.pi.name | escape }}" width="588" height="770">
+  <div><p class="kl-eyebrow">{{ team.pi.position | escape }}</p><h2>{{ team.pi.name | escape }} <span lang="zh">{{ team.pi.name_zh | escape }}</span></h2><p>{{ team.pi.affiliation | escape }}</p><div class="kl-links"><a href="{{ team.pi.orcid | escape }}">ORCID ↗</a><a href="{{ '/publications/' | relative_url }}">Publications ↗</a></div></div>
+  <div class="kl-team-totals"><strong>{{ team.members.size }}</strong><span>researchers & students</span><strong>{{ team.members | map: 'region' | uniq | size }}</strong><span>home regions</span></div>
+</section>
 <details class="kl-training"><summary>PI academic background</summary>
-{% for item in site.data.profile.affiliations %}
-<article class="kl-profile-entry"><div class="kl-number">{{ item.start_year }}{% if item.end_year %}–{{ item.end_year }}{% else %}–present{% endif %}</div><div><h2>{{ item.organization | escape }}</h2>{% if item.role %}<p>{{ item.role | escape }}</p>{% endif %}<p class="kl-note">{{ item.city | escape }}, {{ item.country | escape }}</p></div></article>
-{% endfor %}
-<div class="kl-links"><a href="https://orcid.org/0000-0001-5191-5217">Full ORCID profile ↗</a><a href="https://github.com/JunyanKang">Software on GitHub ↗</a></div>
-<p class="kl-note">Affiliation details reflect the public ORCID record, retrieved {{ site.data.profile.retrieved_at }}.</p>
+{% for item in site.data.profile.affiliations %}<article class="kl-profile-entry"><div class="kl-number">{{ item.start_year }}{% if item.end_year %}–{{ item.end_year }}{% else %}–present{% endif %}</div><div><h2>{{ item.organization | escape }}</h2>{% if item.role %}<p>{{ item.role | escape }}</p>{% endif %}</div></article>{% endfor %}
 </details>
-<section class="kl-section kl-team-banner"><div><h2>Connect with the lab</h2><p>Interested in retinal biology, shared datasets or research software?</p></div><a class="kl-button kl-button--secondary" href="{{ '/contact/' | relative_url }}">Contact & collaboration ↗</a></section>
+<section class="kl-section kl-team-origins" aria-labelledby="origins-title">
+  <div class="kl-section-heading"><div><p class="kl-eyebrow">WHERE WE COME FROM</p><h2 id="origins-title">Many places, one team</h2></div><a href="#members">Meet the members ↓</a></div>
+  <div class="kl-origins-layout">
+    <figure class="kl-origin-map">
+      <svg viewBox="0 0 1000 700" aria-labelledby="map-title map-desc" role="group">
+        <title id="map-title">成员籍贯分布</title><desc id="map-desc">按省级地区汇总，不代表目前工作地点。点击有成员的地区筛选名单，也可使用右侧按钮。</desc>
+        <rect class="kl-map-inset" x="800" y="425" width="180" height="252" rx="4" />
+        {% for region in site.data.china_map.regions %}
+          {% assign regional_members = team.members | where: 'region', region.code %}
+          <g class="kl-map-region{% if regional_members.size > 0 %} has-members{% endif %}" {% if regional_members.size > 0 %}data-region="{{ region.code }}" data-region-name="{{ region.name | escape }}" role="button" tabindex="0" aria-pressed="false" aria-label="{{ region.name | escape }}：{{ regional_members.size }} 位成员"{% endif %}>
+            <title>{{ region.name | escape }} · {{ regional_members.size }} members</title>
+            <path d="{{ region.path }}" />{% if region.sea != '' %}<path class="kl-map-sea" d="{{ region.sea }}" />{% endif %}
+            {% if regional_members.size > 0 %}<circle cx="{{ region.x }}" cy="{{ region.y }}" r="13" /><text x="{{ region.x }}" y="{{ region.y | plus: 5 }}" text-anchor="middle">{{ regional_members.size }}</text>{% endif %}
+          </g>
+        {% endfor %}
+        <text x="890" y="668" class="kl-map-caption" text-anchor="middle">南海诸岛</text>
+      </svg>
+      <figcaption>成员籍贯分布 · Province-level origins, not current locations. <a href="https://datav.aliyun.com/portal/school/atlas/area_selector">Map data: DataV GeoAtlas</a></figcaption>
+    </figure>
+    <div class="kl-origin-key"><p class="kl-note">Select a home region to explore our researchers and students.</p><div class="kl-region-buttons">
+      <button type="button" class="kl-region-button is-active" data-region="all" aria-pressed="true">All regions <span>{{ team.members.size }}</span></button>
+      {% for region in site.data.china_map.regions %}{% assign regional_members = team.members | where: 'region', region.code %}{% if regional_members.size > 0 %}<button type="button" class="kl-region-button" data-region="{{ region.code }}" data-region-name="{{ region.name | escape }}" aria-pressed="false"><span lang="zh">{{ region.name | escape }}</span><span>{{ regional_members.size }}</span></button>{% endif %}{% endfor %}
+    </div></div>
+  </div>
+</section>
+<section class="kl-section" id="members">
+  <div class="kl-section-heading"><h2>Researchers & students</h2><p class="kl-note" id="team-filter-status" role="status">All regions · {{ team.members.size }} members</p></div>
+  {% assign groups = 'researchers,doctoral,masters,alumni' | split: ',' %}
+  {% for group in groups %}{% assign members = team.members | where: 'group', group | sort: 'year' %}{% if members.size > 0 %}
+  <section class="kl-member-group" data-member-group><h3>{% case group %}{% when 'researchers' %}Research staff{% when 'doctoral' %}Doctoral students{% when 'masters' %}Master's students{% when 'alumni' %}Alumni{% endcase %}</h3>
+    <div class="kl-member-grid">{% for member in members %}<article class="kl-member" data-member-region="{{ member.region }}">
+      {% if member.photo and member.photo != '' %}<img src="{{ member.photo | relative_url }}" alt="{{ member.name | escape }}" loading="lazy">{% endif %}
+      <h4 lang="zh">{{ member.name | escape }}</h4><p><span lang="zh">{{ member.role | escape }}</span><span class="kl-member-year">{{ member.year }}</span></p><p class="kl-member-origin" lang="zh">{{ member.hometown | escape }}</p>{% if member.bio %}<p>{{ member.bio | escape }}</p>{% endif %}
+    </article>{% endfor %}</div>
+  </section>{% endif %}{% endfor %}
+</section>

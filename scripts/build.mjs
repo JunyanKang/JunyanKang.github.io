@@ -3,6 +3,8 @@ import { cp, mkdir, readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../', import.meta.url));
 for (const [command, args, cwd] of [
+  ['node', ['scripts/build-content.mjs'], root],
+  ['node', ['scripts/build-map.mjs'], root],
   ['npm', ['run', 'build'], `${root}/atlas`],
   ['bundle', ['exec', 'jekyll', 'build'], root],
 ]) {
@@ -14,4 +16,3 @@ await cp(`${root}/atlas/dist`, `${root}/_site/expression-atlas`, { recursive: tr
 const index = await readFile(`${root}/_site/index.html`, 'utf8');
 if (!index.includes('<!doctype html>') || !index.includes('navbar')) throw new Error('al-folio layout was not rendered');
 console.log('Academic website and public expression atlas built successfully.');
-

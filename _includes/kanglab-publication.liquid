@@ -5,6 +5,6 @@
     <h3><a href="{{ paper.url | escape }}">{{ paper.title | escape }}</a></h3>
     {% unless include.compact %}{% if paper.authors != '' %}<p class="kl-authors">{{ paper.authors | escape }}</p>{% endif %}{% endunless %}
     <p class="kl-journal">{{ paper.journal | escape }}{% if paper.volume %} · {{ paper.volume | escape }}{% endif %}</p>
-    <div class="kl-paper-links"><a href="{{ paper.url | escape }}">{% if paper.doi %}DOI{% else %}Record{% endif %} ↗</a><a href="https://orcid.org/0000-0001-5191-5217/work/{{ paper.orcid_put_code }}">ORCID record ↗</a></div>
+    <div class="kl-paper-links"><a href="{{ paper.url | escape }}">{% if paper.doi %}DOI{% else %}Record{% endif %} ↗</a>{% if paper.orcid_put_code %}<a href="https://orcid.org/0000-0001-5191-5217/work/{{ paper.orcid_put_code }}">ORCID record ↗</a>{% endif %}</div>
   </div>
 </article>

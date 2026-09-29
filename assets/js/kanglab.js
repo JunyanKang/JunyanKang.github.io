@@ -17,3 +17,11 @@
   filter();
 })();
 
+(() => {
+  const controls = [...document.querySelectorAll('[data-software-filter]')];
+  const groups = [...document.querySelectorAll('[data-software-group]')];
+  controls.forEach(control => control.addEventListener('click', () => {
+    groups.forEach(group => { group.hidden = control.dataset.softwareFilter !== 'all' && group.dataset.softwareGroup !== control.dataset.softwareFilter; });
+    controls.forEach(button => { const active = button === control; button.classList.toggle('is-active',active); button.setAttribute('aria-pressed',String(active)); });
+  }));
+})();

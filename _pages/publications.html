@@ -9,7 +9,6 @@ nav_order: 2
   <label for="publication-search">Search publications<input id="publication-search" type="search" placeholder="Title, author, journal, or year" autocomplete="off"></label>
   <a class="kl-button kl-button--secondary" href="{{ '/assets/data/publications.bib' | relative_url }}" download>Download BibTeX</a>
 </div>
-<p class="kl-note">{{ site.data.publications.items.size }} unique works from <a href="https://orcid.org/0000-0001-5191-5217">ORCID</a> · Updated {{ site.data.publications.retrieved_at }}. This list reflects the public ORCID record.</p>
+<p class="kl-note">{{ site.data.publications_all.items.size }} publications · <a href="https://orcid.org/0000-0001-5191-5217">ORCID</a> and lab-curated records.</p>
 <p id="publication-empty" hidden>No publications match your search.</p>
-{% for paper in site.data.publications.items %}{% include kanglab-publication.liquid paper=paper %}{% endfor %}
-
+{% for paper in site.data.publications_all.items %}{% include kanglab-publication.liquid paper=paper %}{% endfor %}

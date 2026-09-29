@@ -1,0 +1,277 @@
+---
+media:
+  input: assets/img/team
+  output: "/assets/img/team"
+  categories:
+  - image
+content:
+- name: team
+  label: 成员与照片 / Team
+  type: file
+  path: _data/team.json
+  format: json
+  fields:
+  - name: pi
+    label: PI profile
+    type: object
+    fields:
+    - name: name
+      label: Name
+      type: string
+    - name: name_zh
+      label: 中文姓名
+      type: string
+    - name: photo
+      label: Portrait
+      type: image
+    - name: position
+      label: Position
+      type: string
+    - name: affiliation
+      label: Affiliation
+      type: text
+    - name: orcid
+      label: ORCID URL
+      type: string
+  - name: members
+    label: Members
+    type: object
+    list:
+      collapsible:
+        collapsed: true
+        summary: "{name} · {role}"
+    fields:
+    - name: name
+      label: 姓名
+      type: string
+      required: true
+    - name: year
+      label: Entry year
+      type: number
+      required: true
+    - name: role
+      label: Role / 培养类型
+      type: string
+      required: true
+    - name: group
+      label: Display group
+      type: select
+      required: true
+      options:
+        values:
+        - name: researchers
+          label: Research staff / 科研人员
+        - name: doctoral
+          label: Doctoral students / 博士生
+        - name: masters
+          label: Master students / 硕士生
+        - name: alumni
+          label: Alumni / 校友
+    - name: region
+      label: Home region / 籍贯省份
+      type: select
+      required: true
+      options:
+        values:
+        - name: '110000'
+          label: 北京市
+        - name: '120000'
+          label: 天津市
+        - name: '130000'
+          label: 河北省
+        - name: '140000'
+          label: 山西省
+        - name: '150000'
+          label: 内蒙古自治区
+        - name: '210000'
+          label: 辽宁省
+        - name: '220000'
+          label: 吉林省
+        - name: '230000'
+          label: 黑龙江省
+        - name: '310000'
+          label: 上海市
+        - name: '320000'
+          label: 江苏省
+        - name: '330000'
+          label: 浙江省
+        - name: '340000'
+          label: 安徽省
+        - name: '350000'
+          label: 福建省
+        - name: '360000'
+          label: 江西省
+        - name: '370000'
+          label: 山东省
+        - name: '410000'
+          label: 河南省
+        - name: '420000'
+          label: 湖北省
+        - name: '430000'
+          label: 湖南省
+        - name: '440000'
+          label: 广东省
+        - name: '450000'
+          label: 广西壮族自治区
+        - name: '460000'
+          label: 海南省
+        - name: '500000'
+          label: 重庆市
+        - name: '510000'
+          label: 四川省
+        - name: '520000'
+          label: 贵州省
+        - name: '530000'
+          label: 云南省
+        - name: '540000'
+          label: 西藏自治区
+        - name: '610000'
+          label: 陕西省
+        - name: '620000'
+          label: 甘肃省
+        - name: '630000'
+          label: 青海省
+        - name: '640000'
+          label: 宁夏回族自治区
+        - name: '650000'
+          label: 新疆维吾尔自治区
+        - name: '710000'
+          label: 台湾省
+        - name: '810000'
+          label: 香港特别行政区
+        - name: '820000'
+          label: 澳门特别行政区
+    - name: hometown
+      label: Hometown / 籍贯
+      type: string
+    - name: photo
+      label: Portrait
+      type: image
+    - name: bio
+      label: Short biography
+      type: text
+- name: publications
+  label: 论文 / Publications
+  type: file
+  path: _data/publications_manual.json
+  format: json
+  fields:
+  - name: items
+    label: Lab-curated publications
+    type: object
+    description: DOI 相同则覆盖 ORCID 条目；不会被后续导入覆盖。
+    list:
+      collapsible:
+        collapsed: true
+        summary: "{year} · {title}"
+    fields:
+    - name: title
+      label: Title
+      type: string
+      required: true
+    - name: year
+      label: Year
+      type: number
+      required: true
+    - name: doi
+      label: DOI
+      type: string
+    - name: journal
+      label: Journal
+      type: string
+    - name: author_names
+      label: Authors, one full name per entry
+      type: string
+      list: true
+    - name: url
+      label: HTTPS link (only required without DOI)
+      type: string
+    - name: selected
+      label: Feature on homepage
+      type: boolean
+    - name: hidden
+      label: Hide this DOI from public list
+      type: boolean
+- name: software
+  label: 软件 / Software
+  type: file
+  path: _data/software.yml
+  format: yaml
+  fields:
+  - name: groups
+    label: Categories
+    type: object
+    list: true
+    fields:
+    - name: id
+      label: ID
+      type: string
+    - name: title
+      label: Title
+      type: string
+    - name: description
+      label: Description
+      type: string
+  - name: projects
+    label: Projects
+    type: object
+    list:
+      collapsible:
+        collapsed: true
+        summary: "{title}"
+    fields:
+    - name: title
+      label: Project name
+      type: string
+      required: true
+    - name: group
+      label: Category
+      type: select
+      required: true
+      options:
+        values:
+        - name: genomics
+          label: Genomics & data analysis
+        - name: imaging
+          label: Imaging & phenotyping
+        - name: literature
+          label: Literature & productivity
+    - name: category
+      label: Specialty label
+      type: string
+    - name: description
+      label: Description
+      type: text
+    - name: url
+      label: GitHub URL
+      type: string
+      required: true
+    - name: upstream
+      label: Original project (fork only)
+      type: string
+    - name: releases
+      label: Releases URL
+      type: string
+    - name: license
+      label: License
+      type: string
+- name: contact
+  label: 联系信息 / Contact
+  type: file
+  path: _data/contact.json
+  format: json
+  fields:
+  - name: email
+    label: Email
+    type: string
+    required: true
+  - name: address_zh
+    label: 中文地址
+    type: string
+    required: true
+  - name: address_en
+    label: English address
+    type: string
+  - name: affiliation
+    label: Institution
+    type: text
