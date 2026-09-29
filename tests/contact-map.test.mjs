@@ -1,6 +1,17 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { providerForCountry, mapLinks, lookupCountry, initContactMap } from '../assets/js/contact-map.mjs';
+
+test('offline map snapshot is an attributed PNG with key-free metadata', async () => {
+  const snapshot = JSON.parse(await readFile(new URL('../assets/maps/contact-amap-fallback.json', import.meta.url), 'utf8'));
+  assert.equal(snapshot.available, true);
+  assert.match(snapshot.location, /^\d+\.\d+,\d+\.\d+$/);
+  assert.equal(snapshot.image, '/assets/maps/contact-amap-fallback.png');
+  assert.doesNotMatch(JSON.stringify(snapshot), /key=|restapi\.amap/);
+  const bytes = await readFile(new URL(`..${snapshot.image}`, import.meta.url));
+  assert.equal(bytes.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
+});
 
 test('mainland China uses AMap; other countries use Google; unavailable lookup uses AMap', () => {
   assert.equal(providerForCountry('CN'), 'amap');

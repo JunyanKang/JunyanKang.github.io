@@ -16,10 +16,10 @@ content:
     type: object
     fields:
     - name: name
-      label: Name
+      label: English name (given name first)
       type: string
     - name: name_zh
-      label: 中文姓名
+      label: 中文姓名（仅后台，不在网页显示）
       type: string
     - name: photo
       label: Portrait
@@ -46,9 +46,10 @@ content:
         summary: "{name} · {role}"
     fields:
     - name: name
-      label: 姓名
+      label: English name / 英文姓名
       type: string
       required: true
+      description: "Given name first, family name last; for example, Lu-Yue Ding."
     - name: photo
       label: 头像照片 / Member photo
       type: image

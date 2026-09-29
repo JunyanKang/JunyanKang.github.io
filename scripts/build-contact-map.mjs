@@ -7,25 +7,39 @@ const key = process.env.AMAP_WEB_SERVICE_KEY;
 const imagePath = `${root}/assets/maps/contact-amap.png`;
 const metadataPath = `${root}/_data/contact_map.json`;
 
+async function useFallback() {
+  const snapshot = JSON.parse(await readFile(`${root}/assets/maps/contact-amap-fallback.json`, 'utf8'));
+  if (snapshot.address !== contact.address_zh) return false;
+  const bytes = await readFile(`${root}/assets/maps/contact-amap-fallback.png`);
+  if (bytes.subarray(0, 8).toString('hex') !== '89504e470d0a1a0a') return false;
+  await writeFile(metadataPath, JSON.stringify(snapshot, null, 2));
+  console.log('Using verified AMap snapshot for the same contact address.');
+  return true;
+}
+
 // Never log request URLs or upstream bodies: they may contain credentials.
 async function request(endpoint, params) {
   const url = new URL(`https://restapi.amap.com/v3/${endpoint}`);
   url.search = new URLSearchParams({ ...params, key });
   try {
     const response = await fetch(url, { signal: AbortSignal.timeout(30000) });
-    if (!response.ok) throw new Error();
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return response;
-  } catch {
-    throw new Error(`AMap ${endpoint} request failed. Check service availability and key permissions.`);
+  } catch (error) {
+    const code = /^HTTP \d+$/.test(error.message) ? error.message : error.cause?.code;
+    throw new Error(`AMap ${endpoint} request failed${/^[A-Z0-9_ ]+$/.test(code || '') ? ` (${code})` : ''}. Check service availability and key permissions.`);
   }
 }
 
 await rm(imagePath, { force: true });
 await writeFile(metadataPath, JSON.stringify({ available: false, address: contact.address_zh }));
 if (!key) {
-  if (process.env.REQUIRE_CONTACT_MAP === 'true') throw new Error('AMAP_WEB_SERVICE_KEY is required for production publication.');
-  console.log('No AMap key: building a navigation-link fallback for local/PR preview.');
+  if (!await useFallback()) {
+    if (process.env.REQUIRE_CONTACT_MAP === 'true') throw new Error('AMAP_WEB_SERVICE_KEY is required when no matching contact-map snapshot exists.');
+    console.log('No AMap key or matching snapshot: building a navigation-link fallback.');
+  }
 } else {
+  try {
   const response = await request('geocode/geo', { address: contact.address_zh });
   const result = await response.json();
   if (result.status !== '1') throw new Error('AMap address lookup failed. Check key permissions and quota.');
@@ -50,4 +64,8 @@ if (!key) {
     image: '/assets/maps/contact-amap.png', generated_at: new Date().toISOString(),
   }, null, 2));
   console.log('Contact map generated; no credentials are included in the published assets.');
+  } catch (error) {
+    if (!await useFallback()) throw error;
+    console.warn('Live AMap generation unavailable; matching published snapshot retained.');
+  }
 }
