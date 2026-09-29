@@ -392,79 +392,6 @@
       }
     },
     {
-      "title": "Potential transmission chains of variant B.1.1.7 and co-mutations of SARS-CoV-2.",
-      "year": 2021,
-      "doi": "10.1038/s41421-021-00282-1",
-      "journal": "Cell discovery",
-      "author_entries": [
-        {
-          "name": "Jingsong Zhang",
-          "first_author": false,
-          "corresponding_author": false
-        },
-        {
-          "name": "Yang Zhang",
-          "first_author": false,
-          "corresponding_author": false
-        },
-        {
-          "name": "Jun-Yan Kang",
-          "first_author": false,
-          "corresponding_author": false
-        },
-        {
-          "name": "Shuiye Chen",
-          "first_author": false,
-          "corresponding_author": false
-        },
-        {
-          "name": "Yongqun He",
-          "first_author": false,
-          "corresponding_author": false
-        },
-        {
-          "name": "Benhao Han",
-          "first_author": false,
-          "corresponding_author": false
-        },
-        {
-          "name": "Mo-Fang Liu",
-          "first_author": false,
-          "corresponding_author": false
-        },
-        {
-          "name": "Lina Lu",
-          "first_author": false,
-          "corresponding_author": false
-        },
-        {
-          "name": "Li Li",
-          "first_author": false,
-          "corresponding_author": false
-        },
-        {
-          "name": "Zhigang Yi",
-          "first_author": false,
-          "corresponding_author": false
-        },
-        {
-          "name": "Luonan Chen",
-          "first_author": false,
-          "corresponding_author": false
-        }
-      ],
-      "url": "https://doi.org/10.1038/s41421-021-00282-1",
-      "selected": false,
-      "hidden": false,
-      "preview": {
-        "image": "/assets/img/publications/sars-2021.png",
-        "label": "Figure 3 · Co-mutations",
-        "alt": "Co-mutation correlations and transmission analysis of SARS-CoV-2",
-        "source": "https://www.nature.com/articles/s41421-021-00282-1",
-        "credit": "Cell Discovery (2021)"
-      }
-    },
-    {
       "title": "PHF7 is a novel histone H2A E3 ligase prior to histone-to-protamine exchange during spermiogenesis.",
       "year": 2019,
       "doi": "10.1242/dev.175547",
@@ -472,17 +399,17 @@
       "author_entries": [
         {
           "name": "Xiukun Wang",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Jun-Yan Kang",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
           "name": "Leixin Wei",
-          "first_author": false,
+          "first_author": true,
           "corresponding_author": false
         },
         {
@@ -553,27 +480,27 @@
         {
           "name": "Wen Yuan",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         },
         {
           "name": "Erwei Zuo",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         },
         {
           "name": "Kehuan Lu",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         },
         {
           "name": "Mo-Fang Liu",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         },
         {
           "name": "Jinsong Li",
           "first_author": false,
-          "corresponding_author": false
+          "corresponding_author": true
         }
       ],
       "url": "https://doi.org/10.1242/dev.175547",
