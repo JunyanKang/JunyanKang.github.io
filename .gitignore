@@ -15,3 +15,5 @@ assets/atlas/*.staging-*/
 output/
 _data/china_map.json
 _data/publications_all.json
+_data/contact_map.json
+assets/maps/contact-amap.png

@@ -31,6 +31,9 @@ jobs:
       - run: bundle exec ruby tests/software_test.rb
       - run: bundle exec ruby tests/publications_test.rb
       - run: node scripts/build.mjs
+        env:
+          AMAP_WEB_SERVICE_KEY: ${{ github.event_name != 'pull_request' && secrets.AMAP_WEB_SERVICE_KEY || '' }}
+          REQUIRE_CONTACT_MAP: ${{ github.event_name != 'pull_request' }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

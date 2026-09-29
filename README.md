@@ -84,4 +84,10 @@ See [deployment and domain configuration](docs/DEPLOYMENT.md). No Node.js, MySQL
 
 ## Attribution and data provenance
 
+### Contact map
+
+The contact page defaults to an AMap street-map preview with a clickable navigation link. A country-only IP lookup (`https://api.country.is/`) selects AMap for mainland China (`CN`) and Google Maps elsewhere. If lookup fails or times out, AMap remains available; visitors can override the provider. This third-party request reveals the visitor's network IP to country.is; the website does not store the IP, request GPS access, or use it for analytics. VPNs can affect the automatic choice.
+
+Configure the **GitHub Actions repository secret** `AMAP_WEB_SERVICE_KEY` with a Web Service API key. Production builds resolve the CMS contact address and generate an unmodified AMap PNG (including attribution) before publishing. The key is never included in browser requests or public files; generated map files are ignored by Git. Failed production map generation stops deployment, leaving the last successful site online. Review AMap's service terms and quota for this use. Local builds without the environment variable and pull-request builds show an address-link fallback instead. Changing the address in Pages CMS regenerates the map on the next deployment.
+
 al-folio is MIT-licensed; see [third-party notices](THIRD_PARTY_NOTICES.md). Dataset provenance is retained in the manifest. Public availability does not replace the source datasets' original citation and licensing requirements. Account information, private team records, environment files, and database dumps are not part of this repository.
