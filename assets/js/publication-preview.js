@@ -89,5 +89,10 @@
   document.addEventListener('keydown', event => { if (event.key === 'Escape' && active) { event.preventDefault(); hide(panel.contains(document.activeElement)); } });
   document.addEventListener('pointerdown', event => { if (active && !panel.contains(event.target) && !active.button.contains(event.target) && !active.title.contains(event.target)) hide(); });
   document.getElementById('publication-search')?.addEventListener('input', () => hide());
-  window.addEventListener('resize', () => hide()); window.addEventListener('scroll', () => hide(), { passive:true });
+  window.addEventListener('resize', () => hide());
+  window.addEventListener('scroll', () => {
+    // Browser focus/scroll-into-view can finish after a Figure click.
+    if (pinned || document.activeElement === active?.title) position();
+    else hide();
+  }, { passive:true });
 })();
