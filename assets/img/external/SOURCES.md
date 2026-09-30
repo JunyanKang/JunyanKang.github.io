@@ -1,6 +1,6 @@
 # External resource images
 
-Retrieved 2026-09-30 from official websites or their linked asset hosts. These assets identify the linked resources and researchers, not endorsements. Copyright and trademarks remain with their respective owners. Profile-page provenance is recorded in `_data/external_resources.yml`. No portraits were generated or retouched. Seurat uses its official website artwork rather than an invented logo. Images are unchanged apart from transport decompression for the Ensembl SVG; cropping is display-only CSS.
+Retrieved 2026-09-30 from official websites or their linked asset hosts. These assets identify the linked resources and researchers, not endorsements. Copyright and trademarks remain with their respective owners. Profile-page provenance is recorded in `_data/external_resources.yml`. No portraits were generated or retouched. Seurat uses its official website artwork rather than an invented logo. Portraits were subsequently resized (maximum 224 pixels on the longer edge) and recompressed for the 56-pixel resource cards; cropping remains display-only CSS. The SHA-256 values below identify the original downloads, not the compressed web derivatives. Other assets remain unchanged apart from transport decompression for the Ensembl SVG.
 
 - **ncbi.ico**: https://www.ncbi.nlm.nih.gov/favicon.ico
   SHA-256: 7b1fb2c8ab022de9ae05d90fbd106a606abc728db1b7c356842e0fd892f2bc85
