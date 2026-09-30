@@ -13,14 +13,14 @@
       "name": "Lu-Yue Ding",
       "photo": "/assets/img/team/ding-luyue.jpg",
       "photo_framing": "upper-body",
+      "photo_center_x": 58,
+      "photo_scale": 175,
       "year": 2023,
       "role": "PhD student",
       "group": "doctoral",
       "region": "330000",
-      "hometown": "Shaoxing, Zhejiang",
-      "bio": "Retinal development",
-      "photo_center_x": 58,
-      "photo_scale": 175
+      "hometown": "Huzhou, Zhejiang",
+      "bio": "Retinal development"
     },
     {
       "name": "Yu-Tong Liu",
@@ -36,92 +36,92 @@
       "name": "Yu Liu",
       "photo": "/assets/img/team/liu-yu.jpg",
       "photo_framing": "upper-body",
+      "photo_center_x": 53,
+      "photo_scale": 175,
       "year": 2023,
       "role": "PhD graduate",
       "group": "alumni",
       "graduation_year": 2026,
       "region": "320000",
       "hometown": "Tongzhou, Jiangsu",
-      "bio": "Retinal aging",
-      "photo_center_x": 53,
-      "photo_scale": 175
+      "bio": "Retinal aging"
     },
     {
       "name": "Ling Tong",
       "photo": "/assets/img/team/tong-ling.jpg",
       "photo_framing": "upper-body",
+      "photo_center_x": 55,
+      "photo_scale": 175,
       "year": 2024,
       "role": "Master's student",
       "group": "masters",
       "region": "360000",
       "hometown": "Shangrao, Jiangxi",
-      "bio": "Retinal development",
-      "photo_center_x": 55,
-      "photo_scale": 175
+      "bio": "Retinal development"
     },
     {
       "name": "Chun-Ren Meng",
       "photo": "/assets/img/team/meng-chunren.jpg",
       "photo_framing": "upper-body",
+      "photo_center_x": 48,
+      "photo_scale": 175,
       "year": 2024,
       "role": "PhD student",
       "group": "doctoral",
       "region": "450000",
       "hometown": "Hechi, Guangxi",
-      "bio": "Retinal development",
-      "photo_center_x": 48,
-      "photo_scale": 175
+      "bio": "Retinal development"
     },
     {
       "name": "Yuan-Rong Guo",
       "photo": "/assets/img/team/guo-yuanrong.jpg",
       "photo_framing": "upper-body",
+      "photo_center_x": 54,
+      "photo_scale": 175,
       "year": 2024,
       "role": "PhD student",
       "group": "doctoral",
       "region": "310000",
       "hometown": "Shanghai",
-      "bio": "Retinal development",
-      "photo_center_x": 54,
-      "photo_scale": 175
+      "bio": "Retinal development"
     },
     {
       "name": "Xing-Hai Yu",
       "photo": "/assets/img/team/yu-xinghai.jpg",
       "photo_framing": "upper-body",
+      "photo_center_x": 56,
+      "photo_scale": 175,
       "year": 2024,
       "role": "Postdoctoral fellow",
       "group": "researchers",
       "region": "150000",
-      "hometown": "Inner Mongolia",
-      "photo_center_x": 56,
-      "photo_scale": 175
+      "hometown": "Inner Mongolia"
     },
     {
       "name": "Si-Wei Qian",
       "photo": "/assets/img/team/qian-siwei.jpg",
       "photo_framing": "upper-body",
+      "photo_center_x": 51,
+      "photo_scale": 175,
       "year": 2024,
       "role": "PhD student",
       "group": "doctoral",
       "region": "330000",
       "hometown": "Wenzhou, Zhejiang",
-      "bio": "Retinal development",
-      "photo_center_x": 51,
-      "photo_scale": 175
+      "bio": "Retinal development"
     },
     {
       "name": "Jia-Qi Liu",
       "photo": "/assets/img/team/liu-jiaqi.jpg",
       "photo_framing": "upper-body",
+      "photo_center_x": 48,
+      "photo_scale": 175,
       "year": 2024,
       "role": "PhD student",
       "group": "doctoral",
       "region": "210000",
       "hometown": "Dalian, Liaoning",
-      "bio": "Retinal aging",
-      "photo_center_x": 48,
-      "photo_scale": 175
+      "bio": "Retinal aging"
     },
     {
       "name": "Yan-Qiu Liu",
@@ -136,26 +136,26 @@
       "name": "Yi-Ting Song",
       "photo": "/assets/img/team/song-yiting.jpg",
       "photo_framing": "upper-body",
+      "photo_center_x": 54,
+      "photo_scale": 175,
       "year": 2025,
       "role": "Master's student",
       "group": "masters",
       "region": "320000",
       "hometown": "Suzhou, Jiangsu",
-      "bio": "Retinal aging",
-      "photo_center_x": 54,
-      "photo_scale": 175
+      "bio": "Retinal aging"
     },
     {
       "name": "Zi-Wu Wang",
       "photo": "/assets/img/team/wang-ziwu.jpg",
       "photo_framing": "upper-body",
+      "photo_center_x": 49,
+      "photo_scale": 175,
       "year": 2025,
       "role": "Research assistant",
       "group": "researchers",
       "region": "130000",
-      "hometown": "Baoding, Hebei",
-      "photo_center_x": 49,
-      "photo_scale": 175
+      "hometown": "Baoding, Hebei"
     },
     {
       "name": "Bin Tong",
