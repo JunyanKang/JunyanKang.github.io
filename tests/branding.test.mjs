@@ -18,7 +18,7 @@ test('academic pages and atlas use the same emblem, lockups and icon', async () 
   const layout = await read('_layouts/kanglab.liquid');
   const include = await read('_includes/kanglab-logo.liquid');
   const atlas = await read('atlas/src/main.tsx');
-  for (const variant of ['horizontal', 'stacked']) {
+  for (const variant of ['horizontal', 'symbol']) {
     assert.ok(layout.includes(`variant='${variant}'`));
     assert.ok(atlas.includes(`variant="${variant}"`));
   }

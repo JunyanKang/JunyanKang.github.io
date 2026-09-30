@@ -59,6 +59,14 @@ Dir.mktmpdir('kanglab-news-test') do |source|
       # Invalid published metadata must fail deployment instead of leaking a bad link.
     end
   end
+  %w[image_source_url image_license_url].each do |field|
+    write.call('visible', base.merge(field => 'javascript:alert(1)'))
+    begin
+      build.call
+      raise "Unsafe credit link accepted: #{field}"
+    rescue Jekyll::Errors::FatalException
+    end
+  end
   write.call('visible', base.merge('image' => '/assets/img/missing.webp'))
   begin
     build.call

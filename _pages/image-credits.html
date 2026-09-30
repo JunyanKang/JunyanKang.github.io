@@ -1,0 +1,17 @@
+---
+title: Image credits
+permalink: /image-credits/
+nav: false
+---
+<article class="kl-news-article">
+  <a class="kl-news-back" href="{{ '/news/' | relative_url }}">← All news</a>
+  <h1>Image credits</h1>
+  {% assign credited_stories = site.news | where: 'published', true %}
+  {% for story in credited_stories %}{% if story.image_credit %}
+  <section class="kl-section" id="{{ story.slug | escape }}">
+    <h2><a href="{{ story.url | relative_url }}">{{ story.title | escape }}</a></h2>
+    <p>{{ story.image_credit | escape }}</p>
+    {% if story.image_source_url %}<p><a href="{{ story.image_source_url | escape }}">Original image and article</a>{% if story.image_license_url %} · <a href="{{ story.image_license_url | escape }}">Reuse licence</a>{% endif %}. Reproduced without alteration.</p>{% endif %}
+  </section>
+  {% endif %}{% endfor %}
+</article>

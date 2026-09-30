@@ -7,6 +7,8 @@ image: /assets/img/publications/retina-rik.png
 image_fit: contain
 image_alt: "Original Figure 1 showing the ten-tissue RNA-seq workflow, principal component analyses, and retina-enriched Rik gene expression"
 image_credit: "Figure 1 reproduced from Liu et al., Journal of Translational Medicine (2026). CC BY 4.0."
+image_source_url: https://link.springer.com/article/10.1186/s12967-026-07769-z/figures/1
+image_license_url: https://creativecommons.org/licenses/by/4.0/
 published: true
 show_in_hero: true
 hero_title: "From retinal genes to visual signalling"
@@ -22,5 +24,3 @@ Published in *Journal of Translational Medicine*, the study integrates RNA seque
 **Authors:** Yu-Tong Liu, Qing Li, Xinghai Yu, Zi-Wu Wang and Jun-Yan Kang.
 
 Read the [original article](https://doi.org/10.1186/s12967-026-07769-z), explore our [retinal research](/research/#retina), or browse [related publications](/publications/).
-
-Figure source: [Figure 1 in the original article](https://link.springer.com/article/10.1186/s12967-026-07769-z/figures/1), reproduced without alteration under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

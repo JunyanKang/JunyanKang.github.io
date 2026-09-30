@@ -33,6 +33,12 @@ module KangLab
         fail_news(doc, 'Carousel order must be a number') unless order.nil? || order.is_a?(Numeric)
       end
       link = data['link'].to_s
+      %w[image_source_url image_license_url].each do |field|
+        value = data[field].to_s
+        next if value.empty?
+        credit_uri = URI.parse(value)
+        fail_news(doc, "#{field} must be an HTTPS URL") unless credit_uri.scheme == 'https' && credit_uri.host && !credit_uri.userinfo
+      end
       unless link.empty?
         uri = URI.parse(link)
         internal = link.start_with?('/') && !link.start_with?('//') && !link.include?('\\') && !link.match?(/[\r\n]/)

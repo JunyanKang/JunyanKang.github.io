@@ -14,8 +14,8 @@ class AtlasBoundary extends Component<{ children: ReactNode }, { error: boolean 
   }
 }
 function ResourcesRedirect() { window.location.replace('/resources/'); return <a href="/resources/">Back to resources</a>; }
-function LabLogo({ variant }: { variant: 'horizontal' | 'stacked' }) {
-  return <span className={`kl-logo kl-logo--${variant}`} aria-hidden="true"><img className="kl-logo__symbol" src="/assets/img/brand/kanglab-symbol-v17.png" width="256" height="256" alt="" /><span className="kl-logo__wordmark">Kang Lab</span></span>;
+function LabLogo({ variant }: { variant: 'horizontal' | 'stacked' | 'symbol' }) {
+  return <span className={`kl-logo kl-logo--${variant}`} aria-hidden="true"><img className="kl-logo__symbol" src="/assets/img/brand/kanglab-symbol-v17.png" width="256" height="256" alt="" />{variant !== 'symbol' && <span className="kl-logo__wordmark">Kang Lab</span>}</span>;
 }
 registerWebComponents();
 createRoot(document.getElementById('root')!).render(<>
@@ -26,5 +26,5 @@ createRoot(document.getElementById('root')!).render(<>
     <Route path="/internal-resources" element={<ResourcesRedirect />} />
     <Route path="*" element={<Navigate to="/expression-atlas/" replace />} />
   </Routes></BrowserRouter></AtlasBoundary></main>
-  <footer className="atlas-footer"><div className="kl-footer-identity"><a href="/" aria-label="Kang Lab home"><LabLogo variant="stacked" /></a><p>Public expression atlas · Shanghai Ninth People's Hospital</p></div><div><a href="/assets/atlas/v1/manifest.json">Dataset manifest</a><a href="https://app.pagescms.org/sign-in">Admin</a></div></footer>
+  <footer className="atlas-footer"><div className="kl-footer-identity"><a href="https://app.pagescms.org/sign-in" aria-label="Admin sign-in" title="Admin sign-in"><LabLogo variant="symbol" /></a><p>Public expression atlas · Shanghai Ninth People's Hospital</p></div><div><a href="/assets/atlas/v1/manifest.json">Dataset manifest</a></div></footer>
 </>);

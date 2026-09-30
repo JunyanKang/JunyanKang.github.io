@@ -30,6 +30,7 @@
   gap: calc(var(--logo-size) * .11);
 }
 .kl-logo--stacked .kl-logo__wordmark { font-size: calc(var(--logo-size) * .23); }
+.kl-logo--symbol { --logo-size: 72px; }
 .kl-logo--symbol .kl-logo__wordmark { display: none; }
 .kl-brand, .atlas-brand { text-decoration: none !important; flex: 0 0 auto; }
 .kl-footer-identity { display: flex; gap: 22px; align-items: center; }
@@ -42,6 +43,6 @@
   /* The compact masthead keeps navigation and page content above the fold. */
   .kl-logo--horizontal { --logo-size: 44px; }
   .kl-logo--horizontal .kl-logo__wordmark { display: none; }
-  .kl-logo--stacked { --logo-size: 64px; }
+  .kl-logo--stacked, .kl-logo--symbol { --logo-size: 64px; }
   .kl-footer-identity { gap: 16px; }
 }

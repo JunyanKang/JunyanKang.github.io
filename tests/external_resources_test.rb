@@ -22,8 +22,11 @@ check(render.call(nil).strip.empty?, 'Absent external data should not break othe
 check(html.scan('class="kl-external-link"').size == data['items'].size, 'All links should render')
 check(html.scan('class="kl-external-group"').size == 3, 'Expected three categories')
 check(html.scan('rel="noopener noreferrer"').size == data['items'].size, 'External links need safe new-tab attributes')
-check(html.scan('loading="lazy"').size == 13, 'Expected images for all curated resources')
-check(html.scan('kl-external-visual--portrait').size == 3, 'Expected three researcher portraits')
+check(html.scan('loading="lazy"').size == data['items'].size, 'Expected images for all curated resources')
+researchers = data['items'].select { |item| item['group'] == 'labs' }
+check(researchers.size == 20, 'Expected twenty curated researchers')
+check(html.scan('kl-external-visual--portrait').size == researchers.size, 'Expected a portrait for each researcher')
+check(researchers.all? { |item| item['image_kind'] == 'portrait' && !item['image_source'].to_s.empty? }, 'Each portrait must have provenance')
 data['items'].each { |item| check(html.include?(item['image']), "Missing image for #{item['title']}") }
 mutated = copy.call
 mutated['items'][0].delete('image')

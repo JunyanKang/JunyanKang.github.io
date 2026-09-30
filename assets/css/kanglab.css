@@ -148,8 +148,7 @@ footer { border-top: 1px solid var(--kl-border); background: transparent !import
 .kl-carousel-link img { display:block; width:100%; height:100%; object-fit:cover; }
 .kl-carousel-caption { position:absolute; inset:auto 0 0; padding:48px 22px 18px; background:linear-gradient(transparent,rgba(250,249,244,.93) 42%,#faf9f4); }
 .kl-carousel-category { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; }
-.kl-carousel-caption h2 { margin:5px 0 8px; font-size:clamp(20px,2.1vw,27px); line-height:1.12; max-width:26ch; }
-.kl-carousel-read { color:#28635c; font-size:12px; font-weight:600; }
+.kl-carousel-caption h2 { margin:5px 0 0; font-size:clamp(20px,2.1vw,27px); line-height:1.12; max-width:none; }
 /* Keep paper panels intact, with captions outside the scientific image. */
 .kl-carousel-slide--contain .kl-carousel-link { display:flex; flex-direction:column; background:#fff; }
 .kl-carousel-slide--contain .kl-carousel-link img { flex:1; min-height:0; height:0; object-fit:contain; padding:12px; }
@@ -175,6 +174,8 @@ footer { border-top: 1px solid var(--kl-border); background: transparent !import
 .kl-news-index-title { font-size:30px; margin:0 0 24px; }
 .kl-news-article { max-width:800px; margin:0 auto; }
 .kl-news-back { font-size:13px; }
+.kl-news-navigation { display:flex; align-items:center; justify-content:space-between; }
+.kl-news-credit-link { font-size:13px; padding:8px; color:#77837b; }
 .kl-news-article header { margin-top:24px; }
 .kl-news-article h1 { font-size:clamp(28px,4vw,42px); line-height:1.12; margin:10px 0 16px; }
 .kl-news-summary { color:#627269; font-size:18px; line-height:1.55; }

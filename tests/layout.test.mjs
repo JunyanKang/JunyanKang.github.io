@@ -29,13 +29,13 @@ test('all research publication links use the same compact link style', async () 
   }
 });
 
-test('footer uses an accessible admin icon next to Kang Lab, without a colophon', async () => {
+test('footer symbol links directly to admin without a gear or wordmark', async () => {
   const layout = await readFile(new URL('../_layouts/kanglab.liquid', import.meta.url), 'utf8');
   const footer = layout.match(/<footer\b[\s\S]*?<\/footer>/)[0];
-  assert.match(footer, /include kanglab-logo\.liquid variant='stacked' %}<\/a><a class="kl-admin-link"/);
+  assert.match(footer, /include kanglab-logo\.liquid variant='symbol'/);
   assert.match(footer, /href="https:\/\/app\.pagescms\.org\/sign-in"/);
   assert.match(footer, /aria-label="Admin sign-in"/);
-  assert.doesNotMatch(footer, /kl-colophon|©|Built with|Open science, shared knowledge/);
+  assert.doesNotMatch(footer, /kl-admin-link|<svg|variant='stacked'|Kang Lab home|kl-colophon|©|Built with|Open science, shared knowledge/);
 });
 
 test('contact details show only the English address and no legacy map caption/buttons', async () => {

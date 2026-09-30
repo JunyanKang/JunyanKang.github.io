@@ -7,6 +7,8 @@ image: /assets/img/publications/ddx19b.png
 image_fit: contain
 image_alt: "Original graphical abstract comparing RNA regulation in wild-type and DDX19B-deficient spermatogenic cells"
 image_credit: "Graphical abstract reproduced from Yu et al., Communications Biology (2026). CC BY-NC-ND 4.0."
+image_source_url: https://www.nature.com/articles/s42003-026-11045-7
+image_license_url: https://creativecommons.org/licenses/by-nc-nd/4.0/
 published: true
 show_in_hero: true
 hero_title: "RNA regulation during differentiation"
@@ -22,5 +24,3 @@ The study links the nuclear-pore-associated RNA helicase DDX19B to changes in 3â
 **Authors:** Xinghai Yu, Zi-Wu Wang, Xinyu Liu, Ling Tong, Qing Li and Jun-Yan Kang. Xinghai Yu, Zi-Wu Wang and Xinyu Liu are joint first authors; Qing Li and Jun-Yan Kang are corresponding authors.
 
 Read the [original article](https://doi.org/10.1038/s42003-026-11045-7), explore our [RNA research](/research/#rna), or browse [related publications](/publications/).
-
-Figure source: [publisher's graphical abstract](https://www.nature.com/articles/s42003-026-11045-7), reproduced without alteration under [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/).

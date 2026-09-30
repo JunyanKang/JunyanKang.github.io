@@ -6,7 +6,9 @@ const read = path => readFile(new URL(`../${path}`, import.meta.url), 'utf8');
 
 test('carousel has accessible controls and published news destinations', async () => {
   const html = await read('_includes/kanglab-carousel.liquid');
-  for (const attribute of ['data-prev', 'data-next', 'data-play', 'data-slide-to', 'aria-live="polite"']) assert.ok(html.includes(attribute));
+  for (const attribute of ['data-slide-to', 'aria-live="polite"']) assert.ok(html.includes(attribute));
+  assert.doesNotMatch(html, /data-prev|data-next|data-play|Read the story/);
+  assert.match(await read('assets/css/kanglab.css'), /\.kl-carousel-caption h2\s*\{[^}]*max-width:none/);
   assert.match(html, /where: 'published', true/);
   assert.match(html, /where: 'show_in_hero', true/);
   assert.match(html, /story.url \| relative_url/);
@@ -33,10 +35,21 @@ test('publication news uses original paper figures, accurate dates and plain pub
     assert.ok(text.includes(`date: ${date}`));
     assert.match(text, /image_fit: contain/);
     assert.doesNotMatch(text, /editorial highlight|not a study of retinal|AI-generated|Publication highlight/i);
-    assert.match(text, /Figure source:/);
+    assert.doesNotMatch(text, /Figure source:/);
+    assert.match(text, /image_source_url: https:/);
+    assert.match(text, /image_license_url: https:\/\/creativecommons.org\/licenses\//);
   }
   assert.match(await read('_includes/kanglab-carousel.liquid'), /story.category == 'Publication'/);
   assert.match(await read('_includes/kanglab-news-card.liquid'), /include.story.category == 'Publication'/);
+});
+
+test('image attribution lives on the credits page instead of in news prose', async () => {
+  const layout = await read('_layouts/kanglab-news.html');
+  assert.doesNotMatch(layout, /<figcaption>/);
+  assert.match(layout, /\/image-credits\//);
+  const credits = await read('_pages/image-credits.html');
+  for (const field of ['image_credit', 'image_source_url', 'image_license_url']) assert.ok(credits.includes(field));
+  assert.match(credits, /where: 'published', true/);
 });
 
 test('welcome news names the four incoming members without fabricated portraits', async () => {

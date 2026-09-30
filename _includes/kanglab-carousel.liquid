@@ -6,17 +6,14 @@
     <div class="kl-carousel-slide{% if story.image_fit == 'contain' or story.category == 'Publication' %} kl-carousel-slide--contain{% endif %}" data-slide role="group" aria-roledescription="slide" aria-label="{{ forloop.index }} of {{ hero_stories.size }}" {% unless forloop.first %}hidden{% endunless %}>
       <a class="kl-carousel-link" href="{{ story.url | relative_url }}">
         <img src="{{ story.image | relative_url }}" width="1448" height="1086" alt="{{ story.image_alt | escape }}" {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
-        <div class="kl-carousel-caption"><span class="kl-carousel-category">{{ story.category | escape }}</span><h2>{{ story.hero_title | default: story.title | escape }}</h2><span class="kl-carousel-read">Read the story <span aria-hidden="true">↗</span></span></div>
+        <div class="kl-carousel-caption"><span class="kl-carousel-category">{{ story.category | escape }}</span><h2>{{ story.hero_title | default: story.title | escape }}</h2></div>
       </a>
     </div>
     {% endfor %}
   </div>
   {% if hero_stories.size > 1 %}
   <div class="kl-carousel-controls" data-carousel-controls hidden>
-    <button type="button" data-prev aria-label="Previous slide"><span aria-hidden="true">←</span></button>
     <div class="kl-carousel-dots" role="group" aria-label="Choose a slide">{% for story in hero_stories %}<button type="button" data-slide-to="{{ forloop.index0 }}" aria-label="Show slide {{ forloop.index }}: {{ story.hero_title | default: story.title | escape }}" {% if forloop.first %}aria-current="true"{% endif %}><span aria-hidden="true"></span></button>{% endfor %}</div>
-    <button type="button" data-next aria-label="Next slide"><span aria-hidden="true">→</span></button>
-    <button type="button" data-play aria-label="Pause slideshow"><span data-play-symbol aria-hidden="true">Ⅱ</span></button>
   </div>
   {% endif %}
   <p class="kl-visually-hidden" data-carousel-status aria-live="polite" aria-atomic="true"></p>

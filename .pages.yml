@@ -59,8 +59,14 @@ content:
     default: contain
     description: 论文新闻始终完整显示原图，轮播文字置于图片下方，不裁切或遮挡数据。
   - name: image_credit
-    label: 图片说明或来源 / Image caption or credit
+    label: 图片来源（集中致谢页） / Image credit
     type: text
+  - name: image_source_url
+    label: 原始图片来源网址 / Original image URL
+    type: string
+  - name: image_license_url
+    label: 图片许可网址 / Image licence URL
+    type: string
   - name: published
     label: 发布到网站 / Published
     type: boolean

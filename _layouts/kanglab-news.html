@@ -2,9 +2,9 @@
 layout: kanglab
 ---
 <article class="kl-news-article">
-  <a class="kl-news-back" href="{{ '/news/' | relative_url }}">← All news</a>
+  <div class="kl-news-navigation"><a class="kl-news-back" href="{{ '/news/' | relative_url }}">← All news</a>{% if page.image_credit %}<a class="kl-news-credit-link" href="{{ '/image-credits/' | relative_url }}#{{ page.slug | escape }}" aria-label="Image credits" title="Image credits">©</a>{% endif %}</div>
   <header><div class="kl-news-meta"><span>{{ page.category | escape }}</span><time datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: '%d %B %Y' }}</time></div><h1>{{ page.title | escape }}</h1><p class="kl-news-summary">{{ page.summary | escape }}</p></header>
-  <figure class="kl-news-cover"><img src="{{ page.image | relative_url }}" alt="{{ page.image_alt | escape }}" width="1448" height="1086" fetchpriority="high">{% if page.image_credit %}<figcaption>{{ page.image_credit | escape }}</figcaption>{% endif %}</figure>
+  <figure class="kl-news-cover"><img src="{{ page.image | relative_url }}" alt="{{ page.image_alt | escape }}" width="1448" height="1086" fetchpriority="high"></figure>
   <div class="kl-news-body">{{ content }}</div>
   {% if page.link and page.link != '' %}<p class="kl-news-cta"><a class="kl-button" href="{{ page.link | relative_url | escape }}">{{ page.link_label | default: 'Explore more' | escape }} <span aria-hidden="true">↗</span></a></p>{% endif %}
 </article>
