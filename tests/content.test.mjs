@@ -48,12 +48,9 @@ test('refresh preserves author flags and adds new authors without inferring role
   assert.throws(()=>publicationAuthors({author_entries:[{name:'',first_author:true}]}));
   assert.throws(()=>publicationAuthors({author_entries:[{name:'A',first_author:'false'}]}));
 });
-test('team descriptions and every map region have English text without inventing missing bios',async()=>{
-  const team=JSON.parse(await readFile(new URL('../_data/team.json',import.meta.url),'utf8'));
+test('map regions have English labels and the template omits private Chinese names',async()=>{
   const names=JSON.parse(await readFile(new URL('../_data/region_names_en.json',import.meta.url),'utf8'));
   const geo=JSON.parse(await readFile(new URL('../assets/geo/china-provinces.geojson',import.meta.url),'utf8'));
-  for(const member of team.members) for(const key of ['name','role','hometown','bio']) assert.doesNotMatch(member[key]||'',/[\u3400-\u9fff]/);
-  assert.equal(team.members.find(m=>m.photo?.endsWith('ding-luyue.jpg')).name,'Lu-Yue Ding');
   const template=await readFile(new URL('../_pages/profile.html',import.meta.url),'utf8');
   assert.doesNotMatch(template,/team\.pi\.name_zh|lang="zh"/);
   for(const feature of geo.features) {

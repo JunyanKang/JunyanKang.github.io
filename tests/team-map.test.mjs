@@ -4,11 +4,10 @@ import { readFile } from 'node:fs/promises';
 
 test('team heading omits member totals and doctoral roles use PhD student', async () => {
   const template = await readFile(new URL('../_pages/profile.html', import.meta.url), 'utf8');
-  const data = await readFile(new URL('../_data/team.json', import.meta.url), 'utf8');
   const cms = await readFile(new URL('../.pages.yml', import.meta.url), 'utf8');
   assert.doesNotMatch(template, /All regions|team\.members\.size/);
-  assert.doesNotMatch(data + cms, /Direct-entry PhD student/);
-  assert.ok(JSON.parse(data).members.some(member => member.role === 'PhD student'));
+  assert.doesNotMatch(cms, /Direct-entry PhD student/);
+  assert.match(cms, /name: PhD student/);
 });
 
 test('origins map is a hover preview, not a member-filter control', async () => {

@@ -1,5 +1,6 @@
 require 'jekyll'
 require 'yaml'
+require_relative 'support/cms_fixtures'
 
 class SoftwareVisibilityTest
   def assert_equal(expected, actual)
@@ -15,7 +16,7 @@ class SoftwareVisibilityTest
   end
   def setup
     @site = Jekyll::Site.new(Jekyll.configuration({'quiet' => true}))
-    @software = YAML.load_file('_data/software.yml')
+    @software = CmsFixtures.software
     @source = File.read('_pages/resources.html').sub(/\A---.*?---\s*/m, '')
   end
 
@@ -28,27 +29,28 @@ class SoftwareVisibilityTest
   def test_tools_and_categories
     result = render_page
     assert_equal @software['projects'].count { |p| p['visible'] == true }, result.scan('<article>').size
-    refute_includes result, 'MarkItDown'
+    refute_includes result, 'Hidden fixture'
     refute_includes result, 'View on GitHub'
     assert_equal @software['projects'].count { |p| p['visible'] == true }, result.scan('class="kl-software-icon kl-github-link"').size
     refute_includes result, 'Releases ↗'
     assert_equal @software['projects'].count { |p| p['visible'] == true && p['releases'] }, result.scan('class="kl-software-icon kl-release-link"').size
-    assert_includes result, 'aria-label="Open ERG Viewer on GitHub"'
+    assert_includes result, 'aria-label="Open Imaging fixture on GitHub"'
     plugins = result.split('data-software-group="productivity"').last
-    assert_includes plugins, 'Biomed Workbench'
+    assert_includes plugins, 'Plugin fixture'
     assert_includes plugins, 'Codex plugin'
   end
 
   def test_hidden_tools_are_not_rendered_or_deleted
-    @software['projects'].find { |p| p['title'] == 'Biomed Workbench' }['visible'] = false
-    refute_includes render_page, 'Biomed Workbench'
-    assert_equal 6, @software['projects'].size
+    count = @software['projects'].size
+    @software['projects'].find { |p| p['title'] == 'Plugin fixture' }['visible'] = false
+    refute_includes render_page, 'Plugin fixture'
+    assert_equal count, @software['projects'].size
   end
 
   def test_recommendation_badge_is_controlled_by_cms_without_changing_visibility
     @software['projects'].each { |p| p.delete('recommended') }
     refute_includes render_page, 'class="kl-recommended"'
-    project = @software['projects'].find { |p| p['title'] == 'SCENIC+ GRN Workflow' }
+    project = @software['projects'].first
     project['recommended'] = true
     assert_equal 1, render_page.scan('class="kl-recommended"').size
     assert_includes render_page, 'aria-label="Recommended"'
@@ -60,15 +62,28 @@ class SoftwareVisibilityTest
     refute_includes render_page, 'class="kl-recommended"'
   end
 
-  def test_erg_viewer_is_in_imaging_and_can_be_hidden
-    project = @software['projects'].find { |p| p['title'] == 'ERG Viewer' }
+  def test_imaging_project_can_be_hidden
+    project = @software['projects'].find { |p| p['title'] == 'Imaging fixture' }
     assert_equal 'imaging', project['group']
-    assert_equal 'https://github.com/JunyanKang/ERG_Viewer', project['url']
     imaging = render_page.split('data-software-group="imaging"').last.split('data-software-group="productivity"').first
-    assert_includes imaging, 'ERG Viewer'
+    assert_includes imaging, 'Imaging fixture'
     assert_includes imaging, project['url']
     project['visible'] = false
-    refute_includes render_page, 'ERG Viewer'
+    refute_includes render_page, 'Imaging fixture'
+  end
+
+  def test_edit_add_remove_and_reclassify_projects
+    project = @software['projects'].first
+    project.merge!('title' => 'Renamed <tool>', 'group' => 'productivity', 'description' => 'Edited description')
+    assert_includes render_page, 'Renamed &lt;tool&gt;'
+    assert_includes render_page, 'Edited description'
+    refute_includes render_page, 'data-software-group="genomics"'
+    @software['projects'] << project.merge('title' => 'Added tool')
+    assert_includes render_page, 'Added tool'
+    @software['projects'].delete(project)
+    refute_includes render_page, 'Renamed &lt;tool&gt;'
+    @software['projects'].clear
+    assert_includes render_page, 'Research software will be listed here'
   end
 
   def test_empty_categories_and_unpublished_tools_are_not_rendered

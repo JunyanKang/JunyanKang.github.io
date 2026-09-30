@@ -25,20 +25,7 @@ test('province name is centered and news uses the existing CMS', async () => {
   assert.match(await read('.pages.yml'), /name: news\s+label: 新闻编辑与发布 \/ News\s+type: collection/);
 });
 
-test('publication news uses original paper figures, accurate dates and plain publication wording', async () => {
-  for (const [slug, image, date] of [
-    ['ddx19b-publication', 'ddx19b.png', '2026-09-28'],
-    ['retina-rik-publication', 'retina-rik.png', '2026-01-30'],
-  ]) {
-    const text = await read(`_news/${slug}.md`);
-    assert.ok(text.includes(`image: /assets/img/publications/${image}`));
-    assert.ok(text.includes(`date: ${date}`));
-    assert.match(text, /image_fit: contain/);
-    assert.doesNotMatch(text, /editorial highlight|not a study of retinal|AI-generated|Publication highlight/i);
-    assert.doesNotMatch(text, /Figure source:/);
-    assert.match(text, /image_source_url: https:/);
-    assert.match(text, /image_license_url: https:\/\/creativecommons.org\/licenses\//);
-  }
+test('publication figures remain uncropped regardless of the selected image fit', async () => {
   assert.match(await read('_includes/kanglab-carousel.liquid'), /story.category == 'Publication'/);
   assert.match(await read('_includes/kanglab-news-card.liquid'), /include.story.category == 'Publication'/);
 });
@@ -52,42 +39,7 @@ test('image attribution lives on the credits page instead of in news prose', asy
   assert.match(credits, /where: 'published', true/);
 });
 
-test('welcome news names the four incoming members without fabricated portraits', async () => {
-  const text = await read('_news/welcome-2026-students.md');
-  const team = JSON.parse(await read('_data/team.json'));
-  const incoming = team.members.filter(member => member.year === 2026);
-  assert.equal(incoming.length, 4);
-  for (const member of incoming) assert.ok(text.includes(member.name));
-  assert.match(text, /image: \/assets\/img\/brand\/kanglab-symbol-v17.png/);
-  assert.match(text, /published: true/);
-  assert.match(text, /show_in_hero: true/);
-});
-
-test('Teachers Day news uses the supplied team illustration and joins the carousel', async () => {
-  const text = await read('_news/teachers-day-2025.md');
-  assert.match(text, /date: 2025-09-10/);
-  assert.match(text, /category: Lab life/);
-  assert.match(text, /image: \/assets\/img\/news\/teachers-day-2025.png/);
-  assert.match(text, /image_fit: contain/);
-  assert.match(text, /published: true/);
-  assert.match(text, /show_in_hero: true/);
-  assert.match(text, /illustrated team portrait/i);
-  const image = await readFile(new URL('../assets/img/news/teachers-day-2025.png', import.meta.url));
-  assert.equal(image.subarray(1, 4).toString(), 'PNG');
-});
-
-test('2026 event news preserves meeting roles and documentary photo framing', async () => {
-  const conference = await read('_news/ccos2026-tianjin.md');
-  assert.match(conference, /30th Congress of Chinese Ophthalmological Society/);
-  assert.match(conference, /date: 2026-09-12/);
-  assert.match(conference, /Lu-Yue Ding \| Poster presentation/);
-  assert.match(conference, /Yuan-Rong Guo \| Poster presentation/);
-  assert.match(conference, /Zi-Wu Wang \| Written communication/);
-  assert.doesNotMatch(conference, /oral presentation|award/i);
-  assert.match(conference, /ccos2026-poster-session.jpg/);
-  const teachers = await read('_news/teachers-day-2026.md');
-  assert.match(teachers, /7 September/);
-  assert.match(teachers, /image_presentation: team-photo/);
+test('news templates honor CMS photo framing without prescribing article contents', async () => {
   for (const template of ['_includes/kanglab-carousel.liquid', '_includes/kanglab-news-card.liquid', '_layouts/kanglab-news.html']) {
     assert.match(await read(template), /data-photo-framing=/);
   }
