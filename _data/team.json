@@ -14,16 +14,18 @@
       "photo": "/assets/img/team/ding-luyue.jpg",
       "photo_framing": "upper-body",
       "year": 2023,
-      "role": "Direct-entry PhD student",
+      "role": "PhD student",
       "group": "doctoral",
       "region": "330000",
       "hometown": "Shaoxing, Zhejiang",
-      "bio": "Retinal development"
+      "bio": "Retinal development",
+      "photo_center_x": 58,
+      "photo_scale": 175
     },
     {
       "name": "Yu-Tong Liu",
       "year": 2023,
-      "role": "Master's student",
+      "role": "Master's graduate",
       "group": "alumni",
       "graduation_year": 2026,
       "region": "500000",
@@ -35,12 +37,14 @@
       "photo": "/assets/img/team/liu-yu.jpg",
       "photo_framing": "upper-body",
       "year": 2023,
-      "role": "PhD student",
+      "role": "PhD graduate",
       "group": "alumni",
       "graduation_year": 2026,
       "region": "320000",
       "hometown": "Tongzhou, Jiangsu",
-      "bio": "Retinal aging"
+      "bio": "Retinal aging",
+      "photo_center_x": 53,
+      "photo_scale": 175
     },
     {
       "name": "Ling Tong",
@@ -51,7 +55,9 @@
       "group": "masters",
       "region": "360000",
       "hometown": "Shangrao, Jiangxi",
-      "bio": "Retinal development"
+      "bio": "Retinal development",
+      "photo_center_x": 55,
+      "photo_scale": 175
     },
     {
       "name": "Chun-Ren Meng",
@@ -62,18 +68,22 @@
       "group": "doctoral",
       "region": "450000",
       "hometown": "Hechi, Guangxi",
-      "bio": "Retinal development"
+      "bio": "Retinal development",
+      "photo_center_x": 48,
+      "photo_scale": 175
     },
     {
       "name": "Yuan-Rong Guo",
       "photo": "/assets/img/team/guo-yuanrong.jpg",
       "photo_framing": "upper-body",
       "year": 2024,
-      "role": "Direct-entry PhD student",
+      "role": "PhD student",
       "group": "doctoral",
       "region": "310000",
       "hometown": "Shanghai",
-      "bio": "Retinal development"
+      "bio": "Retinal development",
+      "photo_center_x": 54,
+      "photo_scale": 175
     },
     {
       "name": "Xing-Hai Yu",
@@ -83,34 +93,40 @@
       "role": "Postdoctoral fellow",
       "group": "researchers",
       "region": "150000",
-      "hometown": "Inner Mongolia"
+      "hometown": "Inner Mongolia",
+      "photo_center_x": 56,
+      "photo_scale": 175
     },
     {
       "name": "Si-Wei Qian",
       "photo": "/assets/img/team/qian-siwei.jpg",
       "photo_framing": "upper-body",
       "year": 2024,
-      "role": "Direct-entry PhD student",
+      "role": "PhD student",
       "group": "doctoral",
       "region": "330000",
       "hometown": "Wenzhou, Zhejiang",
-      "bio": "Retinal development"
+      "bio": "Retinal development",
+      "photo_center_x": 51,
+      "photo_scale": 175
     },
     {
       "name": "Jia-Qi Liu",
       "photo": "/assets/img/team/liu-jiaqi.jpg",
       "photo_framing": "upper-body",
       "year": 2024,
-      "role": "Direct-entry PhD student",
+      "role": "PhD student",
       "group": "doctoral",
       "region": "210000",
       "hometown": "Dalian, Liaoning",
-      "bio": "Retinal aging"
+      "bio": "Retinal aging",
+      "photo_center_x": 48,
+      "photo_scale": 175
     },
     {
       "name": "Yan-Qiu Liu",
       "year": 2025,
-      "role": "Direct-entry PhD student",
+      "role": "PhD student",
       "group": "doctoral",
       "region": "510000",
       "hometown": "Longchang, Sichuan",
@@ -125,7 +141,9 @@
       "group": "masters",
       "region": "320000",
       "hometown": "Suzhou, Jiangsu",
-      "bio": "Retinal aging"
+      "bio": "Retinal aging",
+      "photo_center_x": 54,
+      "photo_scale": 175
     },
     {
       "name": "Zi-Wu Wang",
@@ -135,12 +153,14 @@
       "role": "Research assistant",
       "group": "researchers",
       "region": "130000",
-      "hometown": "Baoding, Hebei"
+      "hometown": "Baoding, Hebei",
+      "photo_center_x": 49,
+      "photo_scale": 175
     },
     {
       "name": "Bin Tong",
       "year": 2026,
-      "role": "Direct-entry PhD student",
+      "role": "PhD student",
       "group": "doctoral",
       "region": "360000",
       "hometown": "Yichun, Jiangxi"

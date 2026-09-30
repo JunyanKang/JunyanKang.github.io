@@ -1,0 +1,22 @@
+{% if site.data.external_resources.items %}
+{% assign external_links = site.data.external_resources.items | where: 'visible', true | sort: 'order' %}
+{% if external_links.size > 0 %}
+<section class="kl-section kl-external-resources" id="external-resources" aria-labelledby="external-title">
+  <div class="kl-section-heading"><h2 id="external-title">External resources</h2></div>
+  <p class="kl-note kl-external-note">Independent databases, tools and research groups. Links do not imply affiliation.</p>
+  {% for group in site.data.external_resources.groups %}
+  {% assign links = external_links | where: 'group', group.id %}
+  {% if links.size > 0 %}
+  <section class="kl-external-group" aria-labelledby="external-{{ group.id | escape }}">
+    <h3 id="external-{{ group.id | escape }}">{{ group.title | escape }}</h3>
+    <ul class="kl-external-grid">
+    {% for resource in links %}
+      <li><a class="kl-external-link" href="{{ resource.url | escape }}" target="_blank" rel="noopener noreferrer"><span class="kl-external-name">{{ resource.title | escape }} <span aria-hidden="true">↗</span></span><span class="kl-external-description">{{ resource.description | escape }}</span>{% if resource.provider and resource.provider != '' %}<span class="kl-external-provider">{{ resource.provider | escape }}</span>{% endif %}<span class="kl-visually-hidden"> (opens in a new tab)</span></a></li>
+    {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  {% endfor %}
+</section>
+{% endif %}
+{% endif %}

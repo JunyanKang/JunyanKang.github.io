@@ -1,0 +1,47 @@
+/* One emblem, with optical proportions specific to each lockup. */
+.kl-logo {
+  --logo-size: 64px;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--logo-size) * .13);
+  color: #005865;
+  flex: 0 0 auto;
+  vertical-align: middle;
+}
+.kl-logo .kl-logo__symbol {
+  display: block;
+  width: var(--logo-size);
+  height: var(--logo-size);
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+.kl-logo__wordmark {
+  color: #005865;
+  font-family: 'Avenir Next Condensed', 'Avenir Next', 'Segoe UI', sans-serif;
+  font-size: calc(var(--logo-size) * .38);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1;
+  white-space: nowrap;
+}
+.kl-logo--stacked {
+  --logo-size: 72px;
+  flex-direction: column;
+  gap: calc(var(--logo-size) * .11);
+}
+.kl-logo--stacked .kl-logo__wordmark { font-size: calc(var(--logo-size) * .23); }
+.kl-logo--symbol .kl-logo__wordmark { display: none; }
+.kl-brand, .atlas-brand { text-decoration: none !important; flex: 0 0 auto; }
+.kl-footer-identity { display: flex; gap: 22px; align-items: center; }
+.kl-footer-lockup { display: flex; align-items: flex-end; gap: 4px; flex: 0 0 auto; }
+.kl-footer-lockup > a:first-child { display: block; text-decoration: none; }
+@media (max-width: 900px) {
+  .kl-logo--horizontal { --logo-size: 56px; }
+}
+@media (max-width: 700px) {
+  /* The compact masthead keeps navigation and page content above the fold. */
+  .kl-logo--horizontal { --logo-size: 44px; }
+  .kl-logo--horizontal .kl-logo__wordmark { display: none; }
+  .kl-logo--stacked { --logo-size: 64px; }
+  .kl-footer-identity { gap: 16px; }
+}

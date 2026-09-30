@@ -1,0 +1,100 @@
+# Official public destinations curated on 2026-09-30; not legacy demo data.
+groups:
+  - id: databases
+    title: Databases & atlases
+  - id: tools
+    title: Analysis tools
+  - id: labs
+    title: Research groups
+items:
+  - title: NCBI GEO
+    group: databases
+    description: Public functional genomics datasets and study records.
+    provider: NCBI
+    url: https://www.ncbi.nlm.nih.gov/geo/
+    visible: true
+    order: 1
+  - title: Ensembl
+    group: databases
+    description: Genome annotation, gene models and cross-species orthologues.
+    provider: Ensembl
+    url: https://www.ensembl.org/
+    visible: true
+    order: 2
+  - title: UCSC Genome Browser
+    group: databases
+    description: Explore genome assemblies and genomic annotation tracks.
+    provider: UC Santa Cruz
+    url: https://genome.ucsc.edu/
+    visible: true
+    order: 3
+  - title: CZ CELLxGENE Discover
+    group: databases
+    description: Discover and explore curated single-cell datasets.
+    provider: Chan Zuckerberg Initiative
+    url: https://cellxgene.cziscience.com/
+    visible: true
+    order: 4
+  - title: Human Protein Atlas
+    group: databases
+    description: RNA expression and protein localization across tissues and cells.
+    provider: Human Protein Atlas
+    url: https://www.proteinatlas.org/
+    visible: true
+    order: 5
+  - title: RetNet
+    group: databases
+    description: Genes and loci associated with inherited retinal diseases.
+    provider: Retinal Information Network
+    url: https://retnet.org/
+    visible: true
+    order: 6
+  - title: Seurat
+    group: tools
+    description: R tools and tutorials for single-cell data analysis.
+    provider: Satija Lab
+    url: https://satijalab.org/seurat/
+    visible: true
+    order: 1
+  - title: Scanpy
+    group: tools
+    description: Python tools for single-cell gene expression analysis.
+    provider: scverse
+    url: https://scanpy.readthedocs.io/en/stable/
+    visible: true
+    order: 2
+  - title: Fiji
+    group: tools
+    description: ImageJ-based tools for scientific image processing and analysis.
+    provider: Fiji / ImageJ
+    url: https://fiji.sc/
+    visible: true
+    order: 3
+  - title: Galaxy
+    group: tools
+    description: Browser-based tools and reproducible analysis workflows.
+    provider: Galaxy Project
+    url: https://usegalaxy.org/
+    visible: true
+    order: 4
+  - title: Cepko Lab
+    group: labs
+    description: Cell-fate decisions during central nervous system development.
+    provider: Harvard Medical School
+    url: https://cepko.hms.harvard.edu/
+    visible: true
+    order: 1
+  - title: Anand Swaroop Lab
+    group: labs
+    description: Retinal development, aging and neurodegeneration.
+    provider: National Eye Institute, NIH
+    url: https://www.nei.nih.gov/research-and-training/research-labs-and-branches/we-are-nei-intramural/anand-swaroop
+    visible: true
+    order: 2
+  - title: Reh Lab
+    group: labs
+    description: Retinal development, stem cells and neural regeneration.
+    provider: University of Washington
+    url: https://www.rehlab.org/
+    visible: true
+    order: 3

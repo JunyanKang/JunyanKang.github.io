@@ -5,6 +5,92 @@ media:
   categories:
   - image
 content:
+- name: news
+  label: 新闻编辑与发布 / News
+  type: collection
+  path: _news
+  format: yaml-frontmatter
+  filename: "{primary}.md"
+  subfolders: false
+  view:
+    fields: [title, published, date, category, show_in_hero]
+    primary: title
+    sort: [date, title]
+    default:
+      sort: date
+      order: desc
+  fields:
+  - name: title
+    label: 新闻标题 / Title
+    type: string
+    required: true
+  - name: date
+    label: 新闻日期 / Date
+    type: date
+    required: true
+  - name: category
+    label: 分类 / Category
+    type: select
+    options:
+      values: [Publication, Resource, Lab life, Event]
+    default: Lab life
+    required: true
+  - name: summary
+    label: 摘要 / Summary
+    type: text
+    required: true
+  - name: image
+    label: 封面图片 / Cover
+    type: image
+    required: true
+  - name: image_alt
+    label: 图片描述 / Accessible image description
+    type: string
+    required: true
+  - name: image_fit
+    label: 图片显示方式 / Image fit
+    type: select
+    options:
+      values:
+      - name: contain
+        label: 完整显示（论文图件或 Logo）
+      - name: cover
+        label: 填满画面（活动照片）
+    default: contain
+    description: 论文新闻始终完整显示原图，轮播文字置于图片下方，不裁切或遮挡数据。
+  - name: image_credit
+    label: 图片说明或来源 / Image caption or credit
+    type: text
+  - name: published
+    label: 发布到网站 / Published
+    type: boolean
+    default: false
+    description: 关闭为草稿，开启后保存即可随网站构建发布。公开仓库中的草稿文件仍可被访问，请勿写入保密信息。
+  - name: show_in_hero
+    label: 加入首页轮播 / Feature in homepage carousel
+    type: boolean
+    default: false
+    description: 仅已发布新闻可加入轮播；点击轮播图跳转到这篇新闻。
+  - name: hero_title
+    label: 轮播短标题 / Short carousel title
+    type: string
+    description: 留空时使用新闻标题。
+  - name: hero_order
+    label: 轮播顺序 / Carousel order
+    type: number
+    default: 10
+    description: 数字小的排在前面。
+  - name: link
+    label: 相关链接 / Related link
+    type: string
+    description: 可填写 https:// 开头的论文链接，或 /expression-atlas/ 等站内路径。
+  - name: link_label
+    label: 链接文字 / Link label
+    type: string
+  - name: body
+    label: 新闻正文 / Article body
+    type: rich-text
+    required: true
 - name: team
   label: 成员与照片 / Team
   type: file
@@ -64,6 +150,14 @@ content:
           label: 原比例头像
         - name: upper-body
           label: 上半身取景
+    - name: photo_center_x
+      label: 横向取景中心 / Horizontal crop center
+      type: number
+      description: "上半身取景使用，35–65，默认 50。人物偏右时增大，偏左时减小；用于平衡肩膀两侧留白，不修改原图。"
+    - name: photo_scale
+      label: 取景放大比例 / Crop scale
+      type: number
+      description: "上半身取景使用，150–220，默认 175。数值越小，肩部范围越宽。成员卡片与地图悬浮卡片共用此设置。"
     - name: year
       label: Entry year
       type: number
@@ -74,12 +168,14 @@ content:
       required: true
       options:
         values:
-        - name: Direct-entry PhD student
-          label: Direct-entry PhD student / 直博生
         - name: PhD student
-          label: PhD student / 普博生
+          label: PhD student / 博士生
         - name: Master's student
           label: Master's student / 硕士生
+        - name: PhD graduate
+          label: PhD graduate / 博士毕业生
+        - name: Master's graduate
+          label: Master's graduate / 硕士毕业生
         - name: Postdoctoral fellow
           label: Postdoctoral fellow / 博士后
         - name: Research assistant
@@ -87,6 +183,7 @@ content:
     - name: group
       label: Display group
       type: select
+      description: "选择 Alumni 后，网页会自动将 student 显示为 graduate，并显示已填写的毕业年份。"
       required: true
       options:
         values:
@@ -274,6 +371,64 @@ content:
         - {name: height, label: Panel height (px), type: number}
         - {name: source_width, label: Original width (px), type: number}
         - {name: source_height, label: Original height (px), type: number}
+- name: external_resources
+  label: 外部资源链接 / External resources
+  type: file
+  path: _data/external_resources.yml
+  format: yaml
+  fields:
+  - name: groups
+    label: 分类 / Categories
+    type: object
+    list: true
+    fields:
+    - name: id
+      type: string
+      required: true
+      label: Category ID (databases, tools, labs)
+    - name: title
+      type: string
+      required: true
+      label: English category title
+  - name: items
+    label: 外部链接 / Links
+    type: object
+    list:
+      collapsible:
+        collapsed: true
+        summary: "{title}"
+    fields:
+    - name: title
+      label: 名称 / English title
+      type: string
+      required: true
+    - name: group
+      label: 分类 / Category
+      type: select
+      options:
+        values: [databases, tools, labs]
+      required: true
+    - name: description
+      label: 简介 / Short English description
+      type: text
+      required: true
+    - name: provider
+      label: 提供方或单位 / Provider or institution
+      type: string
+    - name: url
+      label: 官方网址 / Official HTTPS URL
+      type: string
+      required: true
+      description: 只填写公开的 https:// 链接，不要填写本地地址、占位网址或私人联系方式。
+    - name: order
+      label: 分类内排序 / Order within category
+      type: number
+      default: 10
+      required: true
+    - name: visible
+      label: 在网站显示 / Visible
+      type: boolean
+      default: false
 - name: software
   label: 软件 / Software
   type: file

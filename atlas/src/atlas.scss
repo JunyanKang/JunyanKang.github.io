@@ -32,7 +32,6 @@ h1, h2, h3 { font-family: Georgia, serif; font-weight: 400; }
 .text-muted { color: #677971; font-size: 13px; }
 .atlas-header { border-bottom: 1px solid #dfe5e1; background: #fcfcfa; }
 .atlas-header-inner { min-height: 86px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
-.atlas-brand img { display: block; width: 200px; height: auto; }
 .atlas-header nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 26px; font-size: 14px; }
 .atlas-header nav a { text-decoration: none; color: #45554f; padding: 10px 0; border-bottom: 2px solid transparent; }
 .atlas-header nav a:hover, .atlas-header nav a[aria-current] { color: #17645d; border-color: #17645d; }
@@ -120,7 +119,6 @@ h1, h2, h3 { font-family: Georgia, serif; font-weight: 400; }
 @media (max-width: 760px) {
   .container, .atlas-header-inner, .atlas-footer { width: calc(100% - 36px); }
   .atlas-header-inner { flex-direction: column; gap: 0; padding: 6px 0 10px; }
-  .atlas-brand img { width: 155px; }
   .atlas-header nav { justify-content: center; gap: 16px; font-size: 12px; }
   .section { padding: 16px 0 28px; }
   .expression-atlas-page-header { align-items: flex-start; flex-direction: column; gap: 12px; margin-bottom: 20px; }

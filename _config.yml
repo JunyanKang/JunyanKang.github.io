@@ -6,7 +6,8 @@ description: Kang Lab studies retinal development, aging and evolution through m
 url: https://kanglab.cool
 baseurl: ''
 lang: en
-icon: kanglab.png
+icon: brand/kanglab-icon-v17.png
+apple_touch_icon: /assets/img/brand/kanglab-icon-v17.png
 max_width: 1180px
 navbar_fixed: true
 footer_fixed: false
@@ -61,14 +62,24 @@ exclude:
   - package.json
   - package-lock.json
   - tests
+  - output
   - THIRD_PARTY_NOTICES.md
   - .al-folio-overrides.yml
   - assets/atlas/*.previous-*
   - assets/atlas/*.staging-*
 sass:
   style: compressed
+collections:
+  news:
+    output: true
+    permalink: /news/:name/
 defaults:
   - scope:
       path: ''
     values:
       layout: kanglab
+  - scope:
+      path: ''
+      type: news
+    values:
+      layout: kanglab-news

@@ -3,6 +3,15 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { mergePublications, validateTeam, bibliography, addNewImportedPublications, publicationAuthors } from '../scripts/content.mjs';
 const paper={title:'Test paper',year:'2025',doi:'10.1234/TEST',authors:'A, B',author_names:['A','B'],url:'https://doi.org/10.1234/TEST'};
+test('portrait crop settings accept only safe numeric values and retain defaults',()=>{
+  const member={name:'Example',role:'PhD student',year:2023,group:'doctoral',region:'310000'};
+  const validate=extra=>validateTeam({members:[{...member,...extra}]},['310000']);
+  validate({});
+  validate({photo_center_x:58,photo_scale:175});
+  validate({photo_center_x:null,photo_scale:null});
+  for(const value of [34,66,'50%;color:red',NaN,Infinity]) assert.throws(()=>validate({photo_center_x:value}));
+  for(const value of [149,221,'175',NaN]) assert.throws(()=>validate({photo_scale:value}));
+});
 test('refresh preserves CMS edits, hidden papers and deletions while adding new works',()=>{
   const hidden={...paper,hidden:true,title:'Edited'};
   const added={...paper,doi:'10.1234/new'};

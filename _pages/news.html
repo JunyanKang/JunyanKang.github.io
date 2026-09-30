@@ -1,0 +1,9 @@
+---
+title: News
+permalink: /news/
+nav: true
+nav_order: 4.5
+---
+<h1 class="kl-news-index-title">Lab news</h1>
+{% assign news = site.news | where: 'published', true | sort: 'date' | reverse %}
+<div class="kl-news-grid">{% for story in news %}{% include kanglab-news-card.liquid story=story %}{% else %}<p>News from the lab will appear here.</p>{% endfor %}</div>

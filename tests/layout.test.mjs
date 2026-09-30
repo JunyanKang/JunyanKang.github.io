@@ -11,11 +11,13 @@ test('five content pages omit the large introductory header without losing acces
   }
 });
 
-test('homepage illustration has no visible caption', async () => {
+test('homepage carousel does not restore the removed static illustration caption', async () => {
   const template = await readFile(new URL('../_pages/about.md', import.meta.url), 'utf8');
-  const figure = template.match(/<figure class="kl-hero-figure">[\s\S]*?<\/figure>/)[0];
-  assert.doesNotMatch(figure, /<figcaption/);
-  assert.match(figure, /alt="Conceptual illustration/);
+  const carousel = await readFile(new URL('../_includes/kanglab-carousel.liquid', import.meta.url), 'utf8');
+  assert.match(template, /include kanglab-carousel/);
+  assert.doesNotMatch(carousel, /<figcaption|Retinal cell diversityConceptual illustration/);
+  assert.match(carousel, /story.image_alt/);
+  assert.match(carousel, /story.url/);
 });
 
 test('all research publication links use the same compact link style', async () => {
@@ -30,7 +32,7 @@ test('all research publication links use the same compact link style', async () 
 test('footer uses an accessible admin icon next to Kang Lab, without a colophon', async () => {
   const layout = await readFile(new URL('../_layouts/kanglab.liquid', import.meta.url), 'utf8');
   const footer = layout.match(/<footer\b[\s\S]*?<\/footer>/)[0];
-  assert.match(footer, /<strong>Kang Lab<\/strong><a class="kl-admin-link"/);
+  assert.match(footer, /include kanglab-logo\.liquid variant='stacked' %}<\/a><a class="kl-admin-link"/);
   assert.match(footer, /href="https:\/\/app\.pagescms\.org\/sign-in"/);
   assert.match(footer, /aria-label="Admin sign-in"/);
   assert.doesNotMatch(footer, /kl-colophon|©|Built with|Open science, shared knowledge/);

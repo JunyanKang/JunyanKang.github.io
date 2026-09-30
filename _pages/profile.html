@@ -11,14 +11,15 @@ nav_order: 3
   <div><p class="kl-eyebrow">{{ team.pi.position | escape }}</p><div class="kl-pi-name"><h2>{{ team.pi.name | escape }}</h2><a href="{{ team.pi.orcid | escape }}">ORCID ↗</a></div><p class="kl-pi-affiliation">{% if team.pi.primary_affiliation and team.pi.primary_affiliation != '' %}{{ team.pi.primary_affiliation | escape }}<br>{% endif %}{{ team.pi.affiliation | escape }}</p></div>
 </section>
 <section class="kl-section" id="members">
-  <div class="kl-section-heading"><h2>Researchers & students</h2><p class="kl-note" id="team-filter-status" role="status">All regions · {{ team.members.size }} members</p></div>
+  <div class="kl-section-heading"><h2>Researchers & students</h2></div>
   {% assign groups = 'researchers,doctoral,masters,alumni' | split: ',' %}
   {% for group in groups %}{% assign members = team.members | where: 'group', group | sort: 'year' %}{% if members.size > 0 or group == 'alumni' %}
   <section class="kl-member-group" data-member-group="{{ group }}"><h3>{% case group %}{% when 'researchers' %}Research staff{% when 'doctoral' %}Doctoral students{% when 'masters' %}Master's students{% when 'alumni' %}Alumni{% endcase %}</h3>
     {% if members.size == 0 %}<p class="kl-note" data-empty-member-group>Alumni profiles will be added here.</p>{% endif %}
     <div class="kl-member-grid">{% for member in members %}<article class="kl-member" data-member-region="{{ member.region }}">
-      {% if member.photo and member.photo != '' %}<div class="kl-member-portrait{% if member.photo_framing == 'upper-body' %} kl-member-portrait--upper-body{% endif %}"><img class="kl-member-photo" src="{{ member.photo | relative_url }}" alt="{{ member.name | escape }}" width="84" height="104" loading="lazy" decoding="async"></div>{% endif %}
-      <div class="kl-member-info"><h4>{{ member.name | escape }}</h4><p class="kl-member-role">{{ member.role | escape }}</p><p class="kl-member-year">Joined {{ member.year }}</p>{% if group == 'alumni' and member.graduation_year %}<p class="kl-member-origin">Graduated {{ member.graduation_year | escape }}</p>{% endif %}<p class="kl-member-origin">{{ member.hometown | escape }}</p>{% if member.bio %}<p>{{ member.bio | escape }}</p>{% endif %}</div>
+      {% if member.photo and member.photo != '' %}<div class="kl-member-portrait{% if member.photo_framing == 'upper-body' %} kl-member-portrait--upper-body{% endif %}" style="--portrait-center-x:{{ member.photo_center_x | default: 50 | escape }}%;--portrait-scale:{{ member.photo_scale | default: 175 | escape }}%"><img class="kl-member-photo" src="{{ member.photo | relative_url }}" alt="{{ member.name | escape }}" width="84" height="104" loading="lazy" decoding="async"></div>{% endif %}
+      {% assign display_role = member.role %}{% if group == 'alumni' %}{% assign display_role = display_role | replace: 'student', 'graduate' %}{% endif %}
+      <div class="kl-member-info"><h4>{{ member.name | escape }}</h4><p class="kl-member-role">{{ display_role | escape }}</p><p class="kl-member-year">Joined {{ member.year }}</p>{% if group == 'alumni' and member.graduation_year %}<p class="kl-member-origin">Graduated {{ member.graduation_year | escape }}</p>{% endif %}<p class="kl-member-origin">{{ member.hometown | escape }}</p>{% if member.bio %}<p>{{ member.bio | escape }}</p>{% endif %}</div>
     </article>{% endfor %}</div>
   </section>{% endif %}{% endfor %}
 </section>
@@ -27,22 +28,18 @@ nav_order: 3
   <div class="kl-origins-layout">
     <figure class="kl-origin-map">
       <svg viewBox="0 0 1000 700" aria-labelledby="map-title map-desc" role="group">
-        <title id="map-title">Team members’ home regions</title><desc id="map-desc">Origins grouped by province, not current locations. Select a highlighted region or use the region buttons to filter members.</desc>
+        <title id="map-title">Team members’ home regions</title><desc id="map-desc">Hover over a province, or focus a populated province using Tab, to preview its members. The member list above always shows everyone. Press Escape to dismiss the preview.</desc>
         <rect class="kl-map-inset" x="800" y="425" width="180" height="252" rx="4" />
         {% for region in site.data.china_map.regions %}
           {% assign regional_members = team.members | where: 'region', region.code %}
-          <g class="kl-map-region{% if regional_members.size > 0 %} has-members{% endif %}" {% if regional_members.size > 0 %}data-region="{{ region.code }}" data-region-name="{{ region.name | escape }}" role="button" tabindex="0" aria-pressed="false" aria-label="{{ region.name | escape }}: {{ regional_members.size }} members"{% endif %}>
-            <title>{{ region.name | escape }} · {{ regional_members.size }} members</title>
+          <g class="kl-map-region{% if regional_members.size > 0 %} has-members{% endif %}" data-region="{{ region.code }}" data-region-name="{{ region.name | escape }}" role="group" {% if regional_members.size > 0 %}tabindex="0"{% else %}tabindex="-1"{% endif %} aria-label="{{ region.name | escape }}: {{ regional_members.size }} members">
             <path d="{{ region.path }}" />{% if region.sea != '' %}<path class="kl-map-sea" d="{{ region.sea }}" />{% endif %}
             {% if regional_members.size > 0 %}<circle cx="{{ region.x }}" cy="{{ region.y }}" r="13" /><text x="{{ region.x }}" y="{{ region.y | plus: 5 }}" text-anchor="middle">{{ regional_members.size }}</text>{% endif %}
           </g>
         {% endfor %}
         <text x="890" y="668" class="kl-map-caption" text-anchor="middle">South China Sea Islands</text>
       </svg>
+      <div class="kl-region-preview" id="region-preview" role="tooltip" hidden><p class="kl-region-preview-title"></p><div class="kl-region-preview-cards"></div></div>
     </figure>
-    <div class="kl-origin-key"><p class="kl-note">Select a home region to explore our researchers and students.</p><div class="kl-region-buttons">
-      <button type="button" class="kl-region-button is-active" data-region="all" aria-pressed="true">All regions <span>{{ team.members.size }}</span></button>
-      {% for region in site.data.china_map.regions %}{% assign regional_members = team.members | where: 'region', region.code %}{% if regional_members.size > 0 %}<button type="button" class="kl-region-button" data-region="{{ region.code }}" data-region-name="{{ region.name | escape }}" aria-pressed="false"><span>{{ region.name | escape }}</span><span>{{ regional_members.size }}</span></button>{% endif %}{% endfor %}
-    </div></div>
   </div>
 </section>

@@ -69,6 +69,9 @@ export function validateTeam(team, codes) {
     if(member.graduation_year != null && (!Number.isInteger(member.graduation_year) || member.graduation_year < member.year || member.graduation_year > 2100)) throw new Error(`Invalid graduation year: ${member.name}`);
     if(!codes.includes(String(member.region))) throw new Error(`Unknown home region: ${member.name}`);
     if(member.photo && !member.photo.startsWith('/assets/img/')) throw new Error('Member photo must be a local uploaded image.');
+    for (const [field, min, max] of [['photo_center_x', 35, 65], ['photo_scale', 150, 220]]) {
+      if (member[field] != null && (!Number.isFinite(member[field]) || member[field] < min || member[field] > max)) throw new Error(`Invalid ${field}: ${member.name}`);
+    }
   }
 }
 export function bibliography(items) {

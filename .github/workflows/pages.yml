@@ -30,6 +30,9 @@ jobs:
       - run: node --test tests/*.test.mjs
       - run: bundle exec ruby tests/software_test.rb
       - run: bundle exec ruby tests/publications_test.rb
+      - run: bundle exec ruby tests/news_test.rb
+      - run: bundle exec ruby tests/external_resources_test.rb
+      - run: bundle exec ruby tests/team_test.rb
       - run: node scripts/build.mjs
         env:
           AMAP_WEB_SERVICE_KEY: ${{ github.event_name != 'pull_request' && secrets.AMAP_WEB_SERVICE_KEY || '' }}
