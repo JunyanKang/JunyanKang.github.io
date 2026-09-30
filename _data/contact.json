@@ -1,1 +1,14 @@
-{"email":"kangjunyan@outlook.com","address_zh":"上海市浦东新区严桥路350号","address_en":"350 Yanqiao Road, Pudong New Area, Shanghai, China","affiliation":"Shanghai Ninth People's Hospital · Shanghai Jiao Tong University School of Medicine"}
+{
+  "email": "kangjunyan@outlook.com",
+  "address_zh": "上海市浦东新区严桥路350号",
+  "address_en": "350 Yanqiao Road, Pudong New Area, Shanghai, China",
+  "affiliation": "Shanghai Ninth People's Hospital · Shanghai Jiao Tong University School of Medicine",
+  "recruitment": {
+    "enabled": true,
+    "title": "Postdoctoral opportunities",
+    "description": "We welcome applications for postdoctoral positions. Please send your CV, including personal information, education and employment history, contact details, and a list of publications, to:",
+    "email": "kangjunyan@outlook.com",
+    "subject": "应聘博士后-姓名",
+    "closing": "We look forward to welcoming you to the team. Applications are accepted on a rolling basis from the date of this announcement until all positions are filled."
+  }
+}

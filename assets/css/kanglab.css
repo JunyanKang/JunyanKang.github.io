@@ -329,6 +329,12 @@ img[data-photo-framing="team-photo"], img[data-photo-framing="conference-photo"]
 .kl-visit-layout { display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.4fr); gap:30px; margin-bottom:28px; align-items:center; }
 .kl-contact-details h2 { font:30px Georgia,serif; margin-top:0; }.kl-contact-details h3 {font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:#697d70;margin:26px 0 10px;}
 .kl-contact-details p, .kl-contact-details address {font-size:14px;color:#536b5c;line-height:1.9;font-style:normal;}.kl-contact-email {font-size:18px;overflow-wrap:anywhere;}
+.kl-recruitment {border-top:1px solid var(--kl-border);margin-top:22px;padding-top:16px;}
+.kl-recruitment h3 {margin:0 0 10px;}
+.kl-recruitment p {margin:0 0 9px;line-height:1.65;overflow-wrap:anywhere;}
+.kl-recruitment p:last-child {margin-bottom:0;}
+.kl-recruitment a {font-weight:600;}
+.kl-recruitment-subject > span:last-child {font-size:12px;color:#697d70;}
 .kl-visit-map {position:relative;margin:0;min-width:0;}.kl-visit-map iframe {width:100%;aspect-ratio:15/8;height:auto;border:1px solid #d9e3da;border-radius:4px;display:block;background:#eef3ed;}
 .kl-map-preview {display:block;border:1px solid #d9e3da;border-radius:4px;overflow:hidden;background:#eef3ed;}.kl-map-preview img {display:block;width:100%;height:auto;}.kl-map-unavailable {display:flex;align-items:center;justify-content:center;aspect-ratio:15/8;padding:20px;font-size:13px;}
 /* Keep either provider's attribution visible along the bottom edge. */

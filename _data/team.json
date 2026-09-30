@@ -163,7 +163,9 @@
       "role": "PhD student",
       "group": "doctoral",
       "region": "360000",
-      "hometown": "Yichun, Jiangxi"
+      "hometown": "Yichun, Jiangxi",
+      "photo": "/assets/img/team/tong-bin.jpg",
+      "photo_framing": "portrait"
     },
     {
       "name": "Fu-Ji Deng",

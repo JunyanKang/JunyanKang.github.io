@@ -13,6 +13,24 @@ Member/resource images retain lazy loading and async decoding. The above-the-fol
 
 ## Maintenance
 
+### Before uploading in Pages CMS
+
+Compress new portraits to **200 KB or less** before uploading. Prefer JPG or WebP
+in a **4:5 portrait aspect ratio**, for example **640 x 800 pixels**. Keep the
+whole head and shoulders, center the person, and balance side margins. Choose
+the original-portrait framing option for an already cropped headshot. These
+are recommended delivery settings, not the platform's exact upload limit or
+an enforced crop. PI and member photo fields show this guidance in the editor.
+
+An HTTP 413 response means the upload request was too large. Pages CMS has
+[documented a hosting-platform limit](https://github.com/hunvreus/pagescms/issues/284#issuecomment-4065794522).
+The hosted service's request limit cannot be increased in this website's
+configuration. Upload overhead also counts toward that limit. The optimization
+command below only handles files already present in the repository; it cannot
+compress a file before the CMS accepts its upload.
+
+### Existing repository images
+
 Requires local ImageMagick (`magick`) and Ruby. This is an explicit maintenance task, not a build prerequisite:
 
 ```sh

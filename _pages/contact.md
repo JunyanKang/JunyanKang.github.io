@@ -8,7 +8,24 @@ nav_order: 5
 {% assign destination = contact.address_zh | uri_escape %}
 <h1 class="kl-visually-hidden">Contact</h1>
 <div class="kl-visit-layout">
-  <section class="kl-contact-details"><h2>Kang Lab</h2><p>{{ contact.affiliation | escape }}</p><h3>Email</h3><a class="kl-contact-email" href="mailto:{{ contact.email | escape }}">{{ contact.email | escape }}</a><h3>Visit</h3><address>{{ contact.address_en | escape }}</address></section>
+  <section class="kl-contact-details">
+    <h2>Kang Lab</h2>
+    <p>{{ contact.affiliation | escape }}</p>
+    <h3>Email</h3>
+    <a class="kl-contact-email" href="mailto:{{ contact.email | escape }}">{{ contact.email | escape }}</a>
+    <h3>Visit</h3>
+    <address>{{ contact.address_en | escape }}</address>
+    {% assign recruitment = contact.recruitment %}
+    {% if recruitment.enabled == true %}
+    <div class="kl-recruitment" aria-labelledby="recruitment-title">
+      <h3 id="recruitment-title">{{ recruitment.title | escape }}</h3>
+      <p>{{ recruitment.description | escape }}</p>
+      <p><a href="mailto:{{ recruitment.email | default: contact.email | escape }}?subject={{ recruitment.subject | url_encode }}">{{ recruitment.email | default: contact.email | escape }}</a></p>
+      {% if recruitment.subject != empty and recruitment.subject != nil %}<p class="kl-recruitment-subject">Email subject: <span lang="zh">{{ recruitment.subject | escape }}</span><br><span>Replace 姓名 with your name.</span></p>{% endif %}
+      <p>{{ recruitment.closing | escape }}</p>
+    </div>
+    {% endif %}
+  </section>
   {% assign map = site.data.contact_map %}
   {% capture amap_link %}https://uri.amap.com/search?keyword={{ destination }}&amp;view=map&amp;src=KangLab&amp;callnative=0{% endcapture %}
   {% if map.available %}{% capture amap_link %}https://uri.amap.com/marker?position={{ map.location }}&amp;name={{ destination }}&amp;coordinate=gaode&amp;callnative=0&amp;src=KangLab{% endcapture %}{% endif %}

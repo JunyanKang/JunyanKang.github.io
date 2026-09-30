@@ -129,6 +129,7 @@ content:
     - name: photo
       label: Portrait
       type: image
+      description: "上传前请压缩至 200 KB 以内，建议 JPG 或 WebP；推荐竖版宽高比 4:5，例如 640 × 800 像素。保留完整头部和肩部，人物居中、两侧留白均衡。后台不会自动压缩原图，大文件可能上传失败（413）。也可从 Media 选择已上传照片。"
     - name: position
       label: Position
       type: string
@@ -158,7 +159,7 @@ content:
     - name: photo
       label: 头像照片 / Member photo
       type: image
-      description: 上传本人照片，或从 Media 选择已有照片。可选；照片将在公开 Team 页面显示。
+      description: "上传前请压缩至 200 KB 以内，建议 JPG 或 WebP；推荐竖版宽高比 4:5，例如 640 × 800 像素。保留完整头部和肩部，人物居中、两侧留白均衡。已裁好头像选择“原比例头像”。后台不会自动压缩原图，大文件可能上传失败（413）。也可从 Media 选择已有照片。可选；照片将在公开 Team 页面显示。"
     - name: photo_framing
       label: 照片取景 / Framing
       type: select
@@ -558,3 +559,27 @@ content:
   - name: affiliation
     label: Institution
     type: text
+  - name: recruitment
+    label: 招聘信息 / Recruitment
+    type: object
+    fields:
+    - name: enabled
+      label: 显示招聘信息 / Show recruitment
+      type: boolean
+      default: false
+    - name: title
+      label: 招聘标题（英文） / Title
+      type: string
+    - name: description
+      label: 应聘材料要求（英文） / Application instructions
+      type: text
+    - name: email
+      label: 简历接收邮箱 / Application email
+      type: string
+      description: 留空时使用上方 Contact 邮箱。
+    - name: subject
+      label: 邮件主题格式 / Email subject format
+      type: string
+    - name: closing
+      label: 招聘期限与结语（英文） / Closing text
+      type: text
