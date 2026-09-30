@@ -62,3 +62,34 @@ test('welcome news names the four incoming members without fabricated portraits'
   assert.match(text, /published: true/);
   assert.match(text, /show_in_hero: true/);
 });
+
+test('Teachers Day news uses the supplied team illustration and joins the carousel', async () => {
+  const text = await read('_news/teachers-day-2025.md');
+  assert.match(text, /date: 2025-09-10/);
+  assert.match(text, /category: Lab life/);
+  assert.match(text, /image: \/assets\/img\/news\/teachers-day-2025.png/);
+  assert.match(text, /image_fit: contain/);
+  assert.match(text, /published: true/);
+  assert.match(text, /show_in_hero: true/);
+  assert.match(text, /illustrated team portrait/i);
+  const image = await readFile(new URL('../assets/img/news/teachers-day-2025.png', import.meta.url));
+  assert.equal(image.subarray(1, 4).toString(), 'PNG');
+});
+
+test('2026 event news preserves meeting roles and documentary photo framing', async () => {
+  const conference = await read('_news/ccos2026-tianjin.md');
+  assert.match(conference, /30th Congress of Chinese Ophthalmological Society/);
+  assert.match(conference, /date: 2026-09-12/);
+  assert.match(conference, /Lu-Yue Ding \| Poster presentation/);
+  assert.match(conference, /Yuan-Rong Guo \| Poster presentation/);
+  assert.match(conference, /Zi-Wu Wang \| Written communication/);
+  assert.doesNotMatch(conference, /oral presentation|award/i);
+  assert.match(conference, /ccos2026-poster-session.jpg/);
+  const teachers = await read('_news/teachers-day-2026.md');
+  assert.match(teachers, /7 September/);
+  assert.match(teachers, /image_presentation: team-photo/);
+  for (const template of ['_includes/kanglab-carousel.liquid', '_includes/kanglab-news-card.liquid', '_layouts/kanglab-news.html']) {
+    assert.match(await read(template), /data-photo-framing=/);
+  }
+  assert.match(await read('.pages.yml'), /name: image_presentation/);
+});

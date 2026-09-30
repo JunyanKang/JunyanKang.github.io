@@ -58,6 +58,19 @@ content:
         label: 填满画面（活动照片）
     default: contain
     description: 论文新闻始终完整显示原图，轮播文字置于图片下方，不裁切或遮挡数据。
+  - name: image_presentation
+    label: 活动照片取景 / Photo framing
+    type: select
+    options:
+      values:
+      - name: original
+        label: 原图显示
+      - name: team-photo
+        label: 团队合照（收紧构图并轻度提亮）
+      - name: conference-photo
+        label: 会议照片（减少顶部留白并轻度提亮）
+    default: original
+    description: 只调整网页展示，不修改原照片中的人物、文字或数据。
   - name: image_credit
     label: 图片来源（集中致谢页） / Image credit
     type: text
