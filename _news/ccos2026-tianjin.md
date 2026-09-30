@@ -11,8 +11,6 @@ published: true
 show_in_hero: true
 hero_title: "Sharing our work at CCOS2026"
 hero_order: 6
-link: https://ccos2026.sciconf.cn/
-link_label: Conference website
 ---
 
 Kang Lab took part in the **30th Congress of Chinese Ophthalmological Society (CCOS2026)**, held on **9–12 September 2026** at the **National Convention & Exhibition Center (Tianjin)**. The meeting was organised by the Chinese Medical Association and its Chinese Ophthalmological Society.
