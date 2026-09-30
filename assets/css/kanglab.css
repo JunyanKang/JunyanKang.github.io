@@ -124,7 +124,13 @@ footer { border-top: 1px solid var(--kl-border); background: transparent !import
 .kl-academic .kl-external-group h3 { font-size:18px; margin:0 0 10px; }
 .kl-external-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0 24px; list-style:none; padding:0; margin:0; }
 .kl-external-grid li { min-width:0; border-top:1px solid var(--kl-border); }
-.kl-external-link { display:flex; flex-direction:column; height:100%; box-sizing:border-box; padding:13px 5px; gap:4px; color:inherit; text-decoration:none !important; }
+.kl-external-link { display:flex; align-items:flex-start; height:100%; box-sizing:border-box; padding:13px 5px; gap:12px; color:inherit; text-decoration:none !important; }
+.kl-external-copy { display:flex; flex:1; min-width:0; flex-direction:column; gap:4px; align-self:stretch; }
+.kl-external-visual { display:flex; align-items:center; justify-content:center; flex:0 0 56px; width:56px; height:56px; overflow:hidden; border-radius:8px; background:#fff; color:#426c63; font-size:24px; }
+.kl-external-visual img { display:block; width:100%; height:100%; object-fit:contain; padding:4px; box-sizing:border-box; }
+.kl-external-visual img[src$="/seurat.jpg"] { object-fit:cover; padding:0; }
+.kl-external-visual--portrait { border-radius:50%; }
+.kl-external-visual--portrait img { object-fit:cover; object-position:center 15%; padding:0; }
 .kl-external-link:hover { background:#f0f5ef; }
 .kl-external-link:focus-visible { outline:2px solid #426c63; outline-offset:2px; }
 .kl-external-name { display:flex; justify-content:space-between; gap:8px; font-size:14px; font-weight:600; color:#28635c; }

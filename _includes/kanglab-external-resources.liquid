@@ -11,7 +11,10 @@
     <h3 id="external-{{ group.id | escape }}">{{ group.title | escape }}</h3>
     <ul class="kl-external-grid">
     {% for resource in links %}
-      <li><a class="kl-external-link" href="{{ resource.url | escape }}" target="_blank" rel="noopener noreferrer"><span class="kl-external-name">{{ resource.title | escape }} <span aria-hidden="true">↗</span></span><span class="kl-external-description">{{ resource.description | escape }}</span>{% if resource.provider and resource.provider != '' %}<span class="kl-external-provider">{{ resource.provider | escape }}</span>{% endif %}<span class="kl-visually-hidden"> (opens in a new tab)</span></a></li>
+      <li><a class="kl-external-link" href="{{ resource.url | escape }}" target="_blank" rel="noopener noreferrer">
+        <span class="kl-external-visual{% if resource.image_kind == 'portrait' %} kl-external-visual--portrait{% endif %}">{% if resource.image and resource.image != '' %}<img src="{{ resource.image | relative_url }}" alt="{{ resource.image_alt | escape }}" width="56" height="56" loading="lazy" decoding="async">{% else %}<span aria-hidden="true">{{ resource.title | slice: 0 | escape }}</span>{% endif %}</span>
+        <span class="kl-external-copy"><span class="kl-external-name">{{ resource.title | escape }} <span aria-hidden="true">↗</span></span><span class="kl-external-description">{{ resource.description | escape }}</span>{% if resource.provider and resource.provider != '' %}<span class="kl-external-provider">{{ resource.provider | escape }}</span>{% endif %}<span class="kl-visually-hidden"> (opens in a new tab)</span></span>
+      </a></li>
     {% endfor %}
     </ul>
   </section>

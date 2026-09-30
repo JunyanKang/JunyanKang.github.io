@@ -8,6 +8,10 @@ groups:
     title: Research groups
 items:
   - title: NCBI GEO
+    image: /assets/img/external/ncbi.ico
+    image_kind: logo
+    image_alt: NCBI logo
+    image_source: https://www.ncbi.nlm.nih.gov/geo/
     group: databases
     description: Public functional genomics datasets and study records.
     provider: NCBI
@@ -15,6 +19,10 @@ items:
     visible: true
     order: 1
   - title: Ensembl
+    image: /assets/img/external/ensembl.svg
+    image_kind: logo
+    image_alt: Ensembl logo
+    image_source: https://www.ensembl.org/
     group: databases
     description: Genome annotation, gene models and cross-species orthologues.
     provider: Ensembl
@@ -22,6 +30,10 @@ items:
     visible: true
     order: 2
   - title: UCSC Genome Browser
+    image: /assets/img/external/ucsc.png
+    image_kind: logo
+    image_alt: UCSC Genome Browser helix logo
+    image_source: https://genome.ucsc.edu/
     group: databases
     description: Explore genome assemblies and genomic annotation tracks.
     provider: UC Santa Cruz
@@ -29,6 +41,10 @@ items:
     visible: true
     order: 3
   - title: CZ CELLxGENE Discover
+    image: /assets/img/external/cellxgene.png
+    image_kind: logo
+    image_alt: CZ CELLxGENE logo
+    image_source: https://cellxgene.cziscience.com/
     group: databases
     description: Discover and explore curated single-cell datasets.
     provider: Chan Zuckerberg Initiative
@@ -36,6 +52,10 @@ items:
     visible: true
     order: 4
   - title: Human Protein Atlas
+    image: /assets/img/external/protein-atlas.png
+    image_kind: logo
+    image_alt: Human Protein Atlas logo
+    image_source: https://www.proteinatlas.org/
     group: databases
     description: RNA expression and protein localization across tissues and cells.
     provider: Human Protein Atlas
@@ -43,6 +63,10 @@ items:
     visible: true
     order: 5
   - title: RetNet
+    image: /assets/img/external/retnet.ico
+    image_kind: logo
+    image_alt: RetNet site icon
+    image_source: https://retnet.org/
     group: databases
     description: Genes and loci associated with inherited retinal diseases.
     provider: Retinal Information Network
@@ -50,6 +74,10 @@ items:
     visible: true
     order: 6
   - title: Seurat
+    image: /assets/img/external/seurat.jpg
+    image_kind: logo
+    image_alt: Seurat official website artwork
+    image_source: https://satijalab.org/seurat/
     group: tools
     description: R tools and tutorials for single-cell data analysis.
     provider: Satija Lab
@@ -57,6 +85,10 @@ items:
     visible: true
     order: 1
   - title: Scanpy
+    image: /assets/img/external/scanpy.svg
+    image_kind: logo
+    image_alt: Scanpy logo
+    image_source: https://scanpy.readthedocs.io/en/stable/
     group: tools
     description: Python tools for single-cell gene expression analysis.
     provider: scverse
@@ -64,6 +96,10 @@ items:
     visible: true
     order: 2
   - title: Fiji
+    image: /assets/img/external/fiji.png
+    image_kind: logo
+    image_alt: Fiji logo
+    image_source: https://fiji.sc/
     group: tools
     description: ImageJ-based tools for scientific image processing and analysis.
     provider: Fiji / ImageJ
@@ -71,6 +107,10 @@ items:
     visible: true
     order: 3
   - title: Galaxy
+    image: /assets/img/external/galaxy.ico
+    image_kind: logo
+    image_alt: Galaxy logo
+    image_source: https://usegalaxy.org/
     group: tools
     description: Browser-based tools and reproducible analysis workflows.
     provider: Galaxy Project
@@ -78,6 +118,10 @@ items:
     visible: true
     order: 4
   - title: Cepko Lab
+    image: /assets/img/external/connie-cepko.jpg
+    image_kind: portrait
+    image_alt: Connie Cepko
+    image_source: https://cepko.hms.harvard.edu/people/connie-cepko
     group: labs
     description: Cell-fate decisions during central nervous system development.
     provider: Harvard Medical School
@@ -85,6 +129,10 @@ items:
     visible: true
     order: 1
   - title: Anand Swaroop Lab
+    image: /assets/img/external/anand-swaroop.jpg
+    image_kind: portrait
+    image_alt: Anand Swaroop
+    image_source: https://www.nei.nih.gov/research-and-training/research-labs-and-branches/we-are-nei-intramural/anand-swaroop
     group: labs
     description: Retinal development, aging and neurodegeneration.
     provider: National Eye Institute, NIH
@@ -92,6 +140,10 @@ items:
     visible: true
     order: 2
   - title: Reh Lab
+    image: /assets/img/external/thomas-reh.jpg
+    image_kind: portrait
+    image_alt: Thomas A. Reh
+    image_source: https://www.rehlab.org/thomas-a-reh
     group: labs
     description: Retinal development, stem cells and neural regeneration.
     provider: University of Washington

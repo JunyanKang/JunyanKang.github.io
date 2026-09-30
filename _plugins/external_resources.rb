@@ -5,10 +5,10 @@ module KangLab
     safe true
 
     def generate(site)
-      validate!(site.data['external_resources'])
+      validate!(site.data['external_resources'], site.source)
     end
 
-    def validate!(data)
+    def validate!(data, source = File.expand_path('..', __dir__))
       return unless data
       groups = data.fetch('groups').map { |g| g.fetch('id') }
       fail_resource('Invalid or duplicate category IDs') unless groups.uniq == groups && groups.all? { |g| g.match?(/\A[a-z][a-z0-9-]*\z/) }
@@ -26,6 +26,17 @@ module KangLab
         normalized = item['url'].sub(%r{/$}, '')
         fail_resource("Duplicate URL for #{item['title']}") if urls.include?(normalized)
         urls << normalized
+        image = item['image'].to_s
+        unless image.empty?
+          root = File.realpath(File.join(source, 'assets/img'))
+          path = File.expand_path(image.delete_prefix('/'), source)
+          valid = image.start_with?('/assets/img/') && image.match?(/\.(?:png|jpe?g|webp|svg|ico)\z/i) && File.file?(path) && File.realpath(path).start_with?(root + '/')
+          fail_resource("Invalid local image for #{item['title']}") unless valid
+          fail_resource("Missing image description for #{item['title']}") if item['image_alt'].to_s.strip.empty?
+          fail_resource("Invalid image type for #{item['title']}") unless %w[logo portrait].include?(item['image_kind'])
+          image_source = URI.parse(item['image_source'].to_s)
+          fail_resource("Missing HTTPS image source for #{item['title']}") unless image_source.scheme == 'https' && image_source.host && !image_source.userinfo
+        end
       end
     rescue URI::InvalidURIError, KeyError => e
       fail_resource(e.message)

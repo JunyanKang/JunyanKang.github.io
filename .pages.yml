@@ -415,6 +415,24 @@ content:
     - name: provider
       label: 提供方或单位 / Provider or institution
       type: string
+    - name: image
+      label: 官方 Logo 或头像 / Logo or portrait
+      type: image
+      description: 上传官网标识或负责人公开头像；保留原图，不使用虚构肖像。留空时显示名称首字母。
+    - name: image_kind
+      label: 图片类型 / Image type
+      type: select
+      options:
+        values: [logo, portrait]
+      default: logo
+      description: Logo 完整显示；portrait 使用圆形头像取景。
+    - name: image_alt
+      label: 图片描述 / Image description
+      type: string
+    - name: image_source
+      label: 图片来源 / Official image source
+      type: string
+      description: 填写该标识或头像所在的官方 HTTPS 页面，方便核对来源。
     - name: url
       label: 官方网址 / Official HTTPS URL
       type: string

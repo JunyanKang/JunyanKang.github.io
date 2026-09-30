@@ -22,6 +22,22 @@ check(render.call(nil).strip.empty?, 'Absent external data should not break othe
 check(html.scan('class="kl-external-link"').size == data['items'].size, 'All links should render')
 check(html.scan('class="kl-external-group"').size == 3, 'Expected three categories')
 check(html.scan('rel="noopener noreferrer"').size == data['items'].size, 'External links need safe new-tab attributes')
+check(html.scan('loading="lazy"').size == 13, 'Expected images for all curated resources')
+check(html.scan('kl-external-visual--portrait').size == 3, 'Expected three researcher portraits')
+data['items'].each { |item| check(html.include?(item['image']), "Missing image for #{item['title']}") }
+mutated = copy.call
+mutated['items'][0].delete('image')
+validator.validate!(mutated)
+check(render.call(mutated).include?('<span aria-hidden="true">N</span>'), 'Missing-image initial fallback failed')
+{'image' => '/assets/img/missing-image.png', 'image_kind' => 'invalid', 'image_alt' => '', 'image_source' => 'javascript:alert(1)'}.each do |field, value|
+  invalid = copy.call
+  invalid['items'][0][field] = value
+  begin
+    validator.validate!(invalid)
+    raise "Invalid image field accepted: #{field}"
+  rescue Jekyll::Errors::FatalException
+  end
+end
 mutated = copy.call
 mutated['items'].first['visible'] = false
 check(!render.call(mutated).include?('NCBI GEO'), 'Hidden resource leaked')
@@ -67,6 +83,9 @@ cms = YAML.load_file('.pages.yml')['content'].find { |entry| entry['name'] == 'e
 check(cms['path'] == '_data/external_resources.yml', 'CMS points to wrong file')
 fields = cms['fields'].find { |field| field['name'] == 'items' }['fields']
 check(fields.find { |f| f['name'] == 'visible' }['default'] == false, 'New links must default to hidden')
+%w[image image_kind image_alt image_source].each do |key|
+  check(fields.any? { |f| f['name'] == key }, "CMS missing #{key}")
+end
 page = File.read('_pages/resources.html')
 check(page.index('id="lab-data"') < page.index('id="software"'), 'Dataset section must precede software')
 check(page.index('include kanglab-external-resources') > page.index('Research software will be listed'), 'External resources must be third')
