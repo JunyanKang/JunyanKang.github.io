@@ -26,6 +26,15 @@ projects:
     url: https://github.com/JunyanKang/paper-voice
     releases: https://github.com/JunyanKang/paper-voice/releases
     license: MIT
+  - title: Paper Nexus
+    visible: true
+    recommended: false
+    group: productivity
+    category: Zotero plugin
+    description: Citation previews, bilingual abstracts, reading lists, coauthor networks and public ORCID career records, within Zotero.
+    url: https://github.com/JunyanKang/paper-nexus
+    releases: https://github.com/JunyanKang/paper-nexus/releases
+    license: MIT
   - title: SCENIC+ GRN Workflow
     visible: true
     recommended: false
