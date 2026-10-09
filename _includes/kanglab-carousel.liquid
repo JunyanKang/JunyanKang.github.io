@@ -3,7 +3,7 @@
 <section class="kl-carousel" data-carousel data-interval="6500" role="region" aria-roledescription="carousel" aria-label="Research highlights and lab news">
   <div class="kl-carousel-slides">
     {% for story in hero_stories %}
-    <div class="kl-carousel-slide{% if story.image_fit == 'contain' or story.category == 'Publication' %} kl-carousel-slide--contain{% endif %}" data-slide role="group" aria-roledescription="slide" aria-label="{{ forloop.index }} of {{ hero_stories.size }}" {% unless forloop.first %}hidden{% endunless %}>
+    <div class="kl-carousel-slide{% if story.image_fit == 'contain' or story.category == 'Publication' or story.image_presentation == 'carousel-banner' %} kl-carousel-slide--contain{% endif %}{% if story.image_presentation == 'carousel-banner' and story.category != 'Publication' %} kl-carousel-slide--banner{% endif %}" data-slide role="group" aria-roledescription="slide" aria-label="{{ forloop.index }} of {{ hero_stories.size }}" {% unless forloop.first %}hidden{% endunless %}>
       <a class="kl-carousel-link" href="{{ story.url | relative_url }}">
         <img src="{{ story.image | relative_url }}" data-photo-framing="{{ story.image_presentation | default: 'original' | escape }}" width="1448" height="1086" alt="{{ story.image_alt | escape }}" {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
         <div class="kl-carousel-caption"><span class="kl-carousel-category">{{ story.category | escape }}</span><h2>{{ story.hero_title | default: story.title | escape }}</h2></div>

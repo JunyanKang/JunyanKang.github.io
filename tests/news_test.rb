@@ -66,11 +66,21 @@ Dir.mktmpdir('kanglab-news-test') do |source|
     check(html.include?('datetime="2020-02-03"'), 'CMS date serialization failed')
     check(html.include?('kl-carousel-slide--contain') && html.include?('kl-news-image--contain'), 'Publication figure cropped')
   end
-  %w[original team-photo conference-photo].each do |framing|
+  %w[original team-photo conference-photo carousel-banner].each do |framing|
     write.call('visible', base.merge('image_presentation' => framing, 'summary' => 'Edited summary'))
     build.call
     check(File.read("#{source}/_site/index.html").include?("data-photo-framing=\"#{framing}\""), 'Photo framing edit ignored')
   end
+  write.call('visible', base.merge('image_presentation' => 'carousel-banner', 'image_fit' => 'cover'))
+  build.call
+  html = File.read("#{source}/_site/index.html")
+  check(html.include?('kl-carousel-slide--banner'), 'Editorial banner framing not applied')
+  check(html.include?('kl-carousel-slide--contain'), 'Banner caption must stay outside the image')
+  write.call('visible', base.merge('category' => 'Publication', 'image_presentation' => 'carousel-banner'))
+  build.call
+  html = File.read("#{source}/_site/index.html")
+  check(!html.include?('kl-carousel-slide--banner'), 'Publication figures must not use banner cropping')
+  check(html.include?('kl-carousel-slide--contain'), 'Publication figures must stay complete')
   write.call('visible', base.merge('hero_order' => 20))
   write.call('added', base.merge('title' => 'Added story', 'hero_title' => 'First slide', 'hero_order' => 1))
   build.call

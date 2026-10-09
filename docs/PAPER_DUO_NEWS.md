@@ -38,7 +38,13 @@ folded page retains its chain-link magnifying glass. Their adjacent hands join
 at centre, while the glass remains on the outside. Quiet sound waves and a
 small document network suggest listening and discovery. Warm ivory and sage
 match the lab site; there is no embedded text or UI, and HTML provides the
-accessible title. Full figures remain visible with `image_fit: contain`.
+accessible title. The revised `cover-wide.webp` is a landscape 16:9 composition
+with crop-safe margins around both mascots. `image_fit: contain` keeps the
+caption outside the picture; `image_presentation: carousel-banner` fills the
+responsive image slot without inset padding or sidebars. Only the surrounding
+background is cropped across desktop/mobile ratios. Publication figures are
+explicitly excluded from banner cropping. The original 4:3 cover is retained
+as an unused alternative.
 
 Both reference images were matched to their public Git blob hashes:
 
@@ -47,8 +53,17 @@ Both reference images were matched to their public Git blob hashes:
 
 Article screenshots come from the same public source commits above:
 
-- Voice: `docs/assets/reading-focus-en.png` (sample passage, labelled as such).
-- Nexus: `docs/images/network.png` (Chinese UI, labelled as such).
+- Voice: `docs/assets/reading-focus-en.png` (sample passage, labelled as such),
+  `docs/assets/reading-panel-en.png` (listening modes), and
+  `docs/assets/selection-translation-en.png` (selection translation).
+- Nexus: `docs/images/network.png` (coauthors), `docs/images/translation.png`
+  (bilingual abstract) and `docs/images/career.png` (public ORCID timeline).
+  These are project interface examples, not independently verified biographies.
+
+Each product has three real screenshots. Inline screenshots are lazy-loaded,
+use their actual dimensions and link to the full-resolution WebP for inspection.
+The narrow Voice panel is capped at 340 CSS pixels instead of being stretched
+to the full article width.
 
 Screenshots are only encoded as WebP; their interfaces and displayed content
 are not generated or retouched. Both source projects use the MIT licence.
