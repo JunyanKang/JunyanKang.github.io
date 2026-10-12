@@ -17,23 +17,14 @@ projects:
     description: A Codex plugin connecting scientific questions, multi-omics analysis, evidence interpretation, and publication deliverables.
     url: https://github.com/JunyanKang/biomed-workbench
     license: Apache-2.0
-  - title: Paper Voice
+  - title: Paper Loom
     visible: true
     recommended: true
     group: productivity
     category: Zotero plugin
-    description: Offline paper narration and synchronized translation for Zotero, with multilingual reading support.
-    url: https://github.com/JunyanKang/paper-voice
-    releases: https://github.com/JunyanKang/paper-voice/releases
-    license: MIT
-  - title: Paper Nexus
-    visible: true
-    recommended: false
-    group: productivity
-    category: Zotero plugin
-    description: Citation previews, bilingual abstracts, reading lists, coauthor networks and public ORCID career records, within Zotero.
-    url: https://github.com/JunyanKang/paper-nexus
-    releases: https://github.com/JunyanKang/paper-nexus/releases
+    description: Listen, translate and follow references in Zotero, with offline speech, citation previews and author networks in one companion.
+    url: https://github.com/JunyanKang/paper-loom
+    releases: https://github.com/JunyanKang/paper-loom/releases/latest
     license: MIT
   - title: SCENIC+ GRN Workflow
     visible: true

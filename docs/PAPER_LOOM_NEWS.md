@@ -1,0 +1,28 @@
+# Paper Loom website launch
+
+## Editorial sources
+
+- Product: https://github.com/JunyanKang/paper-loom
+- Current download: https://github.com/JunyanKang/paper-loom/releases/latest
+- English README, installation guide, user guide and privacy documentation in that repository.
+- Local source consulted read-only: `/Volumes/external/Work/SynologyDrive/zotero plugins/paper-loom`.
+
+No fixed plugin version is advertised in the article, because the latest-download link tracks subsequent maintenance releases. Declared Zotero compatibility is distinguished from platform-specific voice-package availability. Translation is not described as offline.
+
+## Images
+
+The cover is an AI-assisted 16:9 re-layout of the project's official `docs/images/hero-en.png`, preserving its book mascot and branding. It is editorial artwork, not an application screenshot.
+
+The four feature images are compressed, uncropped copies of the project's English `caption-controls-en.png`, `references-en.png`, `network-en.png` and `appearance-en.png`. Their full-resolution sources are retained under ignored `output/paper-loom-news/source/`. Reference and author-network screenshots use the product's demonstration library; captions explicitly identify that context and do not present the demonstration records as real publications.
+
+## Replaced content
+
+- The Paper Voice / Paper Nexus joint news entry is replaced by `/news/paper-loom/`.
+- `/news/paper-voice-paper-nexus/` remains as a static redirect with a clickable fallback and canonical destination, excluded from the sitemap.
+- The old software cards are replaced by a recommended Paper Loom entry.
+- Existing image assets and old GitHub repositories/releases are not deleted.
+- News and carousel fields remain editable through the existing Pages CMS News collection.
+
+## Release verification
+
+Build, regression tests, responsive browser checks and public deployment evidence are recorded in ignored `output/paper-loom-news/`. A successful local build alone does not establish that the site is live.
