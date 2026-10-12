@@ -24,7 +24,7 @@ Read a sentence, a selection, a paragraph or the full text. Listen once, repeat 
 After installing the voice package, speech runs locally in **English, Mandarin Chinese, Japanese and French**, with 14 voices including US and UK English. Translation uses your selected online service; you can read the result alongside the source or listen to it aloud.
 
 <figure class="kl-news-software-figure">
-  <a href="/assets/img/news/paper-loom/caption-controls.webp"><img src="/assets/img/news/paper-loom/caption-controls.webp" width="1032" height="389" loading="lazy" alt="Paper Loom's English playback and translation controls beside a selected passage"></a>
+  <a href="/assets/img/news/paper-loom/caption-controls-transparent.svg"><img src="/assets/img/news/paper-loom/caption-controls-transparent.svg" width="1032" height="389" loading="lazy" alt="Paper Loom's English playback and translation controls beside a selected passage"></a>
   <figcaption><strong>Stay with the passage.</strong> Listening and translation controls sit alongside the text rather than in a separate workspace.</figcaption>
 </figure>
 
@@ -33,7 +33,7 @@ After installing the voice package, speech runs locally in **English, Mandarin C
 Hover over a recognized citation to inspect the paper and its abstract. Open a local attachment or DOI, copy a formatted citation, or save the paper to **Read later**. Original, translated and bilingual abstract views share the translation language used for passages.
 
 <figure class="kl-news-software-figure">
-  <a href="/assets/img/news/paper-loom/references.webp"><img src="/assets/img/news/paper-loom/references.webp" width="1768" height="574" loading="lazy" alt="Paper Loom reference and abstract windows using a demonstration paper record"></a>
+  <a href="/assets/img/news/paper-loom/references-transparent.svg"><img src="/assets/img/news/paper-loom/references-transparent.svg" width="1768" height="574" loading="lazy" alt="Paper Loom reference and abstract windows using a demonstration paper record"></a>
   <figcaption><strong>Look beyond the citation.</strong> A real plugin screenshot using the project's demonstration library, not a published research article.</figcaption>
 </figure>
 
@@ -44,7 +44,7 @@ Recognition depends on the PDF's text structure. Scanned documents and complex l
 Explore coauthors and their shared papers in your Zotero library. Focus on an author, see the work connecting them to collaborators, then consult a linked public ORCID record for available education, employment and research outputs.
 
 <figure class="kl-news-software-figure">
-  <a href="/assets/img/news/paper-loom/network.webp"><img src="/assets/img/news/paper-loom/network.webp" width="1616" height="1616" loading="lazy" alt="Paper Loom author network and shared papers from its demonstration library"></a>
+  <a href="/assets/img/news/paper-loom/network-transparent.svg"><img src="/assets/img/news/paper-loom/network-transparent.svg" width="1616" height="1616" loading="lazy" alt="Paper Loom author network and shared papers from its demonstration library"></a>
   <figcaption><strong>Explore connections in your own library.</strong> This screenshot uses demonstration records. Actual networks depend on your collection and metadata; same-name authors need verification.</figcaption>
 </figure>
 
@@ -53,7 +53,7 @@ Explore coauthors and their shared papers in your Zotero library. Focus on an au
 Themes, transparency, interface language, shortcuts, translation fonts and citation styles now share a single settings page. Install the plugin as an **XPI**; download and check the appropriate voice environment from within Paper Loom when you want to listen. Reference, translation and author tools do not require the voice package.
 
 <figure class="kl-news-software-figure kl-news-software-figure--compact">
-  <a href="/assets/img/news/paper-loom/appearance.webp"><img src="/assets/img/news/paper-loom/appearance.webp" width="792" height="1456" loading="lazy" alt="Paper Loom's unified English settings page for translation, appearance, shortcuts and service maintenance"></a>
+  <a href="/assets/img/news/paper-loom/appearance-transparent.svg"><img src="/assets/img/news/paper-loom/appearance-transparent.svg" width="792" height="1456" loading="lazy" alt="Paper Loom's unified English settings page for translation, appearance, shortcuts and service maintenance"></a>
   <figcaption><strong>A shared reading environment.</strong> Configure the tools together, with installation help and manual updates within reach.</figcaption>
 </figure>
 
