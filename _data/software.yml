@@ -20,6 +20,7 @@ projects:
   - title: Paper Loom
     visible: true
     recommended: true
+    landing_page: /paper-loom/
     group: productivity
     category: Zotero plugin
     description: Listen, translate and follow references in Zotero, with offline speech, citation previews and author networks in one companion.

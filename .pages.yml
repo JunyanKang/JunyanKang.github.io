@@ -532,6 +532,10 @@ content:
       label: GitHub URL
       type: string
       required: true
+    - name: landing_page
+      label: Product page / 产品介绍页
+      type: string
+      description: 可选站内路径，例如 /paper-loom/。填写后整张卡片跳转到该页面，不再显示独立的 GitHub 和下载图标；推荐卡片同时使用淡金色背景。
     - name: upstream
       label: Original project (fork only)
       type: string

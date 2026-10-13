@@ -47,6 +47,27 @@ class SoftwareVisibilityTest
     assert_equal count, @software['projects'].size
   end
 
+  def test_product_page_makes_recommended_card_a_single_link
+    project = @software['projects'].first
+    project.merge!('landing_page' => '/paper-loom/', 'recommended' => true, 'releases' => 'https://example.org/releases')
+    card = render_page.split('<article class="kl-software-card--linked kl-software-card--featured">').last.split('</article>').first
+    assert_includes card, 'class="kl-software-card-link" href="/paper-loom/"'
+    assert_includes card, 'aria-label="Recommended"'
+    refute_includes card, 'kl-github-link'
+    refute_includes card, 'kl-release-link'
+    assert_equal 1, card.scan('<a ').size
+    project['recommended'] = false
+    refute_includes render_page, 'kl-software-card--featured'
+    assert_includes render_page, 'class="kl-software-card-link"'
+    project['landing_page'] = ''
+    refute_includes render_page, 'class="kl-software-card-link"'
+    assert_includes render_page, project['url']
+    project['landing_page'] = 'javascript:alert(1)'
+    refute_includes render_page, 'javascript:'
+    project['landing_page'] = '//example.org/'
+    refute_includes render_page, 'class="kl-software-card-link"'
+  end
+
   def test_recommendation_badge_is_controlled_by_cms_without_changing_visibility
     @software['projects'].each { |p| p.delete('recommended') }
     refute_includes render_page, 'class="kl-recommended"'
