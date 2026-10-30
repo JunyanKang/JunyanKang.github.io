@@ -444,7 +444,7 @@
 }
 
 .expression-atlas-table-wrap {
-  overflow-x: auto;
+  overflow-x: visible;
 }
 
 .expression-atlas-table-stack {
@@ -505,7 +505,7 @@
 
 .expression-atlas-line-chart__frame {
   position: relative;
-  overflow-x: auto;
+  overflow-x: visible;
   padding-bottom: 4px;
 }
 
@@ -661,19 +661,19 @@
   .expression-atlas-line-chart__frame, .expression-atlas-table-wrap {
     min-width: 0;
     max-width: 100%;
-    max-height: min(680px, 68svh);
-    overflow: auto;
+    max-height: none;
+    overflow: visible;
     overscroll-behavior: contain;
     scrollbar-width: thin;
     scrollbar-color: var(--kl-border-strong) var(--kl-paper);
   }
-  .expression-atlas-line-chart__svg { flex: none; max-width: none; }
+  .expression-atlas-line-chart__svg { flex: none; max-width: 100%; min-width: 0; }
   .expression-atlas-chart-scroll-hint { font-size: 12px; line-height: 1.5; margin: 8px 0 0; }
   .expression-atlas-table-stack { min-width: 0; margin-top: 12px; }
   .expression-atlas-table th, .expression-atlas-table td { font-size: 13px; padding: 10px 12px; }
-  .expression-atlas-table th:first-child { width: 180px; }
-  .expression-atlas-table thead th { position: sticky; top: 0; z-index: 2; }
-  .expression-atlas-table--heatmap th:first-child { position: sticky; left: 0; z-index: 1; }
+  .expression-atlas-table th:first-child { width: 120px; }
+  .expression-atlas-table thead th { position: static; }
+  .expression-atlas-table--heatmap th:first-child { position: static; }
   .expression-atlas-table--heatmap thead th:first-child { z-index: 3; }
   .expression-atlas-table-caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
   .expression-atlas-figure-meta { align-items: center; }
@@ -693,7 +693,7 @@
     .expression-atlas-plot-controls__field small { display: none; }
     .expression-atlas-plot-controls__field span { min-height: 2.5em; }
     .expression-atlas-plot-controls__field-head { display: flex; flex-direction: column; align-items: flex-start; }
-    .expression-atlas-line-chart__frame, .expression-atlas-table-wrap { max-height: 60svh; }
+    .expression-atlas-line-chart__frame, .expression-atlas-table-wrap { max-height: none; }
   }
 }
 

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import type { CSSProperties, ChangeEvent, FormEvent, MouseEvent, ReactNode } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { queryExpressionAtlas } from '../api/modules';
-import { categoryLayout } from '../../shared/chart-layout.mjs';
+import { fitCategoryBlocks } from '../../shared/chart-layout.mjs';
 import type {
   ExpressionAtlasDatasetResult,
   ExpressionAtlasOrtholog,
@@ -732,11 +732,7 @@ const clampPlotSettings = (settings: PlotSettings): PlotSettings => ({
   fontSize: clamp(Math.round(settings.fontSize), 11, 26)
 });
 
-const getPlotPresets = (defaults: PlotSettings) => [
-  { label: 'Compact', settings: clampPlotSettings({ ...defaults, width: 880, height: defaults.height - 80 }) },
-  { label: 'Standard', settings: defaults },
-  { label: 'Large labels', settings: clampPlotSettings({ ...defaults, width: 1600, height: defaults.height + 80, fontSize: defaults.fontSize + 3 }) }
-];
+const getPlotPresets = (defaults: PlotSettings) => [{ label: 'Compact', settings: defaults }];
 
 const getXAxisTitle = (dataset: ExpressionAtlasDatasetResult) => {
   if (dataset.key === 'mouse_tissue_rna' || dataset.key === 'mouse_tissue_protein') return 'Tissue';
@@ -757,21 +753,21 @@ const toLinePoints = (items: { xLabel: string; value: number | null; tooltip?: s
 
 const getDefaultPlotSettings = (dataset: ExpressionAtlasDatasetResult): PlotSettings => {
   if (dataset.key === 'mouse_tissue_rna') {
-    return { width: 1280, height: 400, fontSize: 15 };
+    return { width: 880, height: 320, fontSize: 15 };
   }
   if (dataset.key === 'mouse_tissue_protein') {
-    return { width: 1280, height: 340, fontSize: 13 };
+    return { width: 880, height: 260, fontSize: 13 };
   }
   if (dataset.key === 'human_retina_scrna') {
-    return { width: 1280, height: 420, fontSize: 15 };
+    return { width: 880, height: 340, fontSize: 15 };
   }
   if (dataset.key === 'monkey_retina_aging_scrna' || dataset.key === 'mouse_retina_dev_scrna') {
-    return { width: 1280, height: 340, fontSize: 13 };
+    return { width: 880, height: 260, fontSize: 13 };
   }
   if (dataset.key === 'human_retina_rpe_rna') {
-    return { width: 1280, height: 360, fontSize: 14 };
+    return { width: 880, height: 280, fontSize: 14 };
   }
-  return { width: 1280, height: 400, fontSize: 14 };
+  return { width: 880, height: 320, fontSize: 14 };
 };
 
 const buildLinePlotData = (dataset: ExpressionAtlasDatasetResult): LinePlotData => {
@@ -913,7 +909,7 @@ const DatasetLineChart = ({
   const axisTitleFontSize = plotSettings.fontSize + 1;
   const tickLabelWidth = Math.max(...[plot.minValue, plot.maxValue, plot.maxValue / 3, plot.maxValue * 2 / 3].map(value => formatValue(value).length)) * axisFontSize * 0.62;
   const rightPad = Math.max(76, tickLabelWidth + 26);
-  const { width, leftPad, bottomPad, angle: labelAngle } = categoryLayout(plot.xLabels, xFontSize, preferredWidth, rightPad);
+  const { width, leftPad, bottomPad, angle: labelAngle, blocks } = fitCategoryBlocks(plot.xLabels, xFontSize, preferredWidth, availableWidth, rightPad);
   const titleLines = wrapPlotLabel(`${getDatasetDisplayTitle(dataset)} · ${dataset.matchedGene ?? getDatasetDisplayTitle(dataset)}`, Math.max(15, Math.floor((width - 30) / (titleFontSize * 0.58))));
   const measurement = `${dataset.unit || 'Expression'}${dataset.key === 'mouse_tissue_protein' ? ' (mean of available replicates)' : ''}`;
   const measurementLines = wrapPlotLabel(measurement, Math.max(15, Math.floor((width - 30) / (axisFontSize * 0.58))));
@@ -933,9 +929,6 @@ const DatasetLineChart = ({
   const panelHeight = multiRow
     ? (chartHeight - Math.max(0, visibleSeries.length - 1) * rowGap) / visibleSeries.length
     : chartHeight;
-  const categoryWidth = plot.xLabels.length ? chartWidth / plot.xLabels.length : chartWidth;
-  const barWidth = Math.max(1, Math.min(multiRow ? 28 : 38, categoryWidth * 0.56));
-  const getBarX = (index: number) => leftPad + index * categoryWidth + (categoryWidth - barWidth) / 2;
   const getPanelTop = (seriesIndex: number) => topPad + seriesIndex * (panelHeight + rowGap);
   const getPanelY = (seriesIndex: number, value: number) =>
     getPanelTop(seriesIndex) + panelHeight - ((value - minValue) / yRange) * panelHeight;
@@ -962,7 +955,7 @@ const DatasetLineChart = ({
 
   return (
     <div className="expression-atlas-plot-card">
-      <div ref={frameRef} className="expression-atlas-line-chart__frame" tabIndex={0} role="region" aria-label="Expression plot; scroll to inspect all samples and cell types">
+      <div ref={frameRef} className="expression-atlas-line-chart__frame" tabIndex={0} role="region" aria-label="Complete expression plot">
         {tooltip ? (
           <div className="expression-atlas-plot-tooltip" style={{ left: tooltip.x, top: tooltip.y }}>
             {tooltip.lines.map((line) => (
@@ -973,12 +966,17 @@ const DatasetLineChart = ({
         <svg
           className="expression-atlas-line-chart__svg"
           width={width}
-          height={height}
-          viewBox={`0 0 ${width} ${height}`}
+          height={height * blocks.length}
+          viewBox={`0 0 ${width} ${height * blocks.length}`}
           role="img"
           aria-label={`${dataset.title} plot`}
           preserveAspectRatio="xMidYMid meet"
         >
+          {blocks.map((blockLabels: string[], blockIndex: number) => {
+            const categoryWidth = blockLabels.length ? chartWidth / blockLabels.length : chartWidth;
+            const barWidth = Math.max(1, Math.min(isBulkDataset(dataset) ? 14 : 28, categoryWidth * 0.56));
+            const getBarX = (index: number) => leftPad + index * categoryWidth + (categoryWidth - barWidth) / 2;
+            return <g key={blockIndex} transform={`translate(0 ${blockIndex * height})`}>
           <text x={width / 2} y={titleFontSize + 8} textAnchor="middle" className="expression-atlas-chart__title" style={titleStyle}>
             {titleLines.map((line, index) => <tspan key={index} x={width / 2} dy={index ? titleFontSize + 5 : 0}>{line}</tspan>)}
           </text>
@@ -1042,7 +1040,7 @@ const DatasetLineChart = ({
             y2={topPad + chartHeight}
             className="expression-atlas-chart__axis"
           />
-          {plot.xLabels.map((label, index) => {
+          {blockLabels.map((label, index) => {
             const x = leftPad + index * categoryWidth + categoryWidth / 2;
             return (
               <g key={label}>
@@ -1063,8 +1061,8 @@ const DatasetLineChart = ({
           {visibleSeries.map((series, seriesIndex) => {
             return (
               <g key={`${dataset.key}-${series.label}`}>
-                {series.points.map((point) => {
-                  const xIndex = plot.xLabels.indexOf(point.xLabel);
+                {series.points.filter(point => blockLabels.includes(point.xLabel)).map((point) => {
+                  const xIndex = blockLabels.indexOf(point.xLabel);
                   const x = getBarX(xIndex);
                   const valueY = getPanelY(seriesIndex, point.value);
                   const baselineY = getPanelY(seriesIndex, 0);
@@ -1089,9 +1087,10 @@ const DatasetLineChart = ({
               </g>
             );
           })}
+            </g>;
+          })}
         </svg>
       </div>
-      <p className="text-muted expression-atlas-chart-scroll-hint">{width > preferredWidth ? 'Scroll horizontally for all sample labels. ' : ''}{Math.round(width)} × {Math.round(height)} px. Dense plots scroll within the panel; exports include the entire figure.</p>
     </div>
   );
 };
@@ -1128,6 +1127,9 @@ const DatasetHeatmap = ({
   onClusterOptionsChange: (nextOptions: HeatmapClusterOptions) => void;
   onExportData?: () => void;
 }) => {
+  const { ref: tableRef, width: tableWidth } = useAvailableWidth();
+  const columnsPerBlock = Math.max(1, Math.floor(((tableWidth || 880) - 120) / 100));
+  const columnBlocks = Array.from({ length: Math.ceil(matrix.columns.length / columnsPerBlock) }, (_, index) => matrix.columns.slice(index * columnsPerBlock, (index + 1) * columnsPerBlock));
   if (!dataset.hasMatch) return <p className="text-muted">No matched gene was found in this dataset.</p>;
 
   return (
@@ -1164,15 +1166,15 @@ const DatasetHeatmap = ({
           </div>
         </div>
       </div>
-      <p className="text-muted expression-atlas-chart-scroll-hint">{matrix.rows.length} rows × {matrix.columns.length} columns. Scroll within the table to inspect every value; CSV includes the full matrix.</p>
-      <div className="expression-atlas-table-stack">
-          <div className="expression-atlas-table-wrap" role="region" tabIndex={0} aria-label={`${getDatasetDisplayTitle(dataset)} full expression matrix; scroll for all columns and rows`}>
-            <table className="expression-atlas-table expression-atlas-table--heatmap" style={{ minWidth: 180 + matrix.columns.length * 100 }}>
+      <div ref={tableRef} className="expression-atlas-table-stack">
+        {columnBlocks.map((columns, blockIndex) => (
+          <div key={blockIndex} className="expression-atlas-table-wrap" role="region" tabIndex={0} aria-label={`${getDatasetDisplayTitle(dataset)} expression matrix, columns ${blockIndex * columnsPerBlock + 1}–${blockIndex * columnsPerBlock + columns.length} of ${matrix.columns.length}`}>
+            <table className="expression-atlas-table expression-atlas-table--heatmap" >
               <caption className="expression-atlas-table-caption">{getDatasetDisplayTitle(dataset)}: {dataset.matchedGene}</caption>
               <thead>
                 <tr>
                   <th scope="col">{matrix.rows.length === 1 ? 'Metric' : 'Cell / group'}</th>
-                  {matrix.columns.map((column) => (
+                  {columns.map((column) => (
                     <th scope="col" key={column}>{column}</th>
                   ))}
                 </tr>
@@ -1181,7 +1183,7 @@ const DatasetHeatmap = ({
                 {matrix.rows.map((row) => (
                   <tr key={row}>
                     <th scope="row">{row}</th>
-                    {matrix.columns.map((column) => {
+                    {columns.map((column) => {
                       const value = matrix.values.get(`${row}::${column}`) ?? null;
                       const colors = getHeatColor(value, matrix);
                       const style = {
@@ -1199,6 +1201,7 @@ const DatasetHeatmap = ({
               </tbody>
             </table>
           </div>
+        ))}
       </div>
     </>
   );

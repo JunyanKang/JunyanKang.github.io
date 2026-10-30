@@ -56,11 +56,13 @@ The source of truth is `assets/css/design-system.css`, shared with the atlas.
 ## Expression Workbench
 
 Keep the plot, not configuration, as the main working area. Dataset title and
-Plot/Table state share a desktop row. Size presets remain immediately available;
+Plot/Table state share a desktop row. Compact is the sole preset and the default for every dataset;
 fine width, minimum height and label-size controls live in collapsed Custom size.
 Controls have a 44px interaction target. The graph uses the available width and
-grows or scrolls inside its own panel rather than dropping sample names. All table
-columns remain in one matrix with pinned headings; there is no sample pagination.
+grows in normal page flow without internal scrolling or dropping sample names.
+Dense categories and matrix columns wrap into ordered vertical blocks on narrow
+screens. Chart blocks retain one common numeric domain; the complete SVG is
+exported. RNA and protein use identical 14px bars, regardless of sample count.
 PDF exports include full geometry on a white print surface; CSV retains all values.
 Phone layouts use the same dataset selection state through a labelled native
 select, with secondary gene annotations collapsed. Scientific caveats stay visible.

@@ -6,7 +6,7 @@ import { gunzipSync } from 'node:zlib';
 import ts from 'typescript';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { categoryLayout } from '../shared/chart-layout.mjs';
+import { categoryLayout, fitCategoryBlocks } from '../shared/chart-layout.mjs';
 import { createAtlasQuery } from '../shared/query.mjs';
 
 // Exercise the actual private component/helpers without adding production exports
@@ -21,7 +21,7 @@ function loadPage(width = 1100) {
   const module = { exports: {} };
   const localRequire = name => {
     if (name === '../api/modules') return {};
-    if (name === '../../shared/chart-layout.mjs') return { categoryLayout };
+    if (name === '../../shared/chart-layout.mjs') return { categoryLayout, fitCategoryBlocks };
     if (name === 'react') return { ...React, useState: initial => React.useState(initial === 0 ? width : initial) };
     return require(name);
   };
@@ -38,8 +38,9 @@ const bulk = {
 
 test('presets and manual sliders retain safe bounds and reset to dataset defaults', () => {
   const defaults = page.getDefaultPlotSettings(bulk);
-  assert.equal(defaults.width, 1280);
-  assert.deepEqual(page.getPlotPresets(defaults).map(item => item.label), ['Compact', 'Standard', 'Large labels']);
+  assert.equal(defaults.width, 880);
+  assert.equal(defaults.height, 320);
+  assert.deepEqual(page.getPlotPresets(defaults).map(item => item.label), ['Compact']);
   const changes = [];
   const tree = page.PlotControlPanel({ title: 'Size', settings: defaults, defaultSettings: defaults, onChange: settings => changes.push(settings) });
   const nodes = [];
@@ -60,7 +61,7 @@ test('presets and manual sliders retain safe bounds and reset to dataset default
   sliders[2].props.onChange({ target: { value: 'invalid' } });
   assert.equal(changes.at(-1).fontSize, defaults.fontSize);
   nodes.find(node => node.type === 'button' && node.props.children === 'Compact').props.onClick();
-  assert.equal(changes.at(-1).height, defaults.height - 80);
+  assert.deepEqual(changes.at(-1), defaults);
   nodes.find(node => node.type === 'button' && node.props.children === 'Reset size').props.onClick();
   assert.deepEqual(changes.at(-1), defaults);
 });
@@ -74,10 +75,11 @@ for (const width of [250, 375, 760, 1280]) {
     assert.match(html, /font-size:17px/); // Narrow screens do not silently shrink selected labels.
     assert.doesNotMatch(html, /NaN|Infinity/);
     const [, svgWidth, svgHeight] = html.match(/<svg[^>]*width="([\d.]+)" height="([\d.]+)"/);
-    assert.ok(Number(svgHeight) >= 340 && Number(svgHeight) < 800);
-    assert.ok(Number(svgWidth) >= Math.min(width, 1280));
+    assert.ok(Number(svgHeight) >= 340 && Number(svgHeight) < 30000);
+    assert.ok(Number(svgWidth) <= width);
+    assert.equal((html.match(/<svg /g) ?? []).length, 1);
     assert.match(html, /tabindex="0" role="region"/);
-    assert.match(html, /exports include the entire figure/);
+    assert.doesNotMatch(html, /scroll to inspect|Dense plots scroll|Scroll horizontally/);
   });
 }
 
@@ -113,10 +115,11 @@ test('all released Pax6 datasets retain full heatmap dimensions and CSV before/a
       assert.equal(matrix.rows.length, original.rows.length);
       assert.equal(matrix.columns.length, original.columns.length);
       const html = render(page.DatasetHeatmap, { dataset, matrix, clusterOptions: options, onClusterOptionsChange: noOp, onExportData: noOp });
-      assert.equal((html.match(/<table /g) ?? []).length, 1);
+      const blocks = (html.match(/<table /g) ?? []).length;
+      assert.ok(blocks >= 1);
       assert.equal((html.match(/<td /g) ?? []).length, matrix.rows.length * matrix.columns.length);
-      assert.equal((html.match(/scope="col"/g) ?? []).length, matrix.columns.length + 1);
-      assert.equal((html.match(/scope="row"/g) ?? []).length, matrix.rows.length);
+      assert.equal((html.match(/scope="col"/g) ?? []).length, matrix.columns.length + blocks);
+      assert.equal((html.match(/scope="row"/g) ?? []).length, matrix.rows.length * blocks);
       assert.equal(page.matrixToCsv(matrix).split('\n').length, matrix.rows.length + 1);
       assert.match(html, /tabindex="0"/);
     }
@@ -225,4 +228,30 @@ test('changing genes retains the chosen dataset even when the new gene is missin
   assert.equal(page.retainDatasetSelection([], 'single-cell'),'single-cell');
   assert.doesNotMatch(source,/setDatasetViewModes\(\{\}\)/);
   assert.doesNotMatch(source,/setDatasetPlotSettings\(\{\}\)/);
+});
+
+ test('responsive category blocks preserve order and share plot geometry without horizontal overflow',()=>{
+ for(const width of [220,250,320,375,760,1280]) for(const fontSize of [11,14,25]) {
+  const labels=bulk.samples.map(s=>s.name);
+  const layout=fitCategoryBlocks(labels,fontSize,880,width,110);
+  assert.deepEqual(layout.blocks.flat(),labels);
+  assert.ok(layout.width <= width);
+  assert.ok(layout.width > layout.leftPad + 110);
+  assert.ok(layout.blocks.every(block=>block.length>0));
+ }
+ const css=readFileSync(new URL('../src/styles/atlas-charts.scss',import.meta.url),'utf8');
+ assert.doesNotMatch(css,/max-height: (?:min\(680px|60svh)/);
+ assert.match(css,/max-height: none;\s+overflow: visible/);
+ });
+
+test('RNA and protein use the same slim bars regardless of sample count',()=>{
+  for(const width of [250,375,1280]) {
+    const {DatasetLineChart}=loadPage(width);
+    const protein={...bulk,key:'mouse_tissue_protein',samples:Array.from({length:11},(_,i)=>({name:`tissue_${i}_1`,value:i+1}))};
+    const widths=[bulk,protein].map(dataset=>{
+      const html=render(DatasetLineChart,{dataset,selectedSeriesLabels:[],settings:page.getDefaultPlotSettings(dataset)});
+      return [...html.matchAll(/<rect[^>]*width="([\d.]+)"/g)].map(match=>Number(match[1]));
+    });
+    assert.ok(widths.every(values=>values.length>0 && values.every(value=>value===14)));
+  }
 });

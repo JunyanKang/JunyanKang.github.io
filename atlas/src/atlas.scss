@@ -148,16 +148,16 @@ h1, h2, h3 { font-family: var(--kl-display); font-weight: 300; letter-spacing: -
 .expression-atlas-ortholog-item__symbols > div span { font-size: 11px; }
 .expression-atlas-ortholog-item__symbols em { font-size: 12px; }
 @media (max-width:420px) { .atlas-header nav { gap:12px; font-size:11px; } }
-/* Matrices wrap into fully expanded blocks; dense plots scroll without dropping labels. */
+/* Matrices wrap into fully expanded blocks; dense plots expand vertically without dropping labels. */
 html { scrollbar-width:none; scrollbar-gutter:auto; }
 html::-webkit-scrollbar, body::-webkit-scrollbar { display:none; width:0; height:0; }
 .expression-atlas-table-wrap { overflow:visible; }
-.expression-atlas-line-chart__frame { overflow-x:auto; }
+.expression-atlas-line-chart__frame { overflow:visible; }
 .expression-atlas-line-chart__svg { width:auto; min-width:0; max-width:none; height:auto; margin-inline:auto; }
 .expression-atlas-chart-scroll-hint { margin:6px 0 0; font-size:11px; }
 .expression-atlas-table { table-layout:fixed; min-width:0; }
 .expression-atlas-table th, .expression-atlas-table td { white-space:normal; overflow-wrap:anywhere; }
-.expression-atlas-table th:first-child { width:180px; }
+.expression-atlas-table th:first-child { width:120px; }
 .expression-atlas-table--heatmap th:first-child { position:static; }
 .expression-atlas-heat-cell span { min-width:0; }
 @media (max-width:760px) {
