@@ -15,13 +15,13 @@ export function categoryLayout(labels, fontSize, preferredWidth, rightPad) {
 }
 
 // Keep readable categories in the page flow; never create a horizontal viewport.
-export function fitCategoryBlocks(labels, fontSize, preferredWidth, availableWidth, rightPad) {
+export function fitCategoryBlocks(labels, fontSize, preferredWidth, availableWidth, rightPad, labelColumnWidth = 0) {
   const limit = availableWidth || preferredWidth;
   const angle = limit < 620 ? 90 : 60;
   const radians = angle * Math.PI / 180;
   const slotWidth = Math.max(26, fontSize * 1.6);
   const textWidths = labels.map(label => label.length * fontSize * 0.62);
-  const leftPad = Math.ceil(Math.max(24, Math.max(0, ...textWidths) * Math.cos(radians) - slotWidth / 2 + 12));
+  const leftPad = Math.ceil(Math.max(24, labelColumnWidth, Math.max(0, ...textWidths) * Math.cos(radians) - slotWidth / 2 + 12));
   const width = Math.min(limit, Math.max(preferredWidth, leftPad + rightPad + labels.length * slotWidth));
   const capacity = Math.max(1, Math.floor((width - leftPad - rightPad) / slotWidth));
   const blocks = [];

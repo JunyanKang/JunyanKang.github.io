@@ -12,7 +12,7 @@ import { createAtlasQuery } from '../shared/query.mjs';
 // Exercise the actual private component/helpers without adding production exports
 // or a browser runner. Width injection stands in only for ResizeObserver.
 const source = readFileSync(new URL('../src/pages/ExpressionAtlasPage.tsx', import.meta.url), 'utf8');
-const exportsForTest = ['DatasetLineChart', 'DatasetHeatmap', 'PlotControlPanel', 'PlotWorkbench', 'CombinedMouseTissuePanel', 'DatasetPanelToolbar', 'getPlotPresets', 'getDefaultPlotSettings', 'clampPlotSettings', 'buildSvgForExport', 'wrapPlotLabel', 'buildDatasetMatrix', 'getDisplayMatrix', 'buildBulkLinePlotData', 'matrixToCsv', 'retainDatasetSelection'];
+const exportsForTest = ['DatasetLineChart', 'DatasetHeatmap', 'PlotWorkbench', 'CombinedMouseTissuePanel', 'DatasetPanelToolbar', 'getDefaultPlotSettings', 'clampPlotSettings', 'buildSvgForExport', 'wrapPlotLabel', 'buildDatasetMatrix', 'getDisplayMatrix', 'buildBulkLinePlotData', 'matrixToCsv', 'retainDatasetSelection'];
 const compiled = ts.transpileModule(`${source}\nexport { ${exportsForTest.join(', ')} };`, {
   compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022 }
 }).outputText;
@@ -36,34 +36,9 @@ const bulk = {
   samples: Array.from({ length: 30 }, (_, index) => ({ name: `tissue_${index}_long_label`, value: index === 3 ? null : index / 2 }))
 };
 
-test('presets and manual sliders retain safe bounds and reset to dataset defaults', () => {
-  const defaults = page.getDefaultPlotSettings(bulk);
-  assert.equal(defaults.width, 880);
-  assert.equal(defaults.height, 320);
-  assert.deepEqual(page.getPlotPresets(defaults).map(item => item.label), ['Compact']);
-  const changes = [];
-  const tree = page.PlotControlPanel({ title: 'Size', settings: defaults, defaultSettings: defaults, onChange: settings => changes.push(settings) });
-  const nodes = [];
-  function walk(node) {
-    if (!React.isValidElement(node)) return;
-    nodes.push(node);
-    React.Children.forEach(node.props.children, walk);
-  }
-  walk(tree);
-  const sliders = nodes.filter(node => node.type === 'input');
-  assert.equal(sliders.length, 3);
-  sliders[0].props.onChange({ target: { value: '99999' } });
-  assert.equal(changes.at(-1).width, 2200);
-  sliders[1].props.onChange({ target: { value: '1' } });
-  assert.equal(changes.at(-1).height, 260);
-  sliders[2].props.onChange({ target: { value: '26' } });
-  assert.equal(changes.at(-1).fontSize, 26);
-  sliders[2].props.onChange({ target: { value: 'invalid' } });
-  assert.equal(changes.at(-1).fontSize, defaults.fontSize);
-  nodes.find(node => node.type === 'button' && node.props.children === 'Compact').props.onClick();
-  assert.deepEqual(changes.at(-1), defaults);
-  nodes.find(node => node.type === 'button' && node.props.children === 'Reset size').props.onClick();
-  assert.deepEqual(changes.at(-1), defaults);
+test('compact defaults are fixed and size configuration is absent',()=>{
+ assert.deepEqual(page.getDefaultPlotSettings(bulk),{width:880,height:320,fontSize:15});
+ assert.doesNotMatch(source,/PlotControlPanel|Custom size|getPlotPresets|datasetPlotSettings/);
 });
 
 for (const width of [250, 375, 760, 1280]) {
@@ -83,9 +58,10 @@ for (const width of [250, 375, 760, 1280]) {
   });
 }
 
-test('workbench DOM order is controls then figure, with explicit PDF and CSV actions', () => {
+test('workbench has no size-control row and retains explicit PDF and CSV actions', () => {
   const html = render(page.PlotWorkbench, { dataset: bulk, settings: page.getDefaultPlotSettings(bulk), onSettingsChange: noOp, selectedSeriesLabels: [], onExportData: noOp });
-  assert.ok(html.indexOf('expression-atlas-plot-controls') < html.indexOf('expression-atlas-plot-layout__figure'));
+  assert.doesNotMatch(html,/expression-atlas-plot-controls|Custom size|Compact/);
+  assert.match(html,/expression-atlas-plot-layout__figure/);
   assert.doesNotMatch(html, /plot-layout__side/);
   assert.match(html, /Download PDF/);
   assert.match(html, /Download CSV/);
@@ -280,4 +256,28 @@ test('presentation helper prose is removed while errors and scientific units rem
  assert.doesNotMatch(source,/Width fits the panel|Size changes apply to the PDF|Explore retinal development, aging|atlas-reading-note|Dense plots scroll/);
  assert.match(source,/mean of available replicates/);
  assert.match(source,/Missing data does not indicate zero expression/);
+});
+
+test('multi-row plots reserve a left label column and at least 96px per bar panel',async()=>{
+ const result=await query('Pax6');
+ let covered=0;
+ for(const width of [250,375,1280]) {
+  const {DatasetLineChart}=loadPage(width);
+  for(const dataset of result.datasets.filter(d=>d.hasMatch)) {
+   const labels=page.buildDatasetMatrix(dataset).rows;
+   if(labels.length<2 || dataset.key==='mouse_tissue_protein') continue;
+   const html=render(DatasetLineChart,{dataset,selectedSeriesLabels:labels,settings:page.getDefaultPlotSettings(dataset)});
+   const rows=[...html.matchAll(/<text x="([\d.]+)" y="([\d.]+)" text-anchor="end" class="expression-atlas-chart__row-label"/g)];
+   const axes=[...html.matchAll(/<line x1="([\d.]+)" y1="([\d.]+)" x2="\1" y2="([\d.]+)" class="expression-atlas-chart__axis"/g)].filter(match=>Number(match[3])-Number(match[2])>10);
+   assert.ok(rows.length>=labels.length,dataset.key);
+   assert.equal(rows.length,axes.length,dataset.key);
+   rows.forEach((row,i)=>{
+    assert.equal(Number(axes[i][1])-Number(row[1]),14);
+    assert.ok(Number(axes[i][3])-Number(axes[i][2])>=96-1e-8,dataset.key);
+    assert.ok(Number(row[2])>Number(axes[i][2]) && Number(row[2])<Number(axes[i][3]),dataset.key);
+   });
+   covered++;
+  }
+ }
+ assert.ok(covered>=9);
 });

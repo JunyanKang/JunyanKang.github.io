@@ -56,8 +56,7 @@ The source of truth is `assets/css/design-system.css`, shared with the atlas.
 ## Expression Workbench
 
 Keep the plot, not configuration, as the main working area. Dataset title and
-Plot/Table state share a desktop row. Compact is the sole preset and the default for every dataset;
-fine width, minimum height and label-size controls live in collapsed Custom size.
+Plot/Table state share a desktop row. All datasets use fixed compact defaults without a sizing toolbar or Custom size disclosure.
 Controls have a 44px interaction target. The graph uses the available width and
 grows in normal page flow without internal scrolling or dropping sample names.
 Dense categories and matrix columns wrap into ordered vertical blocks on narrow
@@ -88,6 +87,8 @@ The translucent map-provider control preserves the user's explicit request for
 a compact overlay. Section gaps vary by content hierarchy, not arbitrary cards:
 reading columns, compact software listings and control groups have distinct density.
 
-Expression workbench state and data integrity: new gene queries retain the chosen dataset, view mode, and sizing settings. A gene absent from that dataset stays visibly absent rather than silently switching context. CSV exports retain source numeric precision; small nonzero display values use scientific notation. Plots identify their measurement unit and protein replicate-mean aggregation explicitly.
+Expression workbench state and data integrity: new gene queries retain the chosen dataset, and view mode. A gene absent from that dataset stays visibly absent rather than silently switching context. CSV exports retain source numeric precision; small nonzero display values use scientific notation. Plots identify their measurement unit and protein replicate-mean aggregation explicitly.
 
 All expression plots share the same default 14px bar and 26px category pitch (12px gap), including single-cell and spatial series. Fewer categories produce a narrower plot, not wider bars or spacing. Keep nonessential instructional prose out of the workbench; retain scientific units, replicate aggregation, missing-data states and errors.
+
+Multi-row expression plots place wrapped cell-type labels in a dedicated left column, centered on each row. Each bar panel is at least 96px tall, separated by 18px; all rows and sample blocks keep the same numeric domain. Extra height extends the page and PDF rather than introducing internal scrolling.

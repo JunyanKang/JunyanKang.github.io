@@ -1,6 +1,6 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import type { CSSProperties, ChangeEvent, FormEvent, MouseEvent, ReactNode } from 'react';
+import type { CSSProperties, FormEvent, MouseEvent, ReactNode } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { queryExpressionAtlas } from '../api/modules';
 import { fitCategoryBlocks } from '../../shared/chart-layout.mjs';
@@ -732,8 +732,6 @@ const clampPlotSettings = (settings: PlotSettings): PlotSettings => ({
   fontSize: clamp(Math.round(settings.fontSize), 11, 26)
 });
 
-const getPlotPresets = (defaults: PlotSettings) => [{ label: 'Compact', settings: defaults }];
-
 const getXAxisTitle = (dataset: ExpressionAtlasDatasetResult) => {
   if (dataset.key === 'mouse_tissue_rna' || dataset.key === 'mouse_tissue_protein') return 'Tissue';
   return 'Time / stage';
@@ -909,16 +907,18 @@ const DatasetLineChart = ({
   const axisTitleFontSize = plotSettings.fontSize + 1;
   const tickLabelWidth = Math.max(...[plot.minValue, plot.maxValue, plot.maxValue / 3, plot.maxValue * 2 / 3].map(value => formatValue(value).length)) * axisFontSize * 0.62;
   const rightPad = Math.max(76, tickLabelWidth + 26);
-  const { width, leftPad, bottomPad, angle: labelAngle, blocks, slotWidth } = fitCategoryBlocks(plot.xLabels, xFontSize, preferredWidth, availableWidth, rightPad);
+  const rowLabelFontSize = compact ? 12 : axisFontSize;
+  const labelColumnWidth = showSeriesLabels ? (compact ? 104 : 174) : 0;
+  const { width, leftPad, bottomPad, angle: labelAngle, blocks, slotWidth } = fitCategoryBlocks(plot.xLabels, xFontSize, preferredWidth, availableWidth, rightPad, labelColumnWidth);
   const titleLines = wrapPlotLabel(`${getDatasetDisplayTitle(dataset)} · ${dataset.matchedGene ?? getDatasetDisplayTitle(dataset)}`, Math.max(15, Math.floor((width - 30) / (titleFontSize * 0.58))));
   const measurement = `${dataset.unit || 'Expression'}${dataset.key === 'mouse_tissue_protein' ? ' (mean of available replicates)' : ''}`;
   const measurementLines = wrapPlotLabel(measurement, Math.max(15, Math.floor((width - 30) / (axisFontSize * 0.58))));
-  const labelLines = visibleSeries.map(series => wrapPlotLabel(series.label, Math.max(12, Math.floor((width - leftPad - rightPad) / (axisFontSize * 0.58)))));
-  const labelSpace = showSeriesLabels ? Math.max(...labelLines.map(lines => lines.length)) * (axisFontSize + 3) + 10 : 0;
+  const labelLines = visibleSeries.map(series => wrapPlotLabel(series.label, Math.max(6, Math.floor((labelColumnWidth - 20) / (rowLabelFontSize * 0.62)))));
+  const rowLabelHeight = showSeriesLabels ? Math.max(...labelLines.map(lines => lines.length)) * (rowLabelFontSize + 3) : 0;
   const titleSpace = titleLines.length * (titleFontSize + 5) + 32 + measurementLines.length * (axisFontSize + 3);
-  const topPad = Math.max(62, titleSpace) + labelSpace;
-  const rowGap = multiRow ? Math.max(8, plotSettings.fontSize * 0.55) + labelSpace : 0;
-  const minRowHeight = multiRow ? Math.max(28, plotSettings.fontSize * 2.1) : Math.max(180, plotSettings.fontSize * 10);
+  const topPad = Math.max(62, titleSpace);
+  const rowGap = multiRow ? 18 : 0;
+  const minRowHeight = multiRow ? Math.max(96, rowLabelHeight + 20) : Math.max(180, plotSettings.fontSize * 10);
   const requiredHeight = topPad + bottomPad + visibleSeries.length * minRowHeight + Math.max(0, visibleSeries.length - 1) * rowGap;
   const height = Math.max(plotSettings.height, requiredHeight);
   const chartWidth = width - leftPad - rightPad;
@@ -1022,13 +1022,13 @@ const DatasetLineChart = ({
                 <line x1={leftPad} y1={panelBottom} x2={width - rightPad} y2={panelBottom} className="expression-atlas-chart__axis" />
                 {minValue < 0 ? <line x1={leftPad} x2={width - rightPad} y1={getPanelY(seriesIndex, 0)} y2={getPanelY(seriesIndex, 0)} stroke="#70847b" strokeWidth="1" strokeDasharray="3 3" /> : null}
                 {showSeriesLabels ? <text
-                  x={leftPad}
-                  y={panelTop - labelSpace + axisFontSize}
-                  textAnchor="start"
+                  x={leftPad - 14}
+                  y={(panelTop + panelBottom) / 2 - (labelLines[seriesIndex].length - 1) * (rowLabelFontSize + 3) / 2 + rowLabelFontSize * 0.35}
+                  textAnchor="end"
                   className="expression-atlas-chart__row-label"
-                  style={axisTextStyle}
+                  style={{ fontFamily, fontSize: rowLabelFontSize }}
                 >
-                  {labelLines[seriesIndex].map((line, index) => <tspan key={index} x={leftPad} dy={index ? axisFontSize + 3 : 0}>{line}</tspan>)}
+                  {labelLines[seriesIndex].map((line, index) => <tspan key={index} x={leftPad - 14} dy={index ? rowLabelFontSize + 3 : 0}>{line}</tspan>)}
                 </text> : null}
               </g>
             );
@@ -1207,79 +1207,6 @@ const DatasetHeatmap = ({
   );
 };
 
-const PlotControlPanel = ({
-  title,
-  settings,
-  defaultSettings,
-  onChange
-}: {
-  title: string;
-  settings: PlotSettings;
-  defaultSettings: PlotSettings;
-  onChange: (nextSettings: PlotSettings) => void;
-}) => {
-  const handleFieldChange =
-    (field: keyof PlotSettings) =>
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const rawValue = Number(event.target.value);
-      const nextSettings = clampPlotSettings({
-        ...settings,
-        [field]: Number.isFinite(rawValue) ? rawValue : settings[field]
-      });
-      onChange(nextSettings);
-    };
-
-  const isDefault =
-    settings.width === defaultSettings.width && settings.height === defaultSettings.height && settings.fontSize === defaultSettings.fontSize;
-
-  const sliderConfig: Array<{ field: keyof PlotSettings; label: string; min: number; max: number; step: number; suffix: string }> = [
-    { field: 'width', label: 'Max width', min: 720, max: 2200, step: 20, suffix: 'px' },
-    { field: 'height', label: 'Min height', min: 260, max: 900, step: 20, suffix: 'px' },
-    { field: 'fontSize', label: 'Label size', min: 11, max: 26, step: 1, suffix: 'px' }
-  ];
-
-  return (
-    <div className="expression-atlas-plot-controls" role="group" aria-label={title}>
-      <div className="expression-atlas-plot-controls__header">
-        <div className="expression-atlas-size-presets" role="group" aria-label="Plot size presets">
-          {getPlotPresets(defaultSettings).map((preset) => (
-            <button key={preset.label} type="button" className="link-button" aria-pressed={Object.keys(settings).every(key => settings[key as keyof PlotSettings] === preset.settings[key as keyof PlotSettings])} onClick={() => onChange(preset.settings)}>{preset.label}</button>
-          ))}
-        </div>
-      </div>
-      <details className="expression-atlas-custom-size">
-        <summary>Custom size</summary>
-      <div className="expression-atlas-plot-controls__grid">
-        {sliderConfig.map((item) => (
-          <label key={item.field} className="expression-atlas-plot-controls__field">
-            <div className="expression-atlas-plot-controls__field-head">
-              <span>{item.label}</span>
-              <strong className="expression-atlas-plot-controls__value">
-                {settings[item.field]}
-                {item.suffix}
-              </strong>
-            </div>
-            <input
-              type="range"
-              min={item.min}
-              max={item.max}
-              step={item.step}
-              value={settings[item.field]}
-              onChange={handleFieldChange(item.field)}
-              aria-label={item.label}
-              aria-valuetext={`${settings[item.field]} pixels`}
-            />
-          </label>
-        ))}
-      </div>
-        <div className="expression-atlas-custom-size__footer">
-          <button type="button" className="link-button link-button--outline" onClick={() => onChange(defaultSettings)} disabled={isDefault}>Reset size</button>
-        </div>
-      </details>
-    </div>
-  );
-};
-
 const DatasetPanelToolbar = ({
   label,
   viewMode,
@@ -1306,10 +1233,8 @@ const DatasetPanelToolbar = ({
   </div>
 );
 
-const PlotWorkbench = ({ dataset, settings, onSettingsChange, selectedSeriesLabels, onExportData, children }: {
+const PlotWorkbench = ({ dataset, selectedSeriesLabels, onExportData, children }: {
   dataset: ExpressionAtlasDatasetResult;
-  settings: PlotSettings;
-  onSettingsChange: (settings: PlotSettings) => void;
   selectedSeriesLabels: string[];
   onExportData: () => void;
   children?: ReactNode;
@@ -1337,7 +1262,6 @@ const PlotWorkbench = ({ dataset, settings, onSettingsChange, selectedSeriesLabe
 
   return (
     <div className="expression-atlas-plot-layout">
-      <PlotControlPanel title={`${getDatasetDisplayTitle(dataset)} size`} settings={settings} defaultSettings={getDefaultPlotSettings(dataset)} onChange={onSettingsChange} />
       {children}
       <div className="expression-atlas-plot-layout__figure" ref={plotRef}>
         <div className="expression-atlas-plot-layout__figure-actions">
@@ -1348,7 +1272,7 @@ const PlotWorkbench = ({ dataset, settings, onSettingsChange, selectedSeriesLabe
           </div>
         </div>
         {exportError ? <p className="expression-atlas-export-error" role="alert">{exportError}</p> : null}
-        <DatasetLineChart dataset={dataset} selectedSeriesLabels={selectedSeriesLabels} settings={settings} />
+        <DatasetLineChart dataset={dataset} selectedSeriesLabels={selectedSeriesLabels} settings={getDefaultPlotSettings(dataset)} />
       </div>
     </div>
   );
@@ -1358,15 +1282,11 @@ const DatasetFigurePanel = ({
   dataset,
   viewMode,
   onViewChange,
-  plotSettings,
-  onPlotSettingsChange,
   matched
 }: {
   dataset: ExpressionAtlasDatasetResult;
   viewMode: DatasetViewMode;
   onViewChange: (mode: DatasetViewMode) => void;
-  plotSettings: PlotSettings;
-  onPlotSettingsChange: (nextSettings: PlotSettings) => void;
   matched: boolean;
 }) => {
   const matrix = useMemo(() => buildDatasetMatrix(dataset), [dataset]);
@@ -1407,7 +1327,7 @@ const DatasetFigurePanel = ({
       />
       <div className="expression-atlas-dataset-panel-body">
         {!dataset.hasMatch ? <p className="text-muted" role="status">No matching gene in this dataset. Missing data does not indicate zero expression.</p> : viewMode === 'plot' ? (
-          <PlotWorkbench dataset={dataset} settings={plotSettings} onSettingsChange={onPlotSettingsChange} selectedSeriesLabels={selectedSeriesLabels} onExportData={handleExportData}>
+          <PlotWorkbench dataset={dataset} selectedSeriesLabels={selectedSeriesLabels} onExportData={handleExportData}>
               {plotData.series.length > 1 ? (
                 <details className="expression-atlas-series-controls">
                   <summary>{isBulkDataset(dataset) ? 'Series legend' : 'Cell types'}: {isBulkDataset(dataset) ? plotData.series.length : `${selectedSeriesLabels.length} of ${plotData.series.length}`} shown</summary>
@@ -1455,19 +1375,11 @@ const CombinedMouseTissuePanel = ({
   datasets,
   viewMode,
   onViewChange,
-  rnaSettings,
-  proteinSettings,
-  onRnaSettingsChange,
-  onProteinSettingsChange,
   matched
 }: {
   datasets: ExpressionAtlasDatasetResult[];
   viewMode: DatasetViewMode;
   onViewChange: (mode: DatasetViewMode) => void;
-  rnaSettings: PlotSettings;
-  proteinSettings: PlotSettings;
-  onRnaSettingsChange: (nextSettings: PlotSettings) => void;
-  onProteinSettingsChange: (nextSettings: PlotSettings) => void;
   matched: boolean;
 }) => {
   const rnaDataset = datasets.find((item) => item.key === 'mouse_tissue_rna') ?? datasets[0];
@@ -1485,7 +1397,7 @@ const CombinedMouseTissuePanel = ({
         <div className="expression-atlas-combined-stack">
           <section className="expression-atlas-combined-section">
             {!rnaDataset.hasMatch ? <p className="text-muted" role="status">Mouse tissue RNA: no matching gene. Missing data does not indicate zero expression.</p> : viewMode === 'plot' ? (
-              <PlotWorkbench dataset={rnaDataset} settings={rnaSettings} onSettingsChange={onRnaSettingsChange} selectedSeriesLabels={[]} onExportData={handleExportRnaData} />
+              <PlotWorkbench dataset={rnaDataset} selectedSeriesLabels={[]} onExportData={handleExportRnaData} />
             ) : (
               <DatasetHeatmap
                 dataset={rnaDataset}
@@ -1498,7 +1410,7 @@ const CombinedMouseTissuePanel = ({
           </section>
           <section className="expression-atlas-combined-section">
             {!proteinDataset.hasMatch ? <p className="text-muted" role="status">Mouse tissue protein: no matching gene. Missing data does not indicate zero expression.</p> : viewMode === 'plot' ? (
-              <PlotWorkbench dataset={proteinDataset} settings={proteinSettings} onSettingsChange={onProteinSettingsChange} selectedSeriesLabels={[]} onExportData={handleExportProteinData} />
+              <PlotWorkbench dataset={proteinDataset} selectedSeriesLabels={[]} onExportData={handleExportProteinData} />
             ) : (
               <DatasetHeatmap
                 dataset={proteinDataset}
@@ -1595,7 +1507,6 @@ export const ExpressionAtlasPage = () => {
   const [queryAttempt, setQueryAttempt] = useState(0);
   const [selectedDatasetKey, setSelectedDatasetKey] = useState<string>('');
   const [datasetViewModes, setDatasetViewModes] = useState<Record<string, DatasetViewMode>>({});
-  const [datasetPlotSettings, setDatasetPlotSettings] = useState<Record<string, PlotSettings>>({});
   const [orthologPage, setOrthologPage] = useState(1);
   const [queryState, setQueryState] = useState<{
     data: ExpressionAtlasQueryResult | null;
@@ -1819,26 +1730,6 @@ export const ExpressionAtlasPage = () => {
                         [activePanel.key]: mode
                       }))
                     }
-                    rnaSettings={
-                      datasetPlotSettings.mouse_tissue_rna ??
-                      getDefaultPlotSettings(activePanel.datasets.find((item) => item.key === 'mouse_tissue_rna') ?? activePanel.datasets[0])
-                    }
-                    proteinSettings={
-                      datasetPlotSettings.mouse_tissue_protein ??
-                      getDefaultPlotSettings(activePanel.datasets.find((item) => item.key === 'mouse_tissue_protein') ?? activePanel.datasets[0])
-                    }
-                    onRnaSettingsChange={(nextSettings) =>
-                      setDatasetPlotSettings((prev) => ({
-                        ...prev,
-                        mouse_tissue_rna: nextSettings
-                      }))
-                    }
-                    onProteinSettingsChange={(nextSettings) =>
-                      setDatasetPlotSettings((prev) => ({
-                        ...prev,
-                        mouse_tissue_protein: nextSettings
-                      }))
-                    }
                     matched={activePanel.hasMatch}
                   />
                 ) : (
@@ -1849,13 +1740,6 @@ export const ExpressionAtlasPage = () => {
                       setDatasetViewModes((prev) => ({
                         ...prev,
                         [activePanel.key]: mode
-                      }))
-                    }
-                    plotSettings={datasetPlotSettings[activePanel.datasets[0].key] ?? getDefaultPlotSettings(activePanel.datasets[0])}
-                    onPlotSettingsChange={(nextSettings) =>
-                      setDatasetPlotSettings((prev) => ({
-                        ...prev,
-                        [activePanel.datasets[0].key]: nextSettings
                       }))
                     }
                     matched={activePanel.hasMatch}
