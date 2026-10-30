@@ -25,11 +25,14 @@ export function createAtlasQuery(loadJson) {
     manifestPromise ??= loadJson('manifest.json').catch(error => { manifestPromise = null; throw error; });
     mappingsPromise ??= loadJson('orthologs.json.gz').catch(error => { mappingsPromise = null; throw error; });
     const [manifest, mappings] = await Promise.all([manifestPromise, mappingsPromise]);
-    const orthologs = mappings.filter(item =>
+    const exact = mappings.filter(item =>
       normalizeGene(item.humanSymbol) === normalizedQuery ||
-      normalizeGene(item.mouseSymbol) === normalizedQuery ||
+      normalizeGene(item.mouseSymbol) === normalizedQuery
+    );
+    // A formal symbol must not expand into other genes that share it as an alias.
+    const orthologs = (exact.length ? exact : mappings.filter(item =>
       normalizeGene(item.alias).split(/[,;|\s]+/).includes(normalizedQuery)
-    ).sort((a, b) => Number(b.preferred) - Number(a.preferred) ||
+    )).sort((a, b) => Number(b.preferred) - Number(a.preferred) ||
       (a.humanSymbol || '').localeCompare(b.humanSymbol || '') || a.id - b.id
     ).slice(0, 12);
     const candidateGenes = [...new Set([normalizedQuery,

@@ -4,6 +4,8 @@
 <section class="kl-section kl-external-resources" id="external-resources" aria-labelledby="external-title">
   <div class="kl-section-heading"><h2 id="external-title">External resources</h2></div>
   <p class="kl-note kl-external-note">Independent databases, tools and research groups. Links do not imply affiliation.</p>
+  <div class="kl-search-field kl-resource-search" data-resource-search hidden><label for="resource-search">Find a resource or researcher</label><div class="kl-search-input"><input id="resource-search" type="search" placeholder="Name, institution, or research topic" autocomplete="off"><button type="button" data-clear-resources hidden>Clear</button></div></div>
+  <p class="kl-note" id="resource-results" role="status" hidden></p>
   {% for group in site.data.external_resources.groups %}
   {% assign links = external_links | where: 'group', group.id %}
   {% if links.size > 0 %}

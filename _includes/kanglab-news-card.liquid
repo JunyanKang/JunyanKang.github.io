@@ -1,4 +1,4 @@
-<article class="kl-news-card">
+<article class="kl-news-card" data-news-category="{{ include.story.category | escape }}">
   <a class="kl-news-image{% if include.story.image_fit == 'contain' or include.story.category == 'Publication' %} kl-news-image--contain{% endif %}" href="{{ include.story.url | relative_url }}" tabindex="-1" aria-hidden="true"><img src="{{ include.story.image | relative_url }}" data-photo-framing="{{ include.story.image_presentation | default: 'original' | escape }}" alt="" width="1448" height="1086" loading="lazy"></a>
   <div class="kl-news-meta"><span>{{ include.story.category | escape }}</span><time datetime="{{ include.story.date | date: '%Y-%m-%d' }}">{{ include.story.date | date: '%d %b %Y' }}</time></div>
   <h3><a href="{{ include.story.url | relative_url }}">{{ include.story.title | escape }}</a></h3>

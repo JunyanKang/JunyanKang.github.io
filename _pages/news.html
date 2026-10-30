@@ -6,4 +6,6 @@ nav_order: 4.5
 ---
 <h1 class="kl-news-index-title">Lab news</h1>
 {% assign news = site.news | where: 'published', true | sort: 'date' | reverse %}
+{% assign categories = news | map: 'category' | uniq | sort %}
+{% if categories.size > 1 %}<div class="kl-filter-buttons" data-news-filters role="group" aria-label="News categories" hidden><button type="button" class="is-active" data-news-filter="" aria-pressed="true">All news</button>{% for category in categories %}<button type="button" data-news-filter="{{ category | escape }}" aria-pressed="false">{{ category | escape }}</button>{% endfor %}</div><p class="kl-note" id="news-results" role="status" hidden></p>{% endif %}
 <div class="kl-news-grid">{% for story in news %}{% include kanglab-news-card.liquid story=story %}{% else %}<p>News from the lab will appear here.</p>{% endfor %}</div>

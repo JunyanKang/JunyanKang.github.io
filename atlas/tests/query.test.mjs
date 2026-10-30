@@ -78,3 +78,12 @@ test('short aliases do not silently select unrelated substring matches', async (
   assert.deepEqual(alias.candidateGenes.sort(), ['an2', 'cspg4']);
   assert.ok(alias.datasets.every(d => !d.hasMatch || d.matchedGene.toLowerCase() === 'cspg4'));
 });
+
+test('formal RHO symbol takes precedence over RHOD and ARHGDIA alias collisions', async () => {
+  const result = await query('Rho');
+  assert.deepEqual(result.candidateGenes, ['rho']);
+  assert.ok(result.orthologs.length > 0);
+  assert.ok(result.orthologs.every(item => item.humanSymbol === 'RHO'));
+  assert.equal(result.orthologs[0].uniprot, 'P15409');
+  assert.ok(result.datasets.every(dataset => !dataset.hasMatch || dataset.matchedGene.toLowerCase() === 'rho'));
+});

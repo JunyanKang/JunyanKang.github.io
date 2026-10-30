@@ -3,8 +3,8 @@
 :root {
   --color-primary: #17645d;
   --color-text-secondary: #677971;
-  --radius-sm: 3px;
-  --radius-md: 5px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
   --transition-fast: 120ms ease;
   color: #253331;
   background: #fcfcfa;
@@ -170,3 +170,33 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display:none; width:0; height
   .expression-atlas-legend__bar { width:60px; }
 }
 .expression-atlas-view-switch__button, .expression-atlas-cluster-toggle { transition:none; }
+
+/* Match the laboratory site's controls, without changing chart geometry or data. */
+[hidden] { display:none !important; }
+::selection { color:#104f49; background:#d7e9df; }
+input { caret-color:#17645d; }
+input::placeholder { color:#53665c; opacity:1; }
+main:focus { outline:none; }
+.atlas-header { position:sticky; top:0; z-index:30; }
+.atlas-header-inner { min-height:82px; }
+.atlas-menu-toggle { display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:8px 12px; border:1px solid #d6dfd8; border-radius:6px; background:#fcfcfa; color:#253331; font-size:14px; font-weight:600; }
+.atlas-query, .expression-atlas-dataset-card { border-radius:var(--radius-md); }
+.expression-atlas-form__row input { font-size:16px; min-height:46px; border-radius:var(--radius-sm); }
+.link-button, .tab-button { min-height:40px; border-radius:var(--radius-sm); }
+.atlas-query-button { min-height:46px; }
+.atlas-query-context { padding-left:24px; }
+.text-muted, .section-subtitle, .atlas-reading-note { color:#53665c; }
+@media (max-width:950px) and (min-width:761px) { .atlas-header nav { gap:14px; } }
+@media (max-width:760px) {
+  .atlas-header-inner { flex-direction:row; flex-wrap:wrap; min-height:68px; padding:8px 0; gap:0; }
+  .atlas-header .kl-logo--horizontal { --logo-size:44px; }
+  .atlas-header .kl-logo--horizontal .kl-logo__wordmark { display:block; }
+  .atlas-header nav { display:grid; width:100%; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px 12px; padding:12px 0 4px; }
+  .atlas-header nav a { display:flex; align-items:center; min-height:44px; padding:8px 12px; border:0; border-radius:6px; font-size:14px; }
+  .atlas-header nav a[aria-current] { background:#edf3ee; font-weight:600; }
+  .link-button, .tab-button, .atlas-suggestions button { min-height:44px; }
+  .expression-atlas-view-switch__button { min-height:40px; }
+  .expression-atlas-plot-layout__figure-actions .link-button { min-height:36px; }
+  .atlas-query-context { padding-left:0; }
+}
+@media (prefers-reduced-motion:reduce) { *, *::before, *::after { transition:none !important; animation:none !important; scroll-behavior:auto !important; } }

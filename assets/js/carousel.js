@@ -10,6 +10,8 @@
     let hovering = false;
     let focused = false;
     let timer;
+    let touchStart;
+    let dragged = false;
     const delay = Number(root.dataset.interval) || 6500;
 
     function schedule() {
@@ -32,6 +34,21 @@
     }
 
     dots.forEach((dot, n) => dot.addEventListener('click', () => show(n, true)));
+    root.addEventListener('pointerdown', event => {
+      if (event.pointerType === 'touch') { touchStart = { x: event.clientX, y: event.clientY }; dragged = false; clearTimeout(timer); }
+    });
+    root.addEventListener('pointerup', event => {
+      if (!touchStart) return;
+      const dx = event.clientX - touchStart.x;
+      const dy = event.clientY - touchStart.y;
+      touchStart = null;
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5) { dragged = true; show(index + (dx < 0 ? 1 : -1), true); }
+      else schedule();
+    });
+    root.addEventListener('pointercancel', () => { touchStart = null; schedule(); });
+    root.addEventListener('click', event => {
+      if (dragged) { event.preventDefault(); dragged = false; }
+    }, true);
     root.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch') { hovering = true; schedule(); } });
     root.addEventListener('pointerleave', () => { hovering = false; schedule(); });
     root.addEventListener('focusin', () => { focused = true; schedule(); });

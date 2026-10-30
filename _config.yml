@@ -53,6 +53,8 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - README.md
+  - DESIGN.md
+  - PRODUCT.md
   - docs
   - scripts
   - tools
