@@ -909,7 +909,7 @@ const DatasetLineChart = ({
   const axisTitleFontSize = plotSettings.fontSize + 1;
   const tickLabelWidth = Math.max(...[plot.minValue, plot.maxValue, plot.maxValue / 3, plot.maxValue * 2 / 3].map(value => formatValue(value).length)) * axisFontSize * 0.62;
   const rightPad = Math.max(76, tickLabelWidth + 26);
-  const { width, leftPad, bottomPad, angle: labelAngle, blocks } = fitCategoryBlocks(plot.xLabels, xFontSize, preferredWidth, availableWidth, rightPad);
+  const { width, leftPad, bottomPad, angle: labelAngle, blocks, slotWidth } = fitCategoryBlocks(plot.xLabels, xFontSize, preferredWidth, availableWidth, rightPad);
   const titleLines = wrapPlotLabel(`${getDatasetDisplayTitle(dataset)} · ${dataset.matchedGene ?? getDatasetDisplayTitle(dataset)}`, Math.max(15, Math.floor((width - 30) / (titleFontSize * 0.58))));
   const measurement = `${dataset.unit || 'Expression'}${dataset.key === 'mouse_tissue_protein' ? ' (mean of available replicates)' : ''}`;
   const measurementLines = wrapPlotLabel(measurement, Math.max(15, Math.floor((width - 30) / (axisFontSize * 0.58))));
@@ -973,8 +973,8 @@ const DatasetLineChart = ({
           preserveAspectRatio="xMidYMid meet"
         >
           {blocks.map((blockLabels: string[], blockIndex: number) => {
-            const categoryWidth = blockLabels.length ? chartWidth / blockLabels.length : chartWidth;
-            const barWidth = Math.max(1, Math.min(isBulkDataset(dataset) ? 14 : 28, categoryWidth * 0.56));
+            const categoryWidth = slotWidth;
+            const barWidth = 14;
             const getBarX = (index: number) => leftPad + index * categoryWidth + (categoryWidth - barWidth) / 2;
             return <g key={blockIndex} transform={`translate(0 ${blockIndex * height})`}>
           <text x={width / 2} y={titleFontSize + 8} textAnchor="middle" className="expression-atlas-chart__title" style={titleStyle}>
@@ -1269,16 +1269,10 @@ const PlotControlPanel = ({
               aria-label={item.label}
               aria-valuetext={`${settings[item.field]} pixels`}
             />
-            <small>
-              {item.min}
-              {item.suffix} - {item.max}
-              {item.suffix}
-            </small>
           </label>
         ))}
       </div>
         <div className="expression-atlas-custom-size__footer">
-          <p className="expression-atlas-plot-controls__note">Width fits the panel; height grows when needed to keep every label. Size changes apply to the PDF too.</p>
           <button type="button" className="link-button link-button--outline" onClick={() => onChange(defaultSettings)} disabled={isDefault}>Reset size</button>
         </div>
       </details>
@@ -1730,7 +1724,6 @@ export const ExpressionAtlasPage = () => {
         <header className="expression-atlas-page-header">
           <div>
             <h1>Expression atlas</h1>
-            <p className="section-subtitle">Explore retinal development, aging and tissue expression, one gene at a time.</p>
           </div>
           <a href="/resources/" className="atlas-back-link">Back to resources</a>
         </header>
@@ -1766,7 +1759,6 @@ export const ExpressionAtlasPage = () => {
           </div>
         </section>
         {queryState.error ? <div className="atlas-error" role="alert"><p>{queryState.error}</p><button type="button" className="link-button" onClick={() => setQueryAttempt((attempt) => attempt + 1)}>Retry</button></div> : null}
-        <p className="atlas-reading-note">Compare patterns within each dataset. Assays and units differ across datasets; a missing value is not zero expression.</p>
 
         {queryState.data ? (
           <div className="expression-atlas-stack">

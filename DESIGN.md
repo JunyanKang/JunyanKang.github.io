@@ -89,3 +89,5 @@ a compact overlay. Section gaps vary by content hierarchy, not arbitrary cards:
 reading columns, compact software listings and control groups have distinct density.
 
 Expression workbench state and data integrity: new gene queries retain the chosen dataset, view mode, and sizing settings. A gene absent from that dataset stays visibly absent rather than silently switching context. CSV exports retain source numeric precision; small nonzero display values use scientific notation. Plots identify their measurement unit and protein replicate-mean aggregation explicitly.
+
+All expression plots share the same default 14px bar and 26px category pitch (12px gap), including single-cell and spatial series. Fewer categories produce a narrower plot, not wider bars or spacing. Keep nonessential instructional prose out of the workbench; retain scientific units, replicate aggregation, missing-data states and errors.

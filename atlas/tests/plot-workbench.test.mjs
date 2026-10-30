@@ -218,7 +218,7 @@ test('plot exports carry source units and protein aggregation semantics in the S
   assert.match(rna,/RPKM/);
   const protein={...bulk,key:'mouse_tissue_protein',unit:'iBAQ',samples:[{name:'heart_1',value:2},{name:'heart_2',value:4}]};
   const html=render(page.DatasetLineChart,{dataset:protein,selectedSeriesLabels:[],settings:page.getDefaultPlotSettings(protein)});
-  assert.match(html,/iBAQ \(mean of available replicates\)/);
+  assert.match(html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' '),/iBAQ \(mean of available replicates\)/);
 });
 
 test('changing genes retains the chosen dataset even when the new gene is missing there',()=>{
@@ -254,4 +254,30 @@ test('RNA and protein use the same slim bars regardless of sample count',()=>{
     });
     assert.ok(widths.every(values=>values.length>0 && values.every(value=>value===14)));
   }
+});
+
+test('every published expression plot shares 14px bars and 26px category spacing',async()=>{
+ const results=await Promise.all([query('Pax6'),query('Rho')]);
+ const covered=new Set();
+ for(const width of [250,375,1280]) {
+  const {DatasetLineChart}=loadPage(width);
+  for(const dataset of results.flatMap(result=>result.datasets).filter(d=>d.hasMatch)) {
+   covered.add(dataset.key);
+   const labels=page.buildDatasetMatrix(dataset).rows;
+   const html=render(DatasetLineChart,{dataset,selectedSeriesLabels:labels,settings:page.getDefaultPlotSettings(dataset)});
+   const bars=[...html.matchAll(/<rect[^>]*width="([\d.]+)"/g)];
+   assert.ok(bars.length>0, dataset.key);
+   assert.ok(bars.every(match=>Number(match[1])===14),dataset.key);
+   const ticks=[...html.matchAll(/<text x="([\d.]+)"[^>]*class="expression-atlas-chart__x-label"/g)].map(match=>Number(match[1]));
+   assert.ok(ticks.length>0,dataset.key);
+   for(let i=1;i<ticks.length;i++) if(ticks[i]>ticks[i-1]) assert.ok(Math.abs(ticks[i]-ticks[i-1]-26)<.001,dataset.key);
+  }
+ }
+ assert.equal(covered.size,7);
+});
+
+test('presentation helper prose is removed while errors and scientific units remain',()=>{
+ assert.doesNotMatch(source,/Width fits the panel|Size changes apply to the PDF|Explore retinal development, aging|atlas-reading-note|Dense plots scroll/);
+ assert.match(source,/mean of available replicates/);
+ assert.match(source,/Missing data does not indicate zero expression/);
 });

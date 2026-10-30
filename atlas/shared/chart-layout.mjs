@@ -27,7 +27,8 @@ export function fitCategoryBlocks(labels, fontSize, preferredWidth, availableWid
   const blocks = [];
   for (let start = 0; start < labels.length; start += capacity) blocks.push(labels.slice(start, start + capacity));
   return {
-    width, leftPad, angle, blocks: blocks.length ? blocks : [[]],
+    width: Math.min(limit, Math.max(280, leftPad + rightPad + Math.min(capacity, labels.length) * slotWidth)),
+    leftPad, angle, slotWidth, blocks: blocks.length ? blocks : [[]],
     bottomPad: Math.ceil(Math.max(134, Math.max(0, ...textWidths) * Math.sin(radians) + fontSize * 4 + 24))
   };
 }
