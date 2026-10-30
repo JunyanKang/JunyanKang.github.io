@@ -1719,7 +1719,6 @@ export const ExpressionAtlasPage = () => {
       <div className="container">
         <header className="expression-atlas-page-header">
           <div>
-            <p className="atlas-eyebrow">RESOURCES / EXPRESSION</p>
             <h1>Expression atlas</h1>
             <p className="section-subtitle">Explore retinal development, aging and tissue expression, one gene at a time.</p>
           </div>

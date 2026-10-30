@@ -13,6 +13,7 @@ atlas/dist/
 assets/atlas/*.previous-*/
 assets/atlas/*.staging-*/
 output/
+.hallmark/
 _data/china_map.json
 _data/publications_all.json
 _data/contact_map.json

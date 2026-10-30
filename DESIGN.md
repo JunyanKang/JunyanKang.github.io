@@ -2,41 +2,63 @@
 
 ## Direction
 
-A restrained scientific editorial site: warm paper, deep teal actions, serif
-headings and compact humanist sans-serif controls. Preserve the approved retinal
-emblem, real research figures, staff photographs and CMS-owned content. Impeccable
-is a review method, not permission to replace this identity with a new template.
+Vantage-inspired precision: dark steel homepage introduction, a real retinal
+single-cell 3D UMAP, and light scholarly reading surfaces. This is a full redesign,
+not the previous warm-paper/serif refinement. The user approved the dual-surface
+direction. Preserve the approved retinal emblem, staff portraits, genuine paper
+figures, scientific content, CMS fields and published routes.
 
-## Shared Scale
+## Shared System
 
-- Canvas: `#fcfcfa`; text: `#253331`; secondary text: `#53665c`.
-- Action: `#17645d`; action hover: `#104f49`; supporting surface: `#edf3ee`.
-- Layout: 1180px maximum; 32px desktop gutters, 18px small-screen gutters.
-- Spacing: 8, 16, 24, 32, 48px; close related controls, separate content sections.
-- Body: 16px; supporting controls: 13-14px; section titles: 26-32px.
-- Display: Georgia, 36-52px; body: Avenir Next with Segoe UI and sans fallbacks.
-- Cards: 12px radius; controls: 6px; selected state uses solid teal and white.
-- Use borders rather than decorative shadows. Avoid ornamental section labels.
+The source of truth is `assets/css/design-system.css`, shared with the atlas.
 
-## Behavior
+- Canvas: `#f8f9f6`; ink: `#1c2c31`; secondary ink: `#52656a`.
+- Dark canvas: `#0a1013`; dark ink: `#eef4f3`; secondary: `#b7c6c8`.
+- Light-surface actions: `#276476`; dark-surface primary action: `#c5ed74`.
+- Self-hosted Geologica variable font, with its OFL license. Light display/body
+  weights; stronger controls and bibliographic titles. No italic display fragments.
+- Body 16px; metadata 12-14px; controls 14-16px; section titles 30-46px.
+  Homepage display type scales independently; academic titles remain compact.
+- Content cap 1312px; responsive gutters 20-64px; a 4px spacing foundation.
+- Flat panels, 4px corners, quiet rules; pill-shaped actions and active navigation.
+- Research uses an anchor rail; publications use a year rail; the team uses a
+  portrait directory; resources use category navigation. Do not force every page
+  into the same card grid. The atlas remains a data tool, not a marketing page.
 
-- At 760px and below, disclose the site navigation with Menu. Escape closes it
-  and returns focus; resizing restores desktop links. Without JS, links remain.
-- The atlas must share navigation, type and action sizing with the editorial site.
-  Its charts, data scales and export geometry are independent of site styling.
-- Publication searches retain `q` in the URL and provide clear/reset and count.
-- External resources use multi-word matching over displayed names, affiliations
-  and descriptions; empty groups disappear only during filtering.
-- News categories come from published CMS records, never a hardcoded list.
-- Keep keyboard focus visible. Do not restore green focus halos on select boxes.
-- Motion is optional and disabled under reduced motion. Carousel auto-advance
-  pauses on focus, hover and hidden tabs. Keep dot navigation and arrow keys.
-- Publication images use contain, not cover. Keep the hero slot at 4:3 so slides
-  cannot resize the surrounding layout. Do not enlarge screenshots independently.
+## Interaction
+
+- Mobile navigation uses Menu, closes on Escape and restores focus. Without JS,
+  links remain available. Keep visible keyboard focus and disabled states.
+- Publication search retains `q`, provides a result count and Clear; external
+  resource search matches displayed names, descriptions and affiliations.
+- News filters are derived from published CMS content. The homepage news carousel
+  retains dot navigation, fixed image geometry and genuine news destinations.
+- Publication figures use contain. Never independently enlarge/crop individual
+  scientific screenshots to fill a decorative slot.
+- Homepage UMAP media uses a stable 16:9 frame with separate desktop/mobile
+  encodes, a poster fallback, autoplay/muted/loop, and a working Pause/Play control.
+  Pause when hidden/offscreen; preserve an explicit user pause. Per user request,
+  this video does not stop automatically for OS reduced-motion preference.
+  Existing CSS transition/carousel motion preferences remain supported.
+- The video is an embedding, not physical retinal anatomy. Surfaces are computed
+  cluster envelopes, not tissue boundaries. Hiding outside cells is a rendering
+  selection, never deletion or alteration of expression values or source objects.
+- Do not modify atlas data, normalization, plot scales or export geometry as part
+  of a typography/layout redesign.
 
 ## Boundaries
 
 Do not restore removed introductory headers, footer boilerplate, carousel arrow
 buttons or an admin gear. The footer symbol remains the CMS entry point. Preserve
-all scientific content, original matrices and published URLs. Content editing
-must remain compatible with Pages CMS additions, removals and visibility flags.
+Pages CMS additions, removals and visibility flags. Publish only rendered UMAP
+media, never source QS files, matrices or private absolute-path provenance.
+
+## Verification
+
+Use real browser screenshots and interactions, not static markup alone. Check
+320px through desktop layouts, navigation, searches, filters, media playback and
+links. Run site/atlas tests, all six Ruby content suites and the combined build.
+Record skill-lint limitations explicitly: external stylesheets must be included
+in the audit, scholarly metadata has different density needs from a hero, and
+the video's reduced-motion policy is an explicit user override. A local build
+does not establish publication; verify GitHub Pages and live assets after push.

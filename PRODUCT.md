@@ -8,7 +8,11 @@ Visitors are researchers, collaborators, students and applicants. Their primary
 tasks are finding research and publications, querying expression data, discovering
 software and external resources, meeting the team and contacting the laboratory.
 
-Home introduces the research and current news. Research, publications and news
+Home introduces the research with a real CellScope-derived 3D UMAP animation,
+then current news. Its dark introduction contrasts with light reading surfaces.
+The media alternates cell-type colors and measured marker-gene expression; it is
+an embedding visualization, not an anatomical reconstruction. Source matrices
+remain private and unchanged. Research, publications and news
 prioritize reading; resources prioritize discovery; the atlas prioritizes task
 completion. Keep them visually related without forcing a marketing layout into
 the data tool. Use existing content rather than inventing claims or news.

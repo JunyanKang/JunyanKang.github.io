@@ -1,0 +1,55 @@
+/* Hallmark · theme: Vantage, adapted steel/light reading; full site redesign.
+ * Brand logo and scientific content preserved. Dark visual stage; light reading.
+ * Signature: real CellScope UMAP. No synthetic scan or decorative measurements.
+ * Typography: Geologica, optical weight and sharpness by role. */
+@font-face { font-family:'Geologica'; font-style:normal; font-weight:200 600; font-display:swap; src:url('/assets/fonts/geologica-latin.woff2') format('woff2'); }
+:root {
+  --kl-display:'Geologica','Segoe UI',sans-serif;
+  --kl-sans:var(--kl-display);
+  --kl-ink:#1c2c31;
+  --kl-muted:#52656a;
+  --kl-accent:#276476;
+  --kl-accent-hover:#194858;
+  --kl-paper:#f8f9f6;
+  --kl-surface:#edf0ed;
+  --kl-white:#fff;
+  --kl-border:#cdd6d3;
+  --kl-map-control:rgba(255,255,255,.7);
+  --kl-map-land:#d7e1d5;
+  --kl-map-populated:#89ab98;
+  --kl-map-sea:#a3b7aa;
+  --kl-border-strong:#82968d;
+  --kl-deep:#0a1013;
+  --kl-deep-surface:#131d22;
+  --kl-deep-rule:#35454a;
+  --kl-on-deep:#eef4f3;
+  --kl-on-deep-muted:#b7c6c8;
+  --kl-highlight:#c5ed74;
+  --kl-highlight-hover:#d6f59d;
+  --kl-recommended:#edf3df;
+  --kl-danger:#a54230;
+  --kl-danger-surface:#fff0eb;
+  --kl-shadow:0 12px 32px rgb(10 16 19 / .12);
+  --kl-control-radius:999px;
+  --kl-radius:4px;
+  --kl-space-1:4px;
+  --kl-space-2:8px;
+  --kl-space-3:12px;
+  --kl-space-4:16px;
+  --kl-space-5:24px;
+  --kl-space-6:32px;
+  --kl-space-7:48px;
+  --kl-space-8:80px;
+  --kl-text-xs:12px;
+  --kl-text-sm:14px;
+  --kl-text-base:16px;
+  --kl-text-lg:20px;
+  --kl-title:clamp(30px,3.5vw,46px);
+  --kl-content:1312px;
+  --kl-gutter:clamp(20px,4.2vw,64px);
+  --kl-ease:160ms ease;
+  --global-theme-color:var(--kl-accent);
+  --global-hover-color:var(--kl-accent-hover);
+  --global-text-color:var(--kl-ink);
+  --global-bg-color:var(--kl-paper);
+}
