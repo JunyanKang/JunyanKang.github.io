@@ -1,6 +1,6 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import type { CSSProperties, ChangeEvent, FormEvent, MouseEvent } from 'react';
+import type { CSSProperties, ChangeEvent, FormEvent, MouseEvent, ReactNode } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { queryExpressionAtlas } from '../api/modules';
 import { categoryLayout } from '../../shared/chart-layout.mjs';
@@ -34,6 +34,10 @@ const useAvailableWidth = () => {
 const wrapPlotLabel = (label: string, maxCharacters: number) => {
   const lines: string[] = [];
   for (const word of label.split(/\s+/)) {
+    if (word.length > maxCharacters) {
+      for (let offset = 0; offset < word.length; offset += maxCharacters) lines.push(word.slice(offset, offset + maxCharacters));
+      continue;
+    }
     const last = lines.length - 1;
     if (last >= 0 && lines[last].length + word.length + 1 <= maxCharacters) lines[last] += ` ${word}`;
     else lines.push(word);
@@ -122,6 +126,7 @@ const getDatasetDisplayTitle = (dataset: Pick<ExpressionAtlasDatasetResult, 'key
 
 const formatValue = (value: number | null) => {
   if (value === null) return '—';
+  if (value !== 0 && Math.abs(value) < 0.001) return value.toExponential(2);
   return valueFormatter.format(value);
 };
 
@@ -147,7 +152,7 @@ const triggerDownload = (fileName: string, blob: Blob) => {
 const matrixToCsv = (matrix: HeatmapMatrix) => {
   const rows = [
     ['Group', ...matrix.columns],
-    ...matrix.rows.map((row) => [row, ...matrix.columns.map((column) => formatValue(matrix.values.get(`${row}::${column}`) ?? null))])
+    ...matrix.rows.map((row) => [row, ...matrix.columns.map((column) => matrix.values.get(`${row}::${column}`) ?? '')])
   ];
 
   return rows
@@ -173,29 +178,50 @@ const svgElementToDataUrl = (svgElement: SVGSVGElement) => {
 
 const buildSvgForExport = (svgElement: SVGSVGElement, legendItems: LegendItem[] = []) => {
   const cloned = svgElement.cloneNode(true) as SVGSVGElement;
-  if (!legendItems.length) return cloned;
-
   const viewBox = svgElement.viewBox.baseVal;
   const baseWidth = viewBox?.width || svgElement.clientWidth || 1200;
   const baseHeight = viewBox?.height || svgElement.clientHeight || 720;
-  const extraHeight = 84;
-  cloned.setAttribute('viewBox', `0 0 ${baseWidth} ${baseHeight + extraHeight}`);
-
   const namespace = 'http://www.w3.org/2000/svg';
+
+  // Export the SVG's native geometry, never the live dark theme's computed styles.
+  cloned.querySelectorAll<SVGTextElement>('text').forEach((text) => {
+    text.style.fill = '#1a3443';
+    text.style.fontFamily = 'Arial, Helvetica, sans-serif';
+    if (!text.style.fontSize) text.style.fontSize = '14px';
+  });
+  cloned.querySelectorAll<SVGTextElement>('.expression-atlas-chart__row-label').forEach((text) => {
+    text.style.fontWeight = '600';
+  });
+  for (const [selector, stroke, strokeWidth] of [
+    ['.expression-atlas-chart__grid', '#d4dde0', '1'],
+    ['.expression-atlas-chart__axis', '#8c9eaa', '1.2']
+  ]) {
+    cloned.querySelectorAll<SVGElement>(selector).forEach((line) => {
+      line.style.stroke = stroke;
+      line.style.strokeWidth = strokeWidth;
+      line.style.shapeRendering = 'crispEdges';
+    });
+  }
+  const background = document.createElementNS(namespace, 'rect');
+  background.setAttribute('width', '100%');
+  background.setAttribute('height', '100%');
+  background.setAttribute('fill', '#ffffff');
+  cloned.insertBefore(background, cloned.firstChild);
+  if (!legendItems.length) return cloned;
+
   const legendGroup = document.createElementNS(namespace, 'g');
-  const itemsPerRow = Math.max(1, Math.floor(baseWidth / 220));
-  const rowGap = 28;
-  const colGap = Math.min(220, Math.max(150, baseWidth / itemsPerRow));
-  const totalRows = Math.ceil(legendItems.length / itemsPerRow);
-  const blockWidth = Math.min(baseWidth - 80, legendItems.length > 1 ? Math.min(baseWidth - 80, itemsPerRow * colGap) : 180);
-  const startX = (baseWidth - blockWidth) / 2;
-  const startY = baseHeight + 28;
+  const itemsPerRow = Math.max(1, Math.floor((baseWidth - 48) / 220));
+  const colGap = (baseWidth - 48) / itemsPerRow;
+  const labelLines = legendItems.map(item => wrapPlotLabel(item.label, Math.max(12, Math.floor((colGap - 28) / 9))));
+  let rowY = baseHeight + 28;
 
   legendItems.forEach((item, index) => {
-    const row = Math.floor(index / itemsPerRow);
     const col = index % itemsPerRow;
-    const x = startX + col * colGap;
-    const y = startY + row * rowGap;
+    if (index > 0 && col === 0) {
+      rowY += Math.max(...labelLines.slice(index - itemsPerRow, index).map(lines => lines.length)) * 18 + 12;
+    }
+    const x = 24 + col * colGap;
+    const y = rowY;
 
     const dot = document.createElementNS(namespace, 'circle');
     dot.setAttribute('cx', String(x));
@@ -209,13 +235,20 @@ const buildSvgForExport = (svgElement: SVGSVGElement, legendItems: LegendItem[] 
     label.setAttribute('fill', 'rgba(19, 49, 70, 0.92)');
     label.setAttribute('font-family', 'Arial, Helvetica, sans-serif');
     label.setAttribute('font-size', '14');
-    label.textContent = item.label;
+    labelLines[index].forEach((line, lineIndex) => {
+      const span = document.createElementNS(namespace, 'tspan');
+      span.setAttribute('x', String(x + 12));
+      span.setAttribute('dy', lineIndex ? '18' : '0');
+      span.textContent = line;
+      label.appendChild(span);
+    });
 
     legendGroup.appendChild(dot);
     legendGroup.appendChild(label);
   });
 
-  const requiredHeight = baseHeight + Math.max(extraHeight, totalRows * rowGap + 40);
+  const lastRowStart = Math.floor((legendItems.length - 1) / itemsPerRow) * itemsPerRow;
+  const requiredHeight = rowY + Math.max(...labelLines.slice(lastRowStart).map(lines => lines.length)) * 18 + 20;
   cloned.setAttribute('viewBox', `0 0 ${baseWidth} ${requiredHeight}`);
   cloned.setAttribute('width', String(baseWidth));
   cloned.setAttribute('height', String(requiredHeight));
@@ -683,21 +716,6 @@ const buildExternalLinks = (result: ExpressionAtlasQueryResult) => {
   );
 };
 
-const chunkColumns = <T,>(items: T[], chunkSize: number) => {
-  const chunks: T[][] = [];
-  for (let index = 0; index < items.length; index += chunkSize) {
-    chunks.push(items.slice(index, index + chunkSize));
-  }
-  return chunks;
-};
-
-const getHeatmapChunkSize = (dataset: ExpressionAtlasDatasetResult) => {
-  if (dataset.key === 'mouse_tissue_rna') return 8;
-  if (dataset.key === 'human_retina_rpe_rna') return 10;
-  if (dataset.key === 'mouse_tissue_protein') return 8;
-  return 14;
-};
-
 const calculateStandardDeviation = (values: number[]) => {
   if (values.length < 2) return 0;
   const mean = values.reduce((sum, value) => sum + value, 0) / values.length;
@@ -713,6 +731,12 @@ const clampPlotSettings = (settings: PlotSettings): PlotSettings => ({
   height: clamp(Math.round(settings.height), 260, 900),
   fontSize: clamp(Math.round(settings.fontSize), 11, 26)
 });
+
+const getPlotPresets = (defaults: PlotSettings) => [
+  { label: 'Compact', settings: clampPlotSettings({ ...defaults, width: 880, height: defaults.height - 80 }) },
+  { label: 'Standard', settings: defaults },
+  { label: 'Large labels', settings: clampPlotSettings({ ...defaults, width: 1600, height: defaults.height + 80, fontSize: defaults.fontSize + 3 }) }
+];
 
 const getXAxisTitle = (dataset: ExpressionAtlasDatasetResult) => {
   if (dataset.key === 'mouse_tissue_rna' || dataset.key === 'mouse_tissue_protein') return 'Tissue';
@@ -733,21 +757,21 @@ const toLinePoints = (items: { xLabel: string; value: number | null; tooltip?: s
 
 const getDefaultPlotSettings = (dataset: ExpressionAtlasDatasetResult): PlotSettings => {
   if (dataset.key === 'mouse_tissue_rna') {
-    return { width: 880, height: 400, fontSize: 15 };
+    return { width: 1280, height: 400, fontSize: 15 };
   }
   if (dataset.key === 'mouse_tissue_protein') {
-    return { width: 880, height: 340, fontSize: 13 };
+    return { width: 1280, height: 340, fontSize: 13 };
   }
   if (dataset.key === 'human_retina_scrna') {
-    return { width: 880, height: 420, fontSize: 15 };
+    return { width: 1280, height: 420, fontSize: 15 };
   }
   if (dataset.key === 'monkey_retina_aging_scrna' || dataset.key === 'mouse_retina_dev_scrna') {
-    return { width: 880, height: 340, fontSize: 13 };
+    return { width: 1280, height: 340, fontSize: 13 };
   }
   if (dataset.key === 'human_retina_rpe_rna') {
-    return { width: 880, height: 360, fontSize: 14 };
+    return { width: 1280, height: 360, fontSize: 14 };
   }
-  return { width: 880, height: 400, fontSize: 14 };
+  return { width: 1280, height: 400, fontSize: 14 };
 };
 
 const buildLinePlotData = (dataset: ExpressionAtlasDatasetResult): LinePlotData => {
@@ -884,16 +908,18 @@ const DatasetLineChart = ({
   const showSeriesLabels = !isBulkDataset(dataset) || multiRow;
   const fontFamily = 'Arial, Helvetica, sans-serif';
   const axisFontSize = plotSettings.fontSize;
-  const xFontSize = compact ? Math.min(plotSettings.fontSize, 11) : Math.max(plotSettings.fontSize - 1, 11);
+  const xFontSize = Math.max(plotSettings.fontSize - 1, 11);
   const titleFontSize = compact ? Math.min(plotSettings.fontSize + 3, 18) : plotSettings.fontSize + 5;
   const axisTitleFontSize = plotSettings.fontSize + 1;
   const tickLabelWidth = Math.max(...[plot.minValue, plot.maxValue, plot.maxValue / 3, plot.maxValue * 2 / 3].map(value => formatValue(value).length)) * axisFontSize * 0.62;
   const rightPad = Math.max(76, tickLabelWidth + 26);
   const { width, leftPad, bottomPad, angle: labelAngle } = categoryLayout(plot.xLabels, xFontSize, preferredWidth, rightPad);
   const titleLines = wrapPlotLabel(`${getDatasetDisplayTitle(dataset)} · ${dataset.matchedGene ?? getDatasetDisplayTitle(dataset)}`, Math.max(15, Math.floor((width - 30) / (titleFontSize * 0.58))));
-  const labelLines = visibleSeries.map(series => wrapPlotLabel(series.label, Math.max(12, Math.floor((width - 32) / (axisFontSize * 0.58)))));
+  const measurement = `${dataset.unit || 'Expression'}${dataset.key === 'mouse_tissue_protein' ? ' (mean of available replicates)' : ''}`;
+  const measurementLines = wrapPlotLabel(measurement, Math.max(15, Math.floor((width - 30) / (axisFontSize * 0.58))));
+  const labelLines = visibleSeries.map(series => wrapPlotLabel(series.label, Math.max(12, Math.floor((width - leftPad - rightPad) / (axisFontSize * 0.58)))));
   const labelSpace = showSeriesLabels ? Math.max(...labelLines.map(lines => lines.length)) * (axisFontSize + 3) + 10 : 0;
-  const titleSpace = titleLines.length * (titleFontSize + 5) + 24;
+  const titleSpace = titleLines.length * (titleFontSize + 5) + 32 + measurementLines.length * (axisFontSize + 3);
   const topPad = Math.max(62, titleSpace) + labelSpace;
   const rowGap = multiRow ? Math.max(8, plotSettings.fontSize * 0.55) + labelSpace : 0;
   const minRowHeight = multiRow ? Math.max(28, plotSettings.fontSize * 2.1) : Math.max(180, plotSettings.fontSize * 10);
@@ -936,7 +962,7 @@ const DatasetLineChart = ({
 
   return (
     <div className="expression-atlas-plot-card">
-      <div ref={frameRef} className="expression-atlas-line-chart__frame" tabIndex={width > preferredWidth ? 0 : undefined} aria-label="Expression plot; scroll horizontally if needed">
+      <div ref={frameRef} className="expression-atlas-line-chart__frame" tabIndex={0} role="region" aria-label="Expression plot; scroll to inspect all samples and cell types">
         {tooltip ? (
           <div className="expression-atlas-plot-tooltip" style={{ left: tooltip.x, top: tooltip.y }}>
             {tooltip.lines.map((line) => (
@@ -955,6 +981,9 @@ const DatasetLineChart = ({
         >
           <text x={width / 2} y={titleFontSize + 8} textAnchor="middle" className="expression-atlas-chart__title" style={titleStyle}>
             {titleLines.map((line, index) => <tspan key={index} x={width / 2} dy={index ? titleFontSize + 5 : 0}>{line}</tspan>)}
+          </text>
+          <text x={width / 2} y={titleLines.length * (titleFontSize + 5) + axisFontSize + 12} textAnchor="middle" className="expression-atlas-chart__measurement" style={axisTextStyle}>
+            {measurementLines.map((line, index) => <tspan key={index} x={width / 2} dy={index ? axisFontSize + 3 : 0}>{line}</tspan>)}
           </text>
           <text
             x={leftPad + chartWidth / 2}
@@ -1062,7 +1091,7 @@ const DatasetLineChart = ({
           })}
         </svg>
       </div>
-      {width > preferredWidth ? <p className="text-muted expression-atlas-chart-scroll-hint">Scroll horizontally to see all sample labels.</p> : null}
+      <p className="text-muted expression-atlas-chart-scroll-hint">{width > preferredWidth ? 'Scroll horizontally for all sample labels. ' : ''}{Math.round(width)} × {Math.round(height)} px. Dense plots scroll within the panel; exports include the entire figure.</p>
     </div>
   );
 };
@@ -1099,9 +1128,6 @@ const DatasetHeatmap = ({
   onClusterOptionsChange: (nextOptions: HeatmapClusterOptions) => void;
   onExportData?: () => void;
 }) => {
-  const { ref: tableRef, width: tableWidth } = useAvailableWidth();
-  const responsiveChunkSize = Math.max(1, Math.min(getHeatmapChunkSize(dataset), Math.floor(((tableWidth || 320) - (tableWidth < 600 ? 106 : 180)) / 78)));
-  const columnGroups = chunkColumns(matrix.columns, responsiveChunkSize);
   if (!dataset.hasMatch) return <p className="text-muted">No matched gene was found in this dataset.</p>;
 
   return (
@@ -1127,7 +1153,7 @@ const DatasetHeatmap = ({
         <div className="expression-atlas-figure-meta__aside">
           {onExportData ? (
             <button type="button" className="link-button link-button--outline" onClick={onExportData}>
-              Export
+              Download CSV
             </button>
           ) : null}
           <div className="expression-atlas-legend">
@@ -1138,23 +1164,24 @@ const DatasetHeatmap = ({
           </div>
         </div>
       </div>
-      <div className="expression-atlas-table-stack" ref={tableRef}>
-        {columnGroups.map((columns, index) => (
-          <div key={`${dataset.key}-chunk-${index}`} className="expression-atlas-table-wrap">
-            <table className="expression-atlas-table expression-atlas-table--heatmap">
+      <p className="text-muted expression-atlas-chart-scroll-hint">{matrix.rows.length} rows × {matrix.columns.length} columns. Scroll within the table to inspect every value; CSV includes the full matrix.</p>
+      <div className="expression-atlas-table-stack">
+          <div className="expression-atlas-table-wrap" role="region" tabIndex={0} aria-label={`${getDatasetDisplayTitle(dataset)} full expression matrix; scroll for all columns and rows`}>
+            <table className="expression-atlas-table expression-atlas-table--heatmap" style={{ minWidth: 180 + matrix.columns.length * 100 }}>
+              <caption className="expression-atlas-table-caption">{getDatasetDisplayTitle(dataset)}: {dataset.matchedGene}</caption>
               <thead>
                 <tr>
                   <th scope="col">{matrix.rows.length === 1 ? 'Metric' : 'Cell / group'}</th>
-                  {columns.map((column) => (
+                  {matrix.columns.map((column) => (
                     <th scope="col" key={column}>{column}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {matrix.rows.map((row) => (
-                  <tr key={`${row}-${index}`}>
+                  <tr key={row}>
                     <th scope="row">{row}</th>
-                    {columns.map((column) => {
+                    {matrix.columns.map((column) => {
                       const value = matrix.values.get(`${row}::${column}`) ?? null;
                       const colors = getHeatColor(value, matrix);
                       const style = {
@@ -1172,7 +1199,6 @@ const DatasetHeatmap = ({
               </tbody>
             </table>
           </div>
-        ))}
       </div>
     </>
   );
@@ -1205,18 +1231,21 @@ const PlotControlPanel = ({
 
   const sliderConfig: Array<{ field: keyof PlotSettings; label: string; min: number; max: number; step: number; suffix: string }> = [
     { field: 'width', label: 'Max width', min: 720, max: 2200, step: 20, suffix: 'px' },
-    { field: 'height', label: 'Height', min: 260, max: 900, step: 20, suffix: 'px' },
-    { field: 'fontSize', label: 'Font', min: 11, max: 26, step: 1, suffix: 'px' }
+    { field: 'height', label: 'Min height', min: 260, max: 900, step: 20, suffix: 'px' },
+    { field: 'fontSize', label: 'Label size', min: 11, max: 26, step: 1, suffix: 'px' }
   ];
 
   return (
-    <div className="expression-atlas-plot-controls">
+    <div className="expression-atlas-plot-controls" role="group" aria-label={title}>
       <div className="expression-atlas-plot-controls__header">
-        <strong>{title}</strong>
-        <button type="button" className="link-button link-button--outline" onClick={() => onChange(defaultSettings)} disabled={isDefault}>
-          Default
-        </button>
+        <div className="expression-atlas-size-presets" role="group" aria-label="Plot size presets">
+          {getPlotPresets(defaultSettings).map((preset) => (
+            <button key={preset.label} type="button" className="link-button" aria-pressed={Object.keys(settings).every(key => settings[key as keyof PlotSettings] === preset.settings[key as keyof PlotSettings])} onClick={() => onChange(preset.settings)}>{preset.label}</button>
+          ))}
+        </div>
       </div>
+      <details className="expression-atlas-custom-size">
+        <summary>Custom size</summary>
       <div className="expression-atlas-plot-controls__grid">
         {sliderConfig.map((item) => (
           <label key={item.field} className="expression-atlas-plot-controls__field">
@@ -1234,6 +1263,8 @@ const PlotControlPanel = ({
               step={item.step}
               value={settings[item.field]}
               onChange={handleFieldChange(item.field)}
+              aria-label={item.label}
+              aria-valuetext={`${settings[item.field]} pixels`}
             />
             <small>
               {item.min}
@@ -1243,6 +1274,11 @@ const PlotControlPanel = ({
           </label>
         ))}
       </div>
+        <div className="expression-atlas-custom-size__footer">
+          <p className="expression-atlas-plot-controls__note">Width fits the panel; height grows when needed to keep every label. Size changes apply to the PDF too.</p>
+          <button type="button" className="link-button link-button--outline" onClick={() => onChange(defaultSettings)} disabled={isDefault}>Reset size</button>
+        </div>
+      </details>
     </div>
   );
 };
@@ -1265,13 +1301,61 @@ const DatasetPanelToolbar = ({
           Plot
         </button>
         <button type="button" aria-pressed={viewMode === 'data'} className={`expression-atlas-view-switch__button ${viewMode === 'data' ? 'is-active' : ''}`} onClick={() => onViewChange('data')}>
-          Data
+          Table
         </button>
       </div>
       <span className={`badge ${matched ? 'badge--success' : ''}`}>{matched ? 'Matched' : 'No match'}</span>
     </div>
   </div>
 );
+
+const PlotWorkbench = ({ dataset, settings, onSettingsChange, selectedSeriesLabels, onExportData, children }: {
+  dataset: ExpressionAtlasDatasetResult;
+  settings: PlotSettings;
+  onSettingsChange: (settings: PlotSettings) => void;
+  selectedSeriesLabels: string[];
+  onExportData: () => void;
+  children?: ReactNode;
+}) => {
+  const plotRef = useRef<HTMLDivElement | null>(null);
+  const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState('');
+  const savePlot = async () => {
+    const svg = plotRef.current?.querySelector('svg');
+    if (!svg || exporting) return;
+    setExporting(true);
+    setExportError('');
+    try {
+      const plot = isBulkDataset(dataset) ? buildBulkLinePlotData(dataset) : buildLinePlotData(dataset);
+      const legends = plot.series.length > 1
+        ? plot.series.filter(series => isBulkDataset(dataset) || selectedSeriesLabels.includes(series.label)).map(({ label, color }) => ({ label, color }))
+        : [];
+      await saveSvgAsPdf(`${getDatasetDisplayTitle(dataset)} ${dataset.matchedGene ?? ''}`.trim(), svg, legends);
+    } catch {
+      setExportError('PDF export failed. Try again, or download the full data as CSV.');
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  return (
+    <div className="expression-atlas-plot-layout">
+      <PlotControlPanel title={`${getDatasetDisplayTitle(dataset)} size`} settings={settings} defaultSettings={getDefaultPlotSettings(dataset)} onChange={onSettingsChange} />
+      {children}
+      <div className="expression-atlas-plot-layout__figure" ref={plotRef}>
+        <div className="expression-atlas-plot-layout__figure-actions">
+          <span className="text-muted">{dataset.matchedGene} · {getDatasetDisplayTitle(dataset)}</span>
+          <div className="expression-atlas-export-actions" role="group" aria-label={`${getDatasetDisplayTitle(dataset)} exports`}>
+            <button type="button" className="link-button" onClick={() => void savePlot()} disabled={exporting || !dataset.hasMatch}>{exporting ? 'Preparing PDF…' : 'Download PDF'}</button>
+            <button type="button" className="link-button" onClick={onExportData} disabled={!dataset.hasMatch}>Download CSV</button>
+          </div>
+        </div>
+        {exportError ? <p className="expression-atlas-export-error" role="alert">{exportError}</p> : null}
+        <DatasetLineChart dataset={dataset} selectedSeriesLabels={selectedSeriesLabels} settings={settings} />
+      </div>
+    </div>
+  );
+};
 
 const DatasetFigurePanel = ({
   dataset,
@@ -1291,9 +1375,7 @@ const DatasetFigurePanel = ({
   const matrix = useMemo(() => buildDatasetMatrix(dataset), [dataset]);
   const [clusterOptions, setClusterOptions] = useState<HeatmapClusterOptions>({ rows: true, columns: false });
   const displayMatrix = useMemo(() => getDisplayMatrix(dataset, matrix, clusterOptions), [clusterOptions, dataset, matrix]);
-  const plotRef = useRef<HTMLDivElement | null>(null);
   const plotData = useMemo(() => (isBulkDataset(dataset) ? buildBulkLinePlotData(dataset) : buildLinePlotData(dataset)), [dataset]);
-  const defaultPlotSettings = useMemo(() => getDefaultPlotSettings(dataset), [dataset]);
   const [selectedSeriesLabels, setSelectedSeriesLabels] = useState<string[]>([]);
 
   useEffect(() => {
@@ -1313,19 +1395,6 @@ const DatasetFigurePanel = ({
     });
   };
 
-  const handleSavePlot = async () => {
-    const svg = plotRef.current?.querySelector('svg');
-    if (!svg) return;
-    const legendItems =
-      plotData.series.length > 1
-        ? (isBulkDataset(dataset) ? plotData.series : plotData.series.filter((series) => selectedSeriesLabels.includes(series.label))).map((series) => ({
-            label: series.label,
-            color: series.color
-          }))
-        : [];
-    await saveSvgAsPdf(`${getDatasetDisplayTitle(dataset)} ${dataset.matchedGene ?? ''}`.trim(), svg, legendItems);
-  };
-
   const handleExportData = () => {
     const csv = matrixToCsv(displayMatrix);
     triggerDownload(`${dataset.key}-${dataset.matchedGene ?? 'expression'}.csv`, new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
@@ -1341,16 +1410,12 @@ const DatasetFigurePanel = ({
       />
       <div className="expression-atlas-dataset-panel-body">
         {!dataset.hasMatch ? <p className="text-muted" role="status">No matching gene in this dataset. Missing data does not indicate zero expression.</p> : viewMode === 'plot' ? (
-          <div className="expression-atlas-plot-layout">
-            <div ref={plotRef} className="expression-atlas-plot-layout__figure">
-              <div className="expression-atlas-plot-layout__figure-actions">
-                <button type="button" className="link-button link-button--outline" onClick={() => void handleSavePlot()} disabled={!dataset.hasMatch}>
-                  Save
-                </button>
-              </div>
-              <DatasetLineChart dataset={dataset} selectedSeriesLabels={selectedSeriesLabels} settings={plotSettings} />
+          <PlotWorkbench dataset={dataset} settings={plotSettings} onSettingsChange={onPlotSettingsChange} selectedSeriesLabels={selectedSeriesLabels} onExportData={handleExportData}>
               {plotData.series.length > 1 ? (
-                <div className="expression-atlas-series-filter expression-atlas-series-filter--inside">
+                <details className="expression-atlas-series-controls">
+                  <summary>{isBulkDataset(dataset) ? 'Series legend' : 'Cell types'}: {isBulkDataset(dataset) ? plotData.series.length : `${selectedSeriesLabels.length} of ${plotData.series.length}`} shown</summary>
+                  {!isBulkDataset(dataset) ? <button type="button" className="link-button" onClick={() => setSelectedSeriesLabels(plotData.series.map(series => series.label))}>Show all cell types</button> : null}
+                <div className="expression-atlas-series-filter expression-atlas-series-filter--inside" role="group" aria-label="Visible series">
                   {plotData.series.map((series) =>
                     isBulkDataset(dataset) ? (
                       <div key={series.label} className="expression-atlas-series-filter__chip is-active is-static">
@@ -1363,6 +1428,8 @@ const DatasetFigurePanel = ({
                         type="button"
                         className={`expression-atlas-series-filter__chip ${selectedSeriesLabels.includes(series.label) ? 'is-active' : ''}`}
                         onClick={() => toggleSeries(series.label)}
+                        aria-pressed={selectedSeriesLabels.includes(series.label)}
+                        disabled={selectedSeriesLabels.length === 1 && selectedSeriesLabels.includes(series.label)}
                       >
                         <span className="expression-atlas-series-filter__dot" style={{ backgroundColor: series.color }} />
                         {series.label}
@@ -1370,17 +1437,9 @@ const DatasetFigurePanel = ({
                     )
                   )}
                 </div>
+                </details>
               ) : null}
-            </div>
-            <div className="expression-atlas-plot-layout__side">
-              <PlotControlPanel
-                title="Plot settings"
-                settings={plotSettings}
-                defaultSettings={defaultPlotSettings}
-                onChange={onPlotSettingsChange}
-              />
-            </div>
-          </div>
+          </PlotWorkbench>
         ) : (
           <DatasetHeatmap
             dataset={dataset}
@@ -1414,19 +1473,8 @@ const CombinedMouseTissuePanel = ({
   onProteinSettingsChange: (nextSettings: PlotSettings) => void;
   matched: boolean;
 }) => {
-  const rnaPlotRef = useRef<HTMLDivElement | null>(null);
-  const proteinPlotRef = useRef<HTMLDivElement | null>(null);
   const rnaDataset = datasets.find((item) => item.key === 'mouse_tissue_rna') ?? datasets[0];
   const proteinDataset = datasets.find((item) => item.key === 'mouse_tissue_protein') ?? datasets[1] ?? datasets[0];
-  const defaultRnaSettings = useMemo(() => getDefaultPlotSettings(rnaDataset), [rnaDataset]);
-  const defaultProteinSettings = useMemo(() => getDefaultPlotSettings(proteinDataset), [proteinDataset]);
-
-  const savePlotFromRef = async (title: string, container: HTMLDivElement | null) => {
-    const svg = container?.querySelector('svg');
-    if (!svg) return;
-    await saveSvgAsPdf(title, svg);
-  };
-
   const handleExportRnaData = () =>
     triggerDownload(`${rnaDataset.key}-${rnaDataset.matchedGene ?? 'expression'}.csv`, new Blob([matrixToCsv(buildDatasetMatrix(rnaDataset))], { type: 'text/csv;charset=utf-8;' }));
 
@@ -1440,29 +1488,7 @@ const CombinedMouseTissuePanel = ({
         <div className="expression-atlas-combined-stack">
           <section className="expression-atlas-combined-section">
             {!rnaDataset.hasMatch ? <p className="text-muted" role="status">Mouse tissue RNA: no matching gene. Missing data does not indicate zero expression.</p> : viewMode === 'plot' ? (
-              <div className="expression-atlas-plot-layout">
-                <div ref={rnaPlotRef} className="expression-atlas-plot-layout__figure">
-                  <div className="expression-atlas-plot-layout__figure-actions">
-                    <button
-                      type="button"
-                      className="link-button link-button--outline"
-                      onClick={() => void savePlotFromRef(`${getDatasetDisplayTitle(rnaDataset)} ${rnaDataset.matchedGene ?? ''}`.trim(), rnaPlotRef.current)}
-                      disabled={!rnaDataset.hasMatch}
-                    >
-                      Save
-                    </button>
-                  </div>
-                  <DatasetLineChart dataset={rnaDataset} selectedSeriesLabels={[]} settings={rnaSettings} />
-                </div>
-                <div className="expression-atlas-plot-layout__side">
-                  <PlotControlPanel
-                    title="RNA plot settings"
-                    settings={rnaSettings}
-                    defaultSettings={defaultRnaSettings}
-                    onChange={onRnaSettingsChange}
-                  />
-                </div>
-              </div>
+              <PlotWorkbench dataset={rnaDataset} settings={rnaSettings} onSettingsChange={onRnaSettingsChange} selectedSeriesLabels={[]} onExportData={handleExportRnaData} />
             ) : (
               <DatasetHeatmap
                 dataset={rnaDataset}
@@ -1475,29 +1501,7 @@ const CombinedMouseTissuePanel = ({
           </section>
           <section className="expression-atlas-combined-section">
             {!proteinDataset.hasMatch ? <p className="text-muted" role="status">Mouse tissue protein: no matching gene. Missing data does not indicate zero expression.</p> : viewMode === 'plot' ? (
-              <div className="expression-atlas-plot-layout">
-                <div ref={proteinPlotRef} className="expression-atlas-plot-layout__figure">
-                  <div className="expression-atlas-plot-layout__figure-actions">
-                    <button
-                      type="button"
-                      className="link-button link-button--outline"
-                      onClick={() => void savePlotFromRef(`${getDatasetDisplayTitle(proteinDataset)} ${proteinDataset.matchedGene ?? ''}`.trim(), proteinPlotRef.current)}
-                      disabled={!proteinDataset.hasMatch}
-                    >
-                      Save
-                    </button>
-                  </div>
-                  <DatasetLineChart dataset={proteinDataset} selectedSeriesLabels={[]} settings={proteinSettings} />
-                </div>
-                <div className="expression-atlas-plot-layout__side">
-                  <PlotControlPanel
-                    title="Protein plot settings"
-                    settings={proteinSettings}
-                    defaultSettings={defaultProteinSettings}
-                    onChange={onProteinSettingsChange}
-                  />
-                </div>
-              </div>
+              <PlotWorkbench dataset={proteinDataset} settings={proteinSettings} onSettingsChange={onProteinSettingsChange} selectedSeriesLabels={[]} onExportData={handleExportProteinData} />
             ) : (
               <DatasetHeatmap
                 dataset={proteinDataset}
@@ -1581,6 +1585,11 @@ const OrthologPanel = ({
   </div>
 );
 
+const retainDatasetSelection = (panels: DatasetPanel[], previous: string) =>
+  panels.some(panel => panel.key === previous) || !panels.length
+    ? previous
+    : (panels.find(panel => panel.hasMatch) ?? panels[0]).key;
+
 export const ExpressionAtlasPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialGene = searchParams.get('gene')?.trim() || 'Pax6';
@@ -1606,11 +1615,6 @@ export const ExpressionAtlasPage = () => {
     setQueryInput(geneFromUrl);
     setSubmittedGene(geneFromUrl);
   }, [searchParams]);
-
-  useEffect(() => {
-    setDatasetViewModes({});
-    setDatasetPlotSettings({});
-  }, [submittedGene]);
 
   useEffect(() => {
     setOrthologPage(1);
@@ -1700,12 +1704,7 @@ export const ExpressionAtlasPage = () => {
     [datasetPanels, selectedDatasetKey]
   );
   useEffect(() => {
-    if (!datasetPanels.length) {
-      setSelectedDatasetKey('');
-      return;
-    }
-    const preferred = datasetPanels.find((panel) => panel.hasMatch) ?? datasetPanels[0];
-    setSelectedDatasetKey(preferred.key);
+    setSelectedDatasetKey(previous => retainDatasetSelection(datasetPanels, previous));
   }, [datasetPanels]);
   const orthologPageSize = 3;
   const orthologTotalPages = Math.max(1, Math.ceil((queryState.data?.orthologs.length ?? 0) / orthologPageSize));
@@ -1713,6 +1712,14 @@ export const ExpressionAtlasPage = () => {
     () => queryState.data?.orthologs.slice((orthologPage - 1) * orthologPageSize, orthologPage * orthologPageSize) ?? [],
     [queryState.data, orthologPage]
   );
+  const geneAnnotationLinks = externalLinks ? (
+    <div className="expression-atlas-hero-links" aria-label="External gene annotations">
+      <a href={externalLinks.summaryHref} target="_blank" rel="noreferrer">Summary ↗</a>
+      <a href={externalLinks.phenotypeHref} target="_blank" rel="noreferrer">Phenotype ↗</a>
+      <a href={externalLinks.structureHref} target="_blank" rel="noreferrer">Structure ↗</a>
+      <a href={externalLinks.referenceHref} target="_blank" rel="noreferrer">Reference ↗</a>
+    </div>
+  ) : null;
 
   return (
     <div className="section">
@@ -1746,12 +1753,13 @@ export const ExpressionAtlasPage = () => {
             <p className="atlas-query-result" aria-live="polite">
               {queryState.loading ? 'Searching expression datasets…' : queryState.data ? <><strong>{queryState.data.query}</strong><span>{matchedDatasetCount} of {queryState.data.datasets.length} datasets matched</span></> : 'Search the public collection'}
             </p>
-            {externalLinks ? <div className="expression-atlas-hero-links" aria-label="External gene annotations">
-              <a href={externalLinks.summaryHref} target="_blank" rel="noreferrer">Summary ↗</a>
-              <a href={externalLinks.phenotypeHref} target="_blank" rel="noreferrer">Phenotype ↗</a>
-              <a href={externalLinks.structureHref} target="_blank" rel="noreferrer">Structure ↗</a>
-              <a href={externalLinks.referenceHref} target="_blank" rel="noreferrer">Reference ↗</a>
-            </div> : null}
+            {geneAnnotationLinks ? <>
+              <div className="expression-atlas-annotations-desktop">{geneAnnotationLinks}</div>
+              <details className="expression-atlas-annotations-mobile">
+                <summary>Gene annotations</summary>
+                {geneAnnotationLinks}
+              </details>
+            </> : null}
           </div>
         </section>
         {queryState.error ? <div className="atlas-error" role="alert"><p>{queryState.error}</p><button type="button" className="link-button" onClick={() => setQueryAttempt((attempt) => attempt + 1)}>Retry</button></div> : null}
@@ -1759,6 +1767,12 @@ export const ExpressionAtlasPage = () => {
 
         {queryState.data ? (
           <div className="expression-atlas-stack">
+            <div className="expression-atlas-dataset-picker">
+              <label htmlFor="atlas-dataset">Dataset</label>
+              <select id="atlas-dataset" value={activePanel?.key ?? ''} onChange={(event) => setSelectedDatasetKey(event.target.value)}>
+                {datasetPanels.map(panel => <option key={panel.key} value={panel.key}>{panel.title}</option>)}
+              </select>
+            </div>
             <div className="tab-switch expression-atlas-dataset-tabs" role="group" aria-label="Datasets">
               {datasetPanels.map((panel) => (
                 <button

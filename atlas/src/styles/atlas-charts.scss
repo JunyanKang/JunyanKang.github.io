@@ -1,3 +1,4 @@
+/*! Hallmark: Vantage steel, dark scientific workbench. Preserve data color encodings. */
 .expression-atlas-combined-stack {
   display: flex;
   flex-direction: column;
@@ -19,7 +20,7 @@
 .expression-atlas-ortholog-card,
 .expression-atlas-dataset-card {
   padding: 18px 20px;
-  background: linear-gradient(180deg, rgba(252, 250, 245, 0.98), rgba(246, 249, 248, 0.98));
+  background: var(--kl-surface);
 }
 
 .expression-atlas-dataset-card {
@@ -33,9 +34,7 @@
 
 .expression-atlas-links-card {
   padding: 18px 20px;
-  background:
-    linear-gradient(180deg, rgba(248, 246, 240, 0.99), rgba(239, 246, 244, 0.99)),
-    radial-gradient(circle at top right, rgba(181, 206, 204, 0.18), transparent 42%);
+  background: var(--kl-surface);
 }
 
 .expression-atlas-links-card__header {
@@ -73,7 +72,7 @@
   gap: 10px;
   padding: 10px 12px;
   border-radius: var(--radius-sm);
-  background: linear-gradient(180deg, rgba(238, 244, 243, 0.92), rgba(247, 248, 244, 0.92));
+  background: var(--kl-surface);
 }
 
 .expression-atlas-ortholog-item__symbols {
@@ -186,8 +185,8 @@
   gap: 10px;
   padding: 12px 14px;
   border-radius: var(--radius-md);
-  border: 1px solid rgba(31, 73, 95, 0.08);
-  background: linear-gradient(180deg, rgba(246, 249, 247, 0.96), rgba(250, 248, 242, 0.98));
+  border: 1px solid var(--kl-border);
+  background: var(--kl-surface);
 }
 
 .expression-atlas-plot-controls__header {
@@ -195,7 +194,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  color: rgba(18, 47, 66, 0.92);
+  color: var(--kl-ink);
   font-size: 0.84rem;
 }
 
@@ -233,16 +232,16 @@
 }
 
 .expression-atlas-plot-controls__value {
-  color: rgba(18, 47, 66, 0.94);
+  color: var(--kl-ink);
   font-size: 0.92rem;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--kl-sans);
 }
 
 .expression-atlas-plot-controls__field input {
   width: 100%;
   min-width: 0;
   margin: 0;
-  accent-color: #1b4f7b;
+  accent-color: var(--kl-ink);
 }
 
 .expression-atlas-plot-controls__field small {
@@ -255,7 +254,7 @@
   justify-content: center;
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid rgba(31, 73, 95, 0.08);
+  border-top: 1px solid var(--kl-border);
 }
 
 .expression-atlas-series-filter--inside {
@@ -269,9 +268,9 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  border: 1px solid rgba(31, 73, 95, 0.1);
-  background: rgba(245, 247, 245, 0.96);
-  color: rgba(28, 54, 69, 0.86);
+  border: 1px solid var(--kl-border);
+  background: var(--kl-surface);
+  color: var(--kl-ink);
   border-radius: 999px;
   padding: 0.4rem 0.72rem;
   font-size: 0.76rem;
@@ -284,9 +283,9 @@
 }
 
 .expression-atlas-series-filter__chip.is-active {
-  background: rgba(228, 238, 239, 0.98);
-  color: rgba(18, 47, 66, 0.94);
-  border-color: rgba(31, 73, 95, 0.18);
+  background: var(--kl-surface);
+  color: var(--kl-ink);
+  border-color: var(--kl-border);
 }
 
 .expression-atlas-series-filter__chip.is-static {
@@ -306,8 +305,8 @@
   gap: 6px;
   padding: 0;
   border-radius: 999px;
-  background: linear-gradient(180deg, rgba(235, 241, 242, 0.92), rgba(247, 248, 245, 0.96));
-  border: 1px solid rgba(31, 73, 95, 0.1);
+  background: var(--kl-surface);
+  border: 1px solid var(--kl-border);
   min-height: 36px;
 }
 
@@ -328,9 +327,9 @@
 }
 
 .expression-atlas-view-switch__button.is-active {
-  background: linear-gradient(132deg, #1b4f7b, #2d7f79 55%, #b18842 130%);
-  color: #ffffff;
-  box-shadow: 0 10px 20px rgba(18, 55, 85, 0.2);
+  background: var(--kl-surface);
+  color: var(--kl-ink);
+  box-shadow: none;
 }
 
 .expression-atlas-heatmap-controls {
@@ -341,9 +340,9 @@
 }
 
 .expression-atlas-cluster-toggle {
-  border: 1px solid rgba(31, 73, 95, 0.12);
-  background: rgba(245, 247, 245, 0.98);
-  color: rgba(28, 54, 69, 0.88);
+  border: 1px solid var(--kl-border);
+  background: var(--kl-surface);
+  color: var(--kl-ink);
   border-radius: 999px;
   min-height: 34px;
   padding: 0.34rem 0.84rem;
@@ -358,18 +357,18 @@
 }
 
 .expression-atlas-cluster-toggle.is-active {
-  background: linear-gradient(132deg, #1b4f7b, #2d7f79 55%, #b18842 130%);
-  color: #ffffff;
+  background: var(--kl-surface);
+  color: var(--kl-ink);
   border-color: transparent;
-  box-shadow: 0 10px 20px rgba(18, 55, 85, 0.18);
+  box-shadow: none;
 }
 
 .expression-atlas-group-note {
   margin-bottom: 14px;
   padding: 14px 15px;
   border-radius: var(--radius-md);
-  background: linear-gradient(180deg, rgba(241, 246, 244, 0.96), rgba(249, 248, 243, 0.98));
-  border: 1px solid rgba(31, 73, 95, 0.08);
+  background: var(--kl-surface);
+  border: 1px solid var(--kl-border);
 }
 
 .expression-atlas-group-note__header {
@@ -391,9 +390,9 @@
   align-items: center;
   padding: 0.38rem 0.74rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.78);
-  border: 1px solid rgba(31, 73, 95, 0.09);
-  color: rgba(28, 54, 69, 0.92);
+  background: var(--kl-surface);
+  border: 1px solid var(--kl-border);
+  color: var(--kl-ink);
   font-size: 0.79rem;
   line-height: 1.35;
 }
@@ -440,8 +439,8 @@
   width: 132px;
   height: 10px;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgb(248, 245, 237), rgb(184, 214, 213), rgb(20, 63, 93));
-  box-shadow: inset 0 0 0 1px rgba(25, 58, 76, 0.1);
+  background: var(--kl-expression-ramp);
+  box-shadow: none;
 }
 
 .expression-atlas-table-wrap {
@@ -463,7 +462,7 @@
 
 .expression-atlas-table th,
 .expression-atlas-table td {
-  border-bottom: 1px solid rgba(28, 63, 87, 0.1);
+  border-bottom: 1px solid var(--kl-border);
   padding: 8px 9px;
   text-align: left;
   font-size: 0.82rem;
@@ -471,16 +470,16 @@
 }
 
 .expression-atlas-table thead th {
-  color: rgba(37, 60, 73, 0.88);
+  color: var(--kl-ink);
   font-weight: 600;
-  background: rgba(245, 247, 243, 0.96);
+  background: var(--kl-surface);
 }
 
 .expression-atlas-table--heatmap th:first-child {
   position: sticky;
   left: 0;
   z-index: 1;
-  background: rgba(250, 248, 242, 0.98);
+  background: var(--kl-surface);
 }
 
 .expression-atlas-table--heatmap td {
@@ -492,7 +491,7 @@
   color: var(--heat-color);
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.01em;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+  box-shadow: none;
 }
 
 .expression-atlas-heat-cell span {
@@ -522,9 +521,9 @@
   min-width: 0;
   padding: 50px 16px 12px;
   border-radius: var(--radius-md);
-  border: 1px solid rgba(31, 73, 95, 0.1);
-  background: #ffffff;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--kl-border);
+  background: var(--kl-surface);
+  box-shadow: none;
 }
 
 .expression-atlas-plot-layout__figure-actions {
@@ -553,22 +552,22 @@
   pointer-events: none;
   padding: 8px 10px;
   border-radius: 12px;
-  background: rgba(19, 42, 58, 0.94);
-  color: #f7fafb;
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--kl-surface);
+  color: var(--kl-ink);
+  font-family: var(--kl-sans);
   font-size: 12px;
   line-height: 1.45;
-  box-shadow: 0 14px 34px rgba(16, 35, 49, 0.24);
+  box-shadow: none;
 }
 
 .expression-atlas-chart__grid {
-  stroke: rgba(34, 74, 98, 0.12);
+  stroke: var(--kl-chart-grid);
   stroke-width: 1;
   shape-rendering: crispEdges;
 }
 
 .expression-atlas-chart__axis {
-  stroke: rgba(34, 74, 98, 0.24);
+  stroke: var(--kl-chart-axis);
   stroke-width: 1.2;
   shape-rendering: crispEdges;
 }
@@ -576,9 +575,9 @@
 .expression-atlas-chart__axis-label,
 .expression-atlas-chart__x-label,
 .expression-atlas-chart__row-label {
-  fill: rgba(26, 52, 67, 0.9);
+  fill: var(--kl-ink);
   font-size: 14px;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--kl-sans);
 }
 
 .expression-atlas-chart__x-label {
@@ -587,5 +586,114 @@
 
 .expression-atlas-chart__row-label {
   font-weight: 600;
+}
+
+// Applied after the site's theme layer so layout and live/export palettes stay separate.
+@mixin workbench {
+  .expression-atlas-dataset-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 16px; padding: 16px; align-items: center; }
+  .expression-atlas-dataset-card__header { grid-column: 1; grid-row: 1; margin: 0; min-height: 0; }
+  .expression-atlas-dataset-card__title { margin-bottom: 4px; }
+  .expression-atlas-dataset-card__subtitle { font-size: 13px; overflow-wrap: anywhere; margin-bottom: 0; }
+  .expression-atlas-ortholog-panel { grid-column: 1 / -1; }
+  .expression-atlas-panel-toolbar, .expression-atlas-dataset-card__meta {
+    position: static;
+    justify-content: flex-start;
+    margin: 0;
+  }
+  .expression-atlas-panel-toolbar { grid-column: 2; grid-row: 1; }
+  .expression-atlas-panel-toolbar__actions { justify-content: flex-start; }
+  .expression-atlas-plot-layout { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .expression-atlas-plot-layout > * { width: 100%; min-width: 0; }
+  .expression-atlas-plot-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    padding: 4px 0;
+    border: 0;
+    border-block: 1px solid var(--kl-border);
+    border-radius: 0;
+    gap: 0 12px;
+  }
+  .expression-atlas-plot-controls__header { flex-wrap: wrap; justify-content: flex-start; font-size: 13px; gap: 8px 16px; }
+  .expression-atlas-plot-controls__header > strong { flex: 1 1 180px; overflow-wrap: anywhere; }
+  .expression-atlas-custom-size { min-width: 0; }
+  .expression-atlas-custom-size summary { min-height: 44px; padding: 12px 4px; cursor: pointer; font-size: 13px; color: var(--kl-ink); }
+  .expression-atlas-custom-size[open] { grid-column: 1 / -1; }
+  .expression-atlas-custom-size__footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-block: 8px; }
+  .expression-atlas-custom-size__footer .link-button { min-height: 44px; flex: none; }
+  .expression-atlas-size-presets { display: flex; flex-wrap: wrap; gap: 4px; }
+  .expression-atlas-size-presets button[aria-pressed='true'] {
+    color: var(--kl-ink);
+    border-color: var(--kl-accent);
+    background: var(--kl-white);
+    box-shadow: inset 0 -2px var(--kl-highlight);
+  }
+  .expression-atlas-plot-controls__header .link-button { min-height: 44px; font-size: 12px; padding: 6px 12px; }
+  .expression-atlas-plot-controls__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .expression-atlas-plot-controls__field { gap: 0; }
+  .expression-atlas-plot-controls__field-head { flex-wrap: wrap; gap: 4px 12px; }
+  .expression-atlas-plot-controls__field span, .expression-atlas-plot-controls__value { font-size: 13px; }
+  .expression-atlas-plot-controls__value { font-family: var(--kl-sans); font-variant-numeric: tabular-nums; }
+  .expression-atlas-plot-controls__field input { min-height: 44px; cursor: ew-resize; }
+  .expression-atlas-plot-controls__field small { font-size: 12px; }
+  .expression-atlas-plot-controls__note { margin: 0; font-size: 12px; color: var(--kl-muted); }
+  .expression-atlas-plot-layout__figure { padding: 12px; border-radius: var(--kl-radius); }
+  .expression-atlas-plot-layout__figure-actions {
+    position: static;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--kl-border);
+    margin-bottom: 8px;
+  }
+  .expression-atlas-plot-layout__figure-actions > span { overflow-wrap: anywhere; }
+  .expression-atlas-export-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .expression-atlas-plot-layout__figure-actions .link-button { min-height: 44px; padding: 6px 12px; }
+  .expression-atlas-export-error { color: var(--kl-ink); margin: 12px 0; }
+  .expression-atlas-series-controls { border-bottom: 1px solid var(--kl-border); padding-bottom: 8px; }
+  .expression-atlas-series-controls summary { padding: 12px 0; min-height: 44px; cursor: pointer; font-size: 13px; color: var(--kl-ink); }
+  .expression-atlas-series-filter { justify-content: flex-start; border: 0; margin-top: 8px; padding: 0; }
+  .expression-atlas-series-filter__chip { white-space: normal; text-align: left; overflow-wrap: anywhere; min-height: 44px; border-color: var(--kl-border-strong); }
+  .expression-atlas-series-filter__chip.is-active { color: var(--kl-ink); }
+  .expression-atlas-series-filter__dot { filter: brightness(1.75) saturate(.8); }
+  .expression-atlas-view-switch__button, .expression-atlas-cluster-toggle { min-height: 44px; font-size: 13px; }
+  .expression-atlas-line-chart__frame, .expression-atlas-table-wrap {
+    min-width: 0;
+    max-width: 100%;
+    max-height: min(680px, 68svh);
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--kl-border-strong) var(--kl-paper);
+  }
+  .expression-atlas-line-chart__svg { flex: none; max-width: none; }
+  .expression-atlas-chart-scroll-hint { font-size: 12px; line-height: 1.5; margin: 8px 0 0; }
+  .expression-atlas-table-stack { min-width: 0; margin-top: 12px; }
+  .expression-atlas-table th, .expression-atlas-table td { font-size: 13px; padding: 10px 12px; }
+  .expression-atlas-table th:first-child { width: 180px; }
+  .expression-atlas-table thead th { position: sticky; top: 0; z-index: 2; }
+  .expression-atlas-table--heatmap th:first-child { position: sticky; left: 0; z-index: 1; }
+  .expression-atlas-table--heatmap thead th:first-child { z-index: 3; }
+  .expression-atlas-table-caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .expression-atlas-figure-meta { align-items: center; }
+  .expression-atlas-figure-meta > p { margin: 0; }
+  .expression-atlas-figure-meta__aside { flex-wrap: wrap; justify-content: flex-start; }
+  .expression-atlas-figure-meta__aside .link-button { min-height: 44px; }
+  @media (max-width: 760px) {
+    .expression-atlas-dataset-card { grid-template-columns: minmax(0, 1fr); padding: 12px; gap: 8px; }
+    .expression-atlas-dataset-card__header, .expression-atlas-panel-toolbar { grid-column: 1; grid-row: auto; }
+    .expression-atlas-plot-controls { grid-template-columns: minmax(0, 1fr); }
+    .expression-atlas-size-presets { flex-wrap: nowrap; width: 100%; }
+    .expression-atlas-size-presets .link-button { flex: 1; padding-inline: 6px; white-space: nowrap; }
+    .expression-atlas-custom-size__footer { align-items: flex-start; flex-direction: column; }
+    .expression-atlas-plot-layout__figure { padding: 8px; }
+    .expression-atlas-plot-controls__grid { gap: 12px; }
+    .expression-atlas-plot-controls__header > strong { flex-basis: 100%; }
+    .expression-atlas-plot-controls__field small { display: none; }
+    .expression-atlas-plot-controls__field span { min-height: 2.5em; }
+    .expression-atlas-plot-controls__field-head { display: flex; flex-direction: column; align-items: flex-start; }
+    .expression-atlas-line-chart__frame, .expression-atlas-table-wrap { max-height: 60svh; }
+  }
 }
 

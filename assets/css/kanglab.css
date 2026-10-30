@@ -1,5 +1,5 @@
-/* Hallmark · theme: Vantage steel / light reading; genre: modern-minimal; redesign: full.
- * User-approved dual surface; preserve brand and scientific color encodings.
+/* Hallmark · theme: Vantage steel / site-wide dark; genre: modern-minimal; redesign: full.
+ * Critique: extend the visual system beyond the hero; preserve scientific encodings.
  * Shape: research cover and directory; hero: Settled; nav: masthead.
  * No synthetic measurements. Dense scholarly pages exempt from marketing word budgets. */
 *, *::before, *::after { box-sizing:border-box; }
@@ -44,9 +44,9 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display:none; }
 .kl-nav a { padding:12px; color:var(--kl-ink); border-radius:var(--kl-control-radius); white-space:nowrap; }
 .kl-nav a[aria-current] { background:var(--kl-deep); color:var(--kl-on-deep); }
 .kl-nav a:hover { background:var(--kl-surface); text-decoration:none; }
-.kl-nav a[aria-current]:hover { background:var(--kl-accent-hover); }
+.kl-nav a[aria-current]:hover { background:var(--kl-white); color:var(--kl-ink); }
 .kl-menu-toggle { display:inline-flex; gap:12px; align-items:center; padding:8px 12px; min-height:44px; border:1px solid var(--kl-border); border-radius:var(--kl-control-radius); background:transparent; font-size:15px; }
-.kl-footer { padding:32px 0; border-top:1px solid var(--kl-border); background:var(--kl-surface) !important; }
+.kl-footer { padding:32px 0; border-top:1px solid var(--kl-border); background:var(--kl-surface) !important; color:var(--kl-ink); }
 .kl-footer-inner { display:flex; align-items:center; justify-content:space-between; gap:32px; }
 .kl-footer p { color:var(--kl-muted); font-size:14px; line-height:1.6; }
 
@@ -245,7 +245,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display:none; }
 .kl-software-group-heading p { font-size:15px; color:var(--kl-muted); }
 .kl-resource-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
 .kl-resource-grid article { position:relative; display:flex; flex-direction:column; align-items:flex-start; min-width:0; padding:28px; border:1px solid var(--kl-border); border-radius:var(--kl-radius); background:var(--kl-white); }
-.kl-resource-grid article.kl-software-card--featured { background:var(--kl-recommended); border-color:var(--kl-border-strong); }
+.kl-resource-grid article.kl-software-card--featured { background:var(--kl-recommended); color:var(--kl-ink); border-color:var(--kl-border-strong); }
 .kl-software-meta { display:flex; align-items:center; justify-content:space-between; width:100%; gap:16px; }
 .kl-recommended { display:flex; color:var(--kl-accent); flex:none; }
 .kl-software-title { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; width:100%; font-size:30px !important; margin:16px 0 !important; }
@@ -453,3 +453,119 @@ img[data-photo-framing='team-photo'], img[data-photo-framing='conference-photo']
   .kl-filter-buttons button { padding-inline:12px; }
 }
 @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *, *::before, *::after { animation:none !important; transition:none !important; } }
+
+/* Full-site Vantage: all routes share the same canvas, not a homepage skin. */
+.kl-header .kl-logo__wordmark, .kl-footer .kl-logo__wordmark { color:var(--kl-ink); }
+.kl-body .kl-header .kl-logo__symbol, .kl-footer .kl-logo__symbol { background:var(--kl-document); border-radius:50%; padding:4px; }
+.kl-nav a[aria-current], .kl-page-home .kl-header .kl-nav a[aria-current] { background:var(--kl-white); box-shadow:inset 0 -2px var(--kl-highlight); }
+.kl-nav a:hover, .kl-page-home .kl-header .kl-nav a:hover { background:var(--kl-white); }
+.kl-body .kl-button { background:var(--kl-highlight); border-color:var(--kl-highlight); color:var(--kl-on-primary) !important; font-weight:500; }
+.kl-body .kl-button:hover { background:var(--kl-highlight-hover); border-color:var(--kl-highlight-hover); }
+.kl-body .kl-button--secondary { background:transparent; color:var(--kl-ink) !important; border-color:var(--kl-border-strong); }
+.kl-body .kl-button--secondary:hover { background:var(--kl-white); }
+.kl-filter-buttons button.is-active, .kl-region-button.is-active { color:var(--kl-ink); background:var(--kl-white); border-color:var(--kl-accent); }
+.kl-search-input input { background:var(--kl-paper); border-radius:var(--kl-radius); }
+.kl-body :is(a,button,input,summary):focus-visible { outline-color:var(--kl-highlight); }
+.kl-footer { background:var(--kl-paper) !important; }
+
+/* Below the hero: editorial spread, quiet reading rails, tool bench. */
+.kl-home-news { padding-top:48px; }
+.kl-carousel { border-color:var(--kl-border); background:var(--kl-surface); }
+.kl-carousel-caption { background:var(--kl-surface); padding:24px; }
+.kl-carousel-caption h2 { font-weight:400; }
+.kl-carousel-category { font-size:12px; }
+.kl-carousel-controls { background:var(--kl-surface); }
+.kl-carousel-dots button[aria-current] span { background:var(--kl-highlight); }
+.kl-theme-grid > a { border-left:1px solid var(--kl-border); padding-left:24px; }
+.kl-open-grid { border-block:1px solid var(--kl-border); background:var(--kl-surface); border-radius:0; }
+.kl-open-grid article { padding:36px; }
+.kl-home-publications .kl-publication { grid-template-columns:72px minmax(0,1fr); }
+.kl-team-banner { padding:48px 0; }
+
+/* Research: persistent index and generous, bounded reading measure. */
+.kl-research-layout { grid-template-columns:210px minmax(0,1fr); gap:64px; }
+.kl-research-nav { padding:16px 20px; background:var(--kl-surface); border-top:1px solid var(--kl-border-strong); }
+.kl-research-nav a { font-size:14px; font-weight:400; }
+.kl-research-nav a:last-child { border-bottom:0; }
+.kl-research-section > p { max-width:68ch; font-size:18px; line-height:1.75; }
+.kl-question-grid { gap:24px; }
+.kl-question-grid article { border-top:1px solid var(--kl-border-strong); padding-top:24px; }
+.kl-question-grid .kl-number { text-transform:none; }
+.kl-research-section .kl-links { padding-top:16px; }
+
+/* Bibliography: search dock and year rail, not floating titles. */
+.kl-publication-toolbar { border:1px solid var(--kl-border); padding:24px 28px; }
+.kl-publication { grid-template-columns:88px minmax(0,1fr); padding-block:32px; }
+.kl-publication-year { font-size:24px; color:var(--kl-accent); }
+.kl-publication > :last-child { border-left:1px solid var(--kl-border); padding-left:28px; }
+.kl-publication h3 { max-width:66ch; font-size:21px; font-weight:500; }
+.kl-journal { color:var(--kl-ink); }
+
+/* Team directory: a reserved PI profile and stable portrait rhythm. */
+.kl-team-pi { background:var(--kl-surface); border-block:1px solid var(--kl-border); border-radius:0; padding:32px; gap:40px; }
+.kl-member { align-items:flex-start; padding-block:28px; }
+.kl-member h4 { font-size:18px; font-weight:500; margin:8px 0 12px; }
+.kl-member-portrait { border:1px solid var(--kl-border); }
+.kl-origins-layout { border:1px solid var(--kl-border); padding:24px; background:var(--kl-surface); }
+.kl-map-region.is-active path { fill:var(--kl-highlight); }
+.kl-map-region circle { fill:var(--kl-paper); stroke:var(--kl-accent); }
+.kl-map-region text { fill:var(--kl-ink); }
+.kl-region-preview { border:1px solid var(--kl-border-strong); border-radius:var(--kl-radius); }
+
+/* Resources: featured data entrance, software shelves, external index. */
+.kl-atlas-banner { border-block:1px solid var(--kl-border-strong); border-radius:0; background:var(--kl-surface); padding:36px; }
+.kl-section-nav { gap:12px 32px; }
+.kl-section-nav a { font-weight:400; font-size:15px; }
+.kl-resource-grid article { background:var(--kl-surface); padding:28px; }
+.kl-resource-grid article.kl-software-card--featured { background:var(--kl-recommended); border-color:var(--kl-border-strong); }
+.kl-software-title { font-size:27px !important; line-height:1.3 !important; }
+.kl-software-card-link { color:var(--kl-ink) !important; }
+.kl-recommended { color:var(--kl-highlight); }
+.kl-external-group > h3 { font-size:24px; }
+.kl-external-link { padding:24px 8px; }
+.kl-external-name { font-weight:500; }
+.kl-external-visual { background:var(--kl-document); }
+
+/* News and contact keep functional context instead of extra page heroes. */
+.kl-page-news .kl-news-grid { gap:48px 32px; }
+.kl-page-news .kl-news-card { padding-bottom:24px; border-bottom:1px solid var(--kl-border); }
+.kl-page-news .kl-news-card h3 { font-size:26px; line-height:1.25; font-weight:400; text-wrap:pretty; }
+.kl-news-article { max-width:880px; }
+.kl-news-article header { border-top:1px solid var(--kl-border); padding-top:28px; }
+.kl-news-body { max-width:72ch; margin-inline:auto; }
+.kl-news-body a { text-decoration:underline; }
+.kl-visit-layout { align-items:start; grid-template-columns:minmax(0,.9fr) minmax(0,1.2fr); }
+.kl-contact-details { padding-top:24px; }
+.kl-recruitment { border-top:1px solid var(--kl-border-strong); border-radius:0; padding:28px; }
+.kl-visit-map { position:sticky; top:120px; }
+.kl-visit-map iframe { aspect-ratio:1; }
+
+/* Scientific figures retain their real white image background; never invert. */
+.kl-carousel-slide--contain img, .kl-news-image--contain { background:var(--kl-document); }
+
+@media (max-width:1000px) {
+  .kl-research-layout { grid-template-columns:170px minmax(0,1fr); gap:32px; }
+  .kl-research-nav { padding:12px; }
+}
+@media (max-width:760px) {
+  .kl-home-news { padding-top:28px; }
+  .kl-research-layout { display:block; }
+  .kl-research-nav { position:static; display:flex; flex-direction:row; flex-wrap:wrap; gap:8px 20px; margin-bottom:28px; }
+  .kl-research-nav a { border:0; padding:8px 0; }
+  .kl-research-section > p { font-size:16px; }
+  .kl-question-grid article { padding-top:20px; }
+  .kl-publication-toolbar { padding:20px; }
+  .kl-team-pi { padding:24px; gap:20px; }
+  .kl-atlas-banner, .kl-open-grid article { padding:24px; }
+  .kl-origins-layout { padding:8px; }
+  .kl-visit-layout { grid-template-columns:minmax(0,1fr); }
+  .kl-visit-map { position:relative; top:auto; }
+  .kl-contact-details { padding-top:0; }
+  .kl-carousel-caption { padding:20px; }
+}
+@media (max-width:540px) {
+  .kl-publication, .kl-home-publications .kl-publication { grid-template-columns:minmax(0,1fr); gap:12px; }
+  .kl-publication > :last-child { padding-left:0; border-left:0; }
+  .kl-theme-grid > a { padding-left:16px; }
+  .kl-page-news .kl-news-grid { gap:28px; }
+}

@@ -2,19 +2,22 @@
 
 ## Direction
 
-Vantage-inspired precision: dark steel homepage introduction, a real retinal
-single-cell 3D UMAP, and light scholarly reading surfaces. This is a full redesign,
-not the previous warm-paper/serif refinement. The user approved the dual-surface
-direction. Preserve the approved retinal emblem, staff portraits, genuine paper
+Vantage-inspired precision: a continuous dark steel website, a real retinal
+single-cell 3D UMAP, and layered dark scholarly reading surfaces. The user's latest
+request supersedes the earlier dark-hero/light-content direction. Apply the same
+system to the complete homepage, every academic route, news articles and atlas.
+Preserve the approved retinal emblem, staff portraits, genuine paper
 figures, scientific content, CMS fields and published routes.
 
 ## Shared System
 
 The source of truth is `assets/css/design-system.css`, shared with the atlas.
 
-- Canvas: `#f8f9f6`; ink: `#1c2c31`; secondary ink: `#52656a`.
-- Dark canvas: `#0a1013`; dark ink: `#eef4f3`; secondary: `#b7c6c8`.
-- Light-surface actions: `#276476`; dark-surface primary action: `#c5ed74`.
+- Canvas: `#0a1013`; panel: `#111b20`; raised surface: `#18242a`.
+- Ink: `#e9f0ef`; secondary: `#a9bbbf`; link: `#b3d8de`.
+- Primary action: `#c5ed74` with dark text; lime is not a large panel fill.
+- Authentic paper images, partner logos and map tiles retain their source colors.
+  Do not invert scientific images. Chart exports retain their light print palette.
 - Self-hosted Geologica variable font, with its OFL license. Light display/body
   weights; stronger controls and bibliographic titles. No italic display fragments.
 - Body 16px; metadata 12-14px; controls 14-16px; section titles 30-46px.
@@ -40,13 +43,29 @@ The source of truth is `assets/css/design-system.css`, shared with the atlas.
   Pause when hidden/offscreen; preserve an explicit user pause. Per user request,
   this video does not stop automatically for OS reduced-motion preference.
   Existing CSS transition/carousel motion preferences remain supported.
+- Gene-highlight phases use expression-dependent glow by explicit user request,
+  overriding Vantage's default no-bloom rule. Zero expression must not emit glow;
+  categorical phases, native surface geometry and camera framing stay unchanged.
 - The video is an embedding, not physical retinal anatomy. Surfaces are computed
   cluster envelopes, not tissue boundaries. Hiding outside cells is a rendering
   selection, never deletion or alteration of expression values or source objects.
-- Do not modify atlas data, normalization, plot scales or export geometry as part
-  of a typography/layout redesign.
+- Do not modify atlas data, normalization or plot scales as part of the redesign.
+  Plot dimensions may adapt to label density or an explicit layout preset, with
+  the exported chart retaining the selected geometry and complete labels.
 
-## Boundaries
+## Expression Workbench
+
+Keep the plot, not configuration, as the main working area. Dataset title and
+Plot/Table state share a desktop row. Size presets remain immediately available;
+fine width, minimum height and label-size controls live in collapsed Custom size.
+Controls have a 44px interaction target. The graph uses the available width and
+grows or scrolls inside its own panel rather than dropping sample names. All table
+columns remain in one matrix with pinned headings; there is no sample pagination.
+PDF exports include full geometry on a white print surface; CSV retains all values.
+Phone layouts use the same dataset selection state through a labelled native
+select, with secondary gene annotations collapsed. Scientific caveats stay visible.
+
+## Content Boundaries
 
 Do not restore removed introductory headers, footer boilerplate, carousel arrow
 buttons or an admin gear. The footer symbol remains the CMS entry point. Preserve
@@ -62,3 +81,9 @@ Record skill-lint limitations explicitly: external stylesheets must be included
 in the audit, scholarly metadata has different density needs from a hero, and
 the video's reduced-motion policy is an explicit user override. A local build
 does not establish publication; verify GitHub Pages and live assets after push.
+
+The translucent map-provider control preserves the user's explicit request for
+a compact overlay. Section gaps vary by content hierarchy, not arbitrary cards:
+reading columns, compact software listings and control groups have distinct density.
+
+Expression workbench state and data integrity: new gene queries retain the chosen dataset, view mode, and sizing settings. A gene absent from that dataset stays visibly absent rather than silently switching context. CSV exports retain source numeric precision; small nonzero display values use scientific notation. Plots identify their measurement unit and protein replicate-mean aggregation explicitly.

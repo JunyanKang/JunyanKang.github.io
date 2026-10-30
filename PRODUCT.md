@@ -9,7 +9,8 @@ tasks are finding research and publications, querying expression data, discoveri
 software and external resources, meeting the team and contacting the laboratory.
 
 Home introduces the research with a real CellScope-derived 3D UMAP animation,
-then current news. Its dark introduction contrasts with light reading surfaces.
+then current news. Its dark steel visual system continues through every page,
+with layered panels for reading, resources and the expression workbench.
 The media alternates cell-type colors and measured marker-gene expression; it is
 an embedding visualization, not an anatomical reconstruction. Source matrices
 remain private and unchanged. Research, publications and news

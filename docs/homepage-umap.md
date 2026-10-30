@@ -36,6 +36,17 @@ only. Brightness is **not comparable between genes**. Sequential gene phases are
 not developmental progression or trajectories. Zero-expression cells remain dim;
 surfaces become more transparent during expression phases. No legend is displayed.
 
+Gene phases also use a bounded, local expression-dependent halo. Only inside
+cells with positive stored expression emit it; zero-expression cells, hidden
+outside cells and the surfaces themselves do not emit. The halo follows the same
+per-gene positive p99 reference and existing phase crossfade. At 720p its Gaussian
+sigma ranges from 1.2 to 2.2 pixels, truncated at three sigma, with a bounded
+composite of at most 20% of the remaining channel brightness. It does not enlarge
+cell cores, alter the surface, rescale the camera or blur the whole image. Nearby
+halos can overlap, so glow is a visual emphasis, not an additional quantitative
+measurement. Categorical phases remain unchanged. This halo pass belongs to the
+isolated website renderer, not a claim about CellScope's GUI export features.
+
 ## Web Delivery
 
 The 20-second silent H.264 loop has desktop and mobile encodes plus a WebP poster.

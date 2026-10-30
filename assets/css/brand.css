@@ -4,7 +4,7 @@
   display: inline-flex;
   align-items: center;
   gap: calc(var(--logo-size) * .13);
-  color: #005865;
+  color: var(--kl-ink);
   flex: 0 0 auto;
   vertical-align: middle;
 }
@@ -16,8 +16,8 @@
   flex: 0 0 auto;
 }
 .kl-logo__wordmark {
-  color: #005865;
-  font-family: 'Avenir Next Condensed', 'Avenir Next', 'Segoe UI', sans-serif;
+  color: var(--kl-ink);
+  font-family: var(--kl-brand-font);
   font-size: calc(var(--logo-size) * .38);
   font-weight: 700;
   letter-spacing: 0;
@@ -33,7 +33,7 @@
 .kl-logo--symbol { --logo-size: 72px; }
 .kl-logo--symbol .kl-logo__wordmark { display: none; }
 .kl-brand, .atlas-brand { text-decoration: none !important; flex: 0 0 auto; }
-.kl-footer-identity { display: flex; gap: 22px; align-items: center; }
+.kl-footer-identity { display: flex; gap: 24px; align-items: center; }
 .kl-footer-lockup { display: flex; align-items: flex-end; gap: 4px; flex: 0 0 auto; }
 .kl-footer-lockup > a:first-child { display: block; text-decoration: none; }
 @media (max-width: 900px) {
@@ -46,3 +46,6 @@
   .kl-logo--stacked, .kl-logo--symbol { --logo-size: 64px; }
   .kl-footer-identity { gap: 16px; }
 }
+
+/* Shared dark chrome, including the standalone expression atlas. */
+.atlas-header .kl-logo__symbol, .atlas-footer .kl-logo__symbol { background:var(--kl-document); border-radius:50%; padding:4px; }

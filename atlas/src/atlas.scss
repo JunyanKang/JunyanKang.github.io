@@ -23,7 +23,7 @@ button, a, input { -webkit-tap-highlight-color: transparent; }
 button { cursor: pointer; }
 button:disabled { opacity: .45; cursor: not-allowed; }
 :focus-visible { outline: 2px solid var(--kl-accent); outline-offset: 4px; }
-select:focus, select:focus-visible { outline:none; box-shadow:none; border-color:#89958f; }
+select:focus, select:focus-visible { outline:none; box-shadow:none; border-color:var(--kl-border-strong); }
 h1, h2, h3, p { margin-top: 0; }
 p { line-height: 1.65; }
 h1, h2, h3 { font-family: var(--kl-display); font-weight: 300; letter-spacing: -.035em; }
@@ -200,3 +200,76 @@ main:focus { outline:none; }
   .atlas-query-context { padding-left:0; }
 }
 @media (prefers-reduced-motion:reduce) { *, *::before, *::after { transition:none !important; animation:none !important; scroll-behavior:auto !important; } }
+
+/* Vantage dark workbench. Only website presentation changes, not data/export. */
+:root {
+  --color-text:var(--kl-ink);
+  --color-text-secondary:var(--kl-muted);
+  --color-muted:var(--kl-muted);
+  --color-surface:var(--kl-surface);
+  --color-surface-alt:var(--kl-paper);
+  --color-surface-elevated:var(--kl-white);
+  --color-border:var(--kl-border);
+}
+.atlas-header nav a[aria-current] { background:var(--kl-white); box-shadow:inset 0 -2px var(--kl-highlight); }
+.atlas-query { border-radius:var(--kl-radius); border-block-color:var(--kl-border-strong); }
+.atlas-query-button { color:var(--kl-on-primary); background:var(--kl-highlight); border-color:var(--kl-highlight); }
+.atlas-query-button:hover { background:var(--kl-highlight-hover); }
+.tab-button.is-active, .expression-atlas-view-switch__button.is-active, .expression-atlas-cluster-toggle.is-active { background:var(--kl-white); border-color:var(--kl-accent); color:var(--kl-ink); box-shadow:inset 0 -2px var(--kl-highlight); }
+.expression-atlas-dataset-card, .expression-atlas-ortholog-card, .expression-atlas-links-card { background:var(--kl-surface); border:1px solid var(--kl-border); border-radius:var(--kl-radius); }
+.expression-atlas-plot-layout__figure { background:var(--kl-paper); }
+.expression-atlas-plot-controls { background:var(--kl-surface); }
+.expression-atlas-plot-tooltip { color:var(--kl-ink); background:var(--kl-white); border:1px solid var(--kl-border-strong); font-family:var(--kl-sans); }
+.expression-atlas-ortholog-item { background:var(--kl-paper); }
+.expression-atlas-ortholog-item span, .expression-atlas-table thead th, .expression-atlas-series-filter__chip, .expression-atlas-view-switch__button, .expression-atlas-cluster-toggle { color:var(--kl-muted); }
+.expression-atlas-table th, .expression-atlas-table td { border-color:var(--kl-border); }
+.expression-atlas-series-filter, .expression-atlas-plot-controls__section { background:transparent; }
+.expression-atlas-figure-label { text-transform:none; letter-spacing:0; }
+/* Scoped to the live page: downloaded SVG/PDF retains its original light palette. */
+.kl-atlas-body .expression-atlas-line-chart__svg text { fill:var(--kl-ink) !important; }
+.kl-atlas-body .expression-atlas-chart__grid { stroke:var(--kl-chart-grid); }
+.kl-atlas-body .expression-atlas-chart__axis { stroke:var(--kl-chart-axis); }
+.kl-atlas-body .expression-atlas-line-chart__svg rect { filter:brightness(1.75) saturate(.8); }
+
+@include atlas-charts.workbench;
+
+/* Keep the first plot near the query without reducing the plot's own geometry. */
+.section { padding-top: 16px; }
+.expression-atlas-page-header { margin-bottom: 12px; gap: 12px; }
+.expression-atlas-page-header h1 { font-size: 32px; margin-bottom: 4px; }
+.section-subtitle { font-size: 14px; }
+.atlas-query { padding: 8px 16px; gap: 20px; }
+.expression-atlas-form { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 0 12px; }
+.expression-atlas-form label { margin: 0; }
+.atlas-suggestions { grid-column: 1 / -1; margin-top: 0; align-items: center; gap: 0 8px; }
+.atlas-suggestions button { min-width: 44px; min-height: 44px; }
+.atlas-query-context { gap: 4px; padding-left: 20px; }
+.atlas-query-result strong { font-size: 23px; }
+.expression-atlas-hero-links { gap: 0 12px; }
+.expression-atlas-hero-links a, .atlas-back-link { display: inline-flex; align-items: center; min-height: 44px; }
+.atlas-reading-note { margin: 8px 0 12px; }
+.expression-atlas-stack { gap: 12px; }
+.expression-atlas-dataset-tabs { gap: 4px; padding-bottom: 8px; }
+.tab-button { min-height: 44px; padding: 8px 12px; }
+.expression-atlas-dataset-picker, .expression-atlas-annotations-mobile { display: none; }
+@media (max-width: 760px) {
+  .expression-atlas-page-header { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 0 12px; }
+  .expression-atlas-page-header h1 { font-size: 28px; }
+  .atlas-query { padding: 8px 12px; gap: 4px; min-width: 0; }
+  .expression-atlas-form { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .atlas-query-context { padding: 8px 0 0; gap: 0; min-width: 0; }
+  .expression-atlas-hero-links { flex-wrap: wrap; }
+  .atlas-suggestions { flex-wrap: nowrap; min-width: 0; max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: var(--kl-border-strong) var(--kl-paper); }
+  .atlas-suggestions > * { flex-shrink: 0; }
+  .atlas-query-result { gap: 4px 8px; align-items: baseline; font-size: 12px; }
+  .atlas-query-result strong { font-size: 20px; min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+  .atlas-query-result > span { white-space: nowrap; }
+  .expression-atlas-annotations-desktop, .expression-atlas-dataset-tabs { display: none; }
+  .expression-atlas-annotations-mobile { display: block; min-width: 0; }
+  .expression-atlas-annotations-mobile summary { min-height: 44px; padding-block: 12px; cursor: pointer; font-size: 13px; }
+  .expression-atlas-dataset-picker { display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; min-width: 0; }
+  .expression-atlas-dataset-picker label { font-size: 13px; font-weight: 500; }
+  .expression-atlas-dataset-picker select { width: 100%; min-width: 0; max-width: 100%; min-height: 44px; padding: 8px 10px; border: 1px solid var(--kl-border-strong); border-radius: var(--kl-radius); color: var(--kl-ink); background: var(--kl-white); color-scheme: dark; font: inherit; font-size: 16px; }
+  .expression-atlas-dataset-picker select:focus-visible { outline: 2px solid var(--kl-accent); outline-offset: 3px; }
+  .expression-atlas-stack { gap: 8px; }
+}
