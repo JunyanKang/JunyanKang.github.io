@@ -16,38 +16,8 @@ function setup({ blocked = false } = {}) {
   vm.runInNewContext(source, { document, window, IntersectionObserver: Observer });
   return { video, toggle, label, mediaSource, document, observe: visible => observe([{ isIntersecting: visible }]) };
 }
-test('UMAP plays, exposes accurate pause/play state, and retains explicit pause across visibility changes', () => {
-  const a = setup();
-  assert.equal(a.video.paused, false);
-  assert.equal(a.toggle.attributes['aria-label'], 'Pause animation');
-  a.toggle.fire('click');
-  assert.equal(a.video.paused, true);
-  a.observe(false); a.observe(true);
-  a.document.hidden = true; a.document.fire('visibilitychange');
-  a.document.hidden = false; a.document.fire('visibilitychange');
-  assert.equal(a.video.paused, true);
-  a.toggle.fire('click'); assert.equal(a.video.paused, false);
-  a.observe(false); assert.equal(a.video.paused, true);
-  a.observe(true); assert.equal(a.video.paused, false);
-});
-test('blocked autoplay exposes Play and media failure leaves the poster without a broken control', async () => {
-  const a = setup({ blocked: true });
-  await Promise.resolve();
-  assert.equal(a.toggle.hidden, false);
-  assert.equal(a.toggle.attributes['aria-label'], 'Play animation');
-  a.mediaSource.fire('error');
-  a.video.fire('pause');
-  a.observe(true);
-  assert.equal(a.toggle.hidden, true);
-});
-test('other pages do not require a media player', () => {
-  vm.runInNewContext(source, { document: { querySelector: () => null } });
-});
-test('a successful fallback source restores the control after a source error', () => {
-  const a = setup();
-  a.mediaSource.fire('error');
-  assert.equal(a.toggle.hidden, true);
-  a.video.fire('loadeddata');
-  assert.equal(a.toggle.hidden, false);
-  assert.equal(a.toggle.attributes['aria-label'], 'Pause animation');
-});
+test('UMAP autoplays without controls and suspends while hidden',()=>{const a=setup(); assert.equal(a.video.paused,false); a.observe(false); assert.equal(a.video.paused,true); a.observe(true); assert.equal(a.video.paused,false); a.document.hidden=true; a.document.fire('visibilitychange'); assert.equal(a.video.paused,true); a.document.hidden=false; a.document.fire('visibilitychange'); assert.equal(a.video.paused,false);});
+test('blocked playback is safely handled',async()=>{const a=setup({blocked:true}); await Promise.resolve(); assert.equal(a.video.paused,true);});
+test('failed media recovers on loadeddata',()=>{const a=setup(); a.video.fire('error'); const n=a.video.calls; a.observe(true); assert.equal(a.video.calls,n); a.video.fire('loadeddata'); assert.equal(a.video.calls,n+1);});
+test('other pages require no player',()=>{vm.runInNewContext(source,{document:{querySelector:()=>null}});});
+test('hero artwork has no visible playback control',async()=>{const html=await readFile(new URL('../_pages/about.md',import.meta.url),'utf8'); assert.equal(html.includes('data-umap-toggle'),false);});

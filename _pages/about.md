@@ -19,7 +19,7 @@ nav: false
       <source src="{{ '/assets/video/retina-umap-lite.mp4' | relative_url }}?v=20261030-glow-r3" type="video/mp4" media="(max-width: 760px)">
       <source src="{{ '/assets/video/retina-umap.mp4' | relative_url }}?v=20261030-glow-r3" type="video/mp4">
     </video>
-    <figcaption><span>Developmental retina / 3D UMAP</span><button type="button" data-umap-toggle hidden aria-label="Pause animation"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path data-umap-icon d="M7 5h3v14H7zm7 0h3v14h-3z"/></svg><span data-umap-label>Pause</span></button></figcaption>
+    <figcaption>Developmental retina / 3D UMAP</figcaption>
   </figure>
   </div>
 </section>

@@ -92,3 +92,5 @@ Expression workbench state and data integrity: new gene queries retain the chose
 All expression plots share the same default 14px bar and 26px category pitch (12px gap), including single-cell and spatial series. Fewer categories produce a narrower plot, not wider bars or spacing. Keep nonessential instructional prose out of the workbench; retain scientific units, replicate aggregation, missing-data states and errors.
 
 Multi-row expression plots place wrapped cell-type labels in a dedicated left column, centered on each row. Each bar panel is at least 96px tall, separated by 18px; all rows and sample blocks keep the same numeric domain. Extra height extends the page and PDF rather than introducing internal scrolling.
+
+The homepage UMAP is frameless artwork: no corner brackets or playback button. Its video uses lighten compositing against the same deep background as the page, preserving the luminous cells without a dark rectangular inset. Playback still suspends offscreen or when the tab is hidden.
