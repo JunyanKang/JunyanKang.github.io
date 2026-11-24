@@ -40,11 +40,34 @@ const cohorts = {
 const base = (
   import.meta.env.VITE_RETINA_ATLAS_BASE || "/assets/retina-atlas"
 ).replace(/\/$/, "");
+let preferredSource = base;
 async function bytes(path: string, signal: AbortSignal) {
-  const response = await fetch(`${base}/${path}`, { signal });
-  if (!response.ok) throw Error(`Data request failed (${response.status}).`);
-  const b = new Uint8Array(await response.arrayBuffer());
-  return b[0] === 31 && b[1] === 139 ? gunzipSync(b) : b;
+  const sources = base === "https://raw.githubusercontent.com/JunyanKang/retina-atlas-data/atlas-v1"
+    ? [base, "https://cdn.jsdelivr.net/gh/JunyanKang/retina-atlas-data@atlas-v1"]
+    : [base];
+  if (preferredSource !== base) sources.reverse();
+  for (const [index, source] of sources.entries()) {
+    const request = new AbortController();
+    const cancel = () => request.abort();
+    if (signal.aborted) throw new DOMException("Cancelled", "AbortError");
+    signal.addEventListener("abort", cancel, { once: true });
+    const timer = window.setTimeout(cancel, index === 0 && sources.length > 1 ? 12000 : 45000);
+    try {
+      const response = await fetch(`${source}/${path}`, { signal: request.signal });
+      if (!response.ok) throw Error(`HTTP ${response.status}`);
+      const b = new Uint8Array(await response.arrayBuffer());
+      const decoded = b[0] === 31 && b[1] === 139 ? gunzipSync(b) : b;
+      preferredSource = source;
+      return decoded;
+    } catch (error) {
+      if (signal.aborted) throw error;
+      if (index === sources.length - 1) throw Error("Could not download the atlas data. Check your connection and retry.");
+    } finally {
+      clearTimeout(timer);
+      signal.removeEventListener("abort", cancel);
+    }
+  }
+  throw Error("Atlas data source unavailable.");
 }
 async function json<T>(path: string, signal: AbortSignal): Promise<T> {
   return JSON.parse(strFromU8(await bytes(path, signal)));
