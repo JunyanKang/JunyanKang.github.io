@@ -84,7 +84,26 @@ async function load(key: string, signal: AbortSignal, embedding: boolean) {
     Math.min(...bounds.map((b) => b[2])),
     Math.max(...bounds.map((b) => b[3])),
   ];
-  return { key, manifest, geo, layers, sets, bounds, common };
+  const annotations = sets.map((indices) => {
+    const types = manifest.types.map(() => ({ count: 0, x: 0, y: 0, anchor: -1, distance: Infinity }));
+    for (const i of indices) {
+      const t = types[geo.type[i]];
+      t.count++;
+      t.x += geo.x[i];
+      t.y += geo.y[i];
+    }
+    // A centroid can lie in the empty interior of a curved retinal layer.
+    for (const i of indices) {
+      const t = types[geo.type[i]];
+      const distance = (geo.x[i] - t.x / t.count) ** 2 + (geo.y[i] - t.y / t.count) ** 2;
+      if (distance < t.distance) {
+        t.distance = distance;
+        t.anchor = i;
+      }
+    }
+    return types;
+  });
+  return { key, manifest, geo, layers, sets, bounds, common, annotations };
 }
 type Data = Awaited<ReturnType<typeof load>>;
 async function query(d: Data, gene: string, signal: AbortSignal) {
@@ -166,11 +185,13 @@ function Plot({
   g,
   result,
   spatial,
+  focus = -1,
 }: {
   d: Data;
   g: number;
   result?: Result;
   spatial: boolean;
+  focus?: number;
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
@@ -196,17 +217,18 @@ function Plot({
         1,
         Math.min(2.4, Math.sqrt((w * h) / d.sets[g].length) * 0.65),
       );
-      for (const pass of result ? [0, 1] : [0])
+      for (const pass of result || focus >= 0 ? [0, 1] : [0])
         for (const i of d.sets[g]) {
           const v = result?.values[i] ?? NaN;
           if (result && Number(v > 0) !== pass) continue;
+          if (!result && focus >= 0 && Number(d.geo.type[i] === focus) !== pass) continue;
           ctx.fillStyle = result
             ? v > 0
               ? ramp[Math.min(100, Math.ceil((100 * v) / result.cap))]
               : Number.isNaN(v)
                 ? "#c8bba9"
                 : "#d5dbdc"
-            : typeColor(d.geo.type[i]);
+            : focus >= 0 && pass === 0 ? "#dce1e1" : typeColor(d.geo.type[i]);
           ctx.fillRect(
             w / 2 + (d.geo.x[i] - (x0 + x1) / 2) * s - dot / 2,
             h / 2 +
@@ -216,18 +238,49 @@ function Plot({
             dot,
           );
         }
+      if (!result) {
+        const present = d.annotations[g].map((t, id) => ({ ...t, id }))
+          .filter(t => t.count && (focus < 0 || t.id === focus))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, w < 200 ? 2 : 3)
+          .sort((a, b) => d.geo.x[a.anchor] - d.geo.x[b.anchor]);
+        ctx.font = "600 11px sans-serif";
+        present.forEach((t, index) => {
+          const x = w / 2 + (d.geo.x[t.anchor] - (x0 + x1) / 2) * s;
+          const y = h / 2 + (spatial ? 1 : -1) * (d.geo.y[t.anchor] - (y0 + y1) / 2) * s;
+          const slot = w / present.length;
+          const text = d.manifest.types[t.id].replaceAll("_", " ");
+          const box = Math.min(slot - 4, ctx.measureText(text).width + 8);
+          const center = slot * (index + 0.5);
+          const top = y > h / 2 ? h - 17 : 2;
+          ctx.strokeStyle = "#324746";
+          ctx.beginPath();
+          ctx.moveTo(center, top + 7);
+          ctx.lineTo(x, y);
+          ctx.stroke();
+          ctx.fillStyle = typeColor(t.id);
+          ctx.beginPath();
+          ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#f9fbf8";
+          ctx.fillRect(center - box / 2, top, box, 15);
+          ctx.textAlign = "center";
+          ctx.fillStyle = "#182d31";
+          ctx.fillText(text, center, top + 11, box - 4);
+        });
+      }
     }
     const observer = new ResizeObserver(draw);
     observer.observe(el);
     draw();
     return () => observer.disconnect();
-  }, [d, g, result, spatial]);
+  }, [d, g, result, spatial, focus]);
   return (
     <figure>
       <figcaption>
         {result?.mode === "Activity"
           ? "ATAC activity"
-          : result?.mode || "Cell types"}
+          : result?.mode || (focus < 0 ? "Cell annotation" : `${d.manifest.types[focus]} · ${d.annotations[g][focus].count.toLocaleString()} cells`)}
       </figcaption>
       <canvas
         ref={ref}
@@ -254,6 +307,7 @@ export function RetinaFacets({
   const [retry, setRetry] = useState(0);
   const [metric, setMetric] = useState("mean");
   const [embedding, setEmbedding] = useState(false);
+  const [focus, setFocus] = useState(-1);
   useEffect(() => {
     const c = new AbortController();
     setData(undefined);
@@ -302,7 +356,7 @@ export function RetinaFacets({
     <div className="retina-facets">
       <label>
         Cohort{" "}
-        <select value={key} onChange={(e) => setKey(e.target.value)}>
+        <select value={key} onChange={(e) => { setFocus(-1); setKey(e.target.value); }}>
           {cohorts[kind].map(([id, title]) => (
             <option key={id} value={id}>
               {title}
@@ -350,6 +404,17 @@ export function RetinaFacets({
               </span>
             ))}
           </div>
+          {kind === "spatial" && (
+            <fieldset className="retina-annotation-key">
+              <legend>Highlight cell type</legend>
+              <button type="button" aria-pressed={focus === -1} onClick={() => setFocus(-1)}>All types</button>
+              {d.manifest.types.map((name, i) => (
+                <button key={name} type="button" aria-pressed={focus === i} onClick={() => setFocus(i)}>
+                  <i style={{ background: typeColor(i) }} />{name.replaceAll("_", " ")}
+                </button>
+              ))}
+            </fieldset>
+          )}
           <div
             className={`retina-grid ${order.some((g, i) => i > 0 && d.manifest.groups[g].age === d.manifest.groups[order[i - 1]].age) ? "retina-grid--replicates" : ""}`}
           >
@@ -361,7 +426,7 @@ export function RetinaFacets({
                 </header>
                 <div className="retina-pair">
                   {kind === "spatial" && (
-                    <Plot d={d} g={g} spatial={!embedding} />
+                    <Plot d={d} g={g} spatial={!embedding} focus={focus} />
                   )}{" "}
                   {res.list.map((r) => (
                     <Plot
@@ -376,19 +441,6 @@ export function RetinaFacets({
               </section>
             ))}
           </div>
-          {kind === "spatial" && (
-            <details>
-              <summary>Cell-type key</summary>
-              <div className="retina-key">
-                {d.manifest.types.map((t, i) => (
-                  <span key={t}>
-                    <b style={{ background: typeColor(i) }} />
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </details>
-          )}
           <h4>
             {key === "mouse_dev_multi"
               ? "Cluster summary"

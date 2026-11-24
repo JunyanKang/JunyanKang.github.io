@@ -105,3 +105,35 @@
 .retina-facets {
   container-type: inline-size;
 }
+.retina-annotation-key {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.retina-annotation-key legend { margin-bottom: 4px; font-weight: 650; }
+.retina-annotation-key button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  margin: 2px 4px 2px 0;
+  padding: 5px 9px;
+  color: inherit;
+  background: transparent;
+  border: 1px solid #536665;
+  border-radius: 5px;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.retina-annotation-key button[aria-pressed="true"] {
+  color: #142522;
+  background: #dcedd3;
+}
+.retina-annotation-key i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+}
