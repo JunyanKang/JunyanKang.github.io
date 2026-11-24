@@ -137,3 +137,22 @@
   border-radius: 50%;
   flex: none;
 }
+.retina-view-tools {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: 6px;
+}
+.retina-view-tools button {
+  min-height: 30px;
+  min-width: 30px;
+  background: transparent;
+  border: 1px solid #536665;
+  border-radius: 4px;
+  color: inherit;
+  cursor: pointer;
+}
+.retina-view-tools button:disabled { opacity: .5; }
+.retina-view-tools output { font-variant-numeric: tabular-nums; font-size: 13px; }
+.retina-pair canvas { cursor: grab; }
+.retina-pair canvas:active { cursor: grabbing; }

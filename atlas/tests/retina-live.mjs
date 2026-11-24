@@ -18,6 +18,14 @@ try {
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${key}: desktop overflow`);
       const scales=await page.locator('.retina-scales').innerText(); assert.ok(scales.includes('≥'));assert.equal(await page.locator('.retina-pair canvas').count(),2*n);
       if(key==='monkey_age_space') {
+        const sample = page.locator('.retina-grid section').first();
+        await sample.getByRole('button', {name: 'Zoom in'}).click();
+        assert.equal(await sample.locator('output').innerText(), '2×');
+        const transforms = await sample.locator('canvas').evaluateAll(nodes => nodes.map(node => [node.__zoom.x, node.__zoom.y, node.__zoom.k]));
+        assert.deepEqual(transforms[0], transforms[1]);
+        assert.equal(transforms[0][2], 2);
+        await sample.getByRole('button', {name: 'Reset view'}).click();
+        assert.equal(await sample.locator('output').innerText(), '1×');
         const row=page.getByRole('rowheader',{name:'RPE',exact:true}).locator('..');assert.equal(await row.locator('td').first().innerText(),'0.11');await page.getByLabel('Statistic').selectOption('n');assert.equal(await row.locator('td').first().innerText(),'709');await page.getByLabel('Statistic').selectOption('mean');
       }
       if(kind==='spatial') {

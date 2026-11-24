@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { gunzipSync, strFromU8 } from "fflate";
+import { select } from "d3-selection";
+import { zoom, zoomIdentity, zoomTransform } from "d3-zoom";
+import type { ReactNode } from "react";
 import "./retina-facets.css";
 
 type Mode = "RNA" | "Activity";
@@ -180,6 +183,40 @@ const ramp = Array.from(
   (_, i) =>
     `rgb(${Math.round(212 - i * 1.85)},${Math.round(232 - i * 1.34)},${Math.round(221 - i * 1.35)})`,
 );
+function SampleView({ title, count, children }: { title: string; count: number; children: ReactNode }) {
+  const pair = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+  const command = useRef<(factor: number) => void>(() => {});
+  useEffect(() => {
+    const canvases = Array.from(pair.current!.querySelectorAll("canvas"));
+    const behavior = zoom<HTMLCanvasElement, unknown>().scaleExtent([1, 32])
+      .filter(e => !e.button && (e.type !== "wheel" || e.ctrlKey || e.metaKey))
+      .on("zoom", function (event) {
+        for (const el of canvases) {
+          select(el).property("__zoom", event.transform);
+          el.dispatchEvent(new Event("viewchange"));
+        }
+        setScale(event.transform.k);
+      });
+    canvases.forEach(el => select(el).call(behavior));
+    command.current = factor => {
+      const node = select(canvases[0]);
+      if (!factor) node.call(behavior.transform, zoomIdentity);
+      else node.call(behavior.scaleBy, factor);
+    };
+    return () => { canvases.forEach(el => select(el).on(".zoom", null)); };
+  }, []);
+  return <section>
+    <header><strong>{title}</strong><small>{count.toLocaleString()} cells</small></header>
+    <div className="retina-pair" ref={pair}>{children}</div>
+    <div className="retina-view-tools" role="group" aria-label={`${title} view`}>
+      <button type="button" aria-label="Zoom out" disabled={scale <= 1} onClick={() => command.current(0.5)}>−</button>
+      <output>{Number(scale.toFixed(1))}×</output>
+      <button type="button" aria-label="Zoom in" disabled={scale >= 32} onClick={() => command.current(2)}>+</button>
+      <button type="button" onClick={() => command.current(0)}>Reset view</button>
+    </div>
+  </section>;
+}
 function Plot({
   d,
   g,
@@ -203,11 +240,13 @@ function Plot({
         h = el.clientHeight;
       if (!w || !h) return;
       const ratio = Math.min(window.devicePixelRatio || 1, 2);
-      el.width = Math.ceil(w * ratio);
-      el.height = Math.ceil(h * ratio);
+      if (el.width !== Math.ceil(w * ratio)) el.width = Math.ceil(w * ratio);
+      if (el.height !== Math.ceil(h * ratio)) el.height = Math.ceil(h * ratio);
       const ctx = el.getContext("2d");
       if (!ctx) return;
-      ctx.scale(ratio, ratio);
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+      const view = zoomTransform(el);
       const [x0, x1, y0, y1] = spatial ? d.bounds[g] : d.common;
       const s = Math.min(
         (w - 8) / Math.max(x1 - x0, 1e-8),
@@ -217,11 +256,16 @@ function Plot({
         1,
         Math.min(2.4, Math.sqrt((w * h) / d.sets[g].length) * 0.65),
       );
+      const sx = s * view.k, sy = spatial ? sx : -sx;
+      const ox = view.applyX(w / 2) - ((x0 + x1) / 2) * sx;
+      const oy = view.applyY(h / 2) - ((y0 + y1) / 2) * sy;
       for (const pass of result || focus >= 0 ? [0, 1] : [0])
         for (const i of d.sets[g]) {
           const v = result?.values[i] ?? NaN;
           if (result && Number(v > 0) !== pass) continue;
           if (!result && focus >= 0 && Number(d.geo.type[i] === focus) !== pass) continue;
+          const x = ox + d.geo.x[i] * sx, y = oy + d.geo.y[i] * sy;
+          if (x < -dot || x > w + dot || y < -dot || y > h + dot) continue;
           ctx.fillStyle = result
             ? v > 0
               ? ramp[Math.min(100, Math.ceil((100 * v) / result.cap))]
@@ -229,14 +273,7 @@ function Plot({
                 ? "#c8bba9"
                 : "#d5dbdc"
             : focus >= 0 && pass === 0 ? "#dce1e1" : typeColor(d.geo.type[i]);
-          ctx.fillRect(
-            w / 2 + (d.geo.x[i] - (x0 + x1) / 2) * s - dot / 2,
-            h / 2 +
-              (spatial ? 1 : -1) * (d.geo.y[i] - (y0 + y1) / 2) * s -
-              dot / 2,
-            dot,
-            dot,
-          );
+          ctx.fillRect(x - dot / 2, y - dot / 2, dot, dot);
         }
       if (!result) {
         const present = d.annotations[g].map((t, id) => ({ ...t, id }))
@@ -246,8 +283,9 @@ function Plot({
           .sort((a, b) => d.geo.x[a.anchor] - d.geo.x[b.anchor]);
         ctx.font = "600 11px sans-serif";
         present.forEach((t, index) => {
-          const x = w / 2 + (d.geo.x[t.anchor] - (x0 + x1) / 2) * s;
-          const y = h / 2 + (spatial ? 1 : -1) * (d.geo.y[t.anchor] - (y0 + y1) / 2) * s;
+          const x = ox + d.geo.x[t.anchor] * sx;
+          const y = oy + d.geo.y[t.anchor] * sy;
+          if (x < 0 || x > w || y < 0 || y > h) return;
           const slot = w / present.length;
           const text = d.manifest.types[t.id].replaceAll("_", " ");
           const box = Math.min(slot - 4, ctx.measureText(text).width + 8);
@@ -270,10 +308,24 @@ function Plot({
         });
       }
     }
-    const observer = new ResizeObserver(draw);
+    let visible = false, frame = 0;
+    function schedule() {
+      if (visible && !frame) frame = requestAnimationFrame(() => { frame = 0; draw(); });
+    }
+    const visibility = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      schedule();
+    }, { rootMargin: "160px" });
+    visibility.observe(el);
+    const observer = new ResizeObserver(schedule);
     observer.observe(el);
-    draw();
-    return () => observer.disconnect();
+    el.addEventListener("viewchange", schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      visibility.disconnect();
+      el.removeEventListener("viewchange", schedule);
+    };
   }, [d, g, result, spatial, focus]);
   return (
     <figure>
@@ -419,12 +471,7 @@ export function RetinaFacets({
             className={`retina-grid ${order.some((g, i) => i > 0 && d.manifest.groups[g].age === d.manifest.groups[order[i - 1]].age) ? "retina-grid--replicates" : ""}`}
           >
             {order.map((g) => (
-              <section key={g}>
-                <header>
-                  <strong>{label(g)}</strong>{" "}
-                  <small>{d.sets[g].length.toLocaleString()} cells</small>
-                </header>
-                <div className="retina-pair">
+              <SampleView key={g} title={label(g)} count={d.sets[g].length}>
                   {kind === "spatial" && (
                     <Plot d={d} g={g} spatial={!embedding} focus={focus} />
                   )}{" "}
@@ -437,8 +484,7 @@ export function RetinaFacets({
                       spatial={kind === "spatial" && !embedding}
                     />
                   ))}
-                </div>
-              </section>
+              </SampleView>
             ))}
           </div>
           <h4>
