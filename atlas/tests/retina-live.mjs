@@ -16,7 +16,15 @@ try {
       const card = await page.locator('.expression-atlas-dataset-card').boundingBox();
       assert.ok(grid.width >= card.width - 48, `${key}: plots must span the result card`);
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${key}: desktop overflow`);
-      const scales=await page.locator('.retina-scales').innerText(); assert.ok(scales.includes('≥'));assert.equal(await page.locator('.retina-pair canvas').count(),2*n);
+      const scales=await page.locator('.retina-scales').innerText(); assert.ok(scales.includes('≥'));assert.equal(await page.locator('.retina-pair canvas').count(),(kind === 'multi' ? 3 : 2)*n);
+      if (kind === 'multi') {
+        const sample = page.locator('.retina-grid section').first();
+        const target = key === 'mouse_dev_multi' ? 'Cluster 1' : 'Rod';
+        await page.getByRole('button', {name: target, exact: true}).click();
+        assert.ok((await sample.locator('figcaption').first().innerText()).startsWith(target + ' · '));
+        await sample.getByRole('button', {name: 'Zoom in'}).click();
+        assert.deepEqual(await sample.locator('canvas').evaluateAll(nodes => nodes.map(node => node.__zoom.k)), [2,2,2]);
+      }
       if(key==='monkey_age_space') {
         const sample = page.locator('.retina-grid section').first();
         await sample.getByRole('button', {name: 'Zoom in'}).click();

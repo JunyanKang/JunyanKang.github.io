@@ -333,11 +333,11 @@ function Plot({
       <figcaption>
         {result?.mode === "Activity"
           ? "ATAC activity"
-          : result?.mode || (focus < 0 ? "Cell annotation" : `${d.manifest.types[focus]} · ${d.annotations[g][focus].count.toLocaleString()} cells`)}
+          : result?.mode || (focus < 0 ? (d.key === "mouse_dev_multi" ? "Cluster annotation" : "Cell annotation") : `${d.manifest.types[focus]} · ${d.annotations[g][focus].count.toLocaleString()} cells`)}
       </figcaption>
       <canvas
         ref={ref}
-        aria-label={`${d.manifest.groups[g].age} ${result?.mode || "cell types"} map`}
+        aria-label={`${d.manifest.groups[g].sample} ${result?.mode || (d.key === "mouse_dev_multi" ? "clusters" : "cell types")} map`}
       />
     </figure>
   );
@@ -468,25 +468,21 @@ export function RetinaFacets({
               </span>
             ))}
           </div>
-          {kind === "spatial" && (
             <fieldset className="retina-annotation-key">
-              <legend>Highlight cell type</legend>
-              <button type="button" aria-pressed={focus === -1} onClick={() => setFocus(-1)}>All types</button>
+              <legend>{key === "mouse_dev_multi" ? "Highlight cluster" : "Highlight cell type"}</legend>
+              <button type="button" aria-pressed={focus === -1} onClick={() => setFocus(-1)}>{key === "mouse_dev_multi" ? "All clusters" : "All types"}</button>
               {d.manifest.types.map((name, i) => (
                 <button key={name} type="button" aria-pressed={focus === i} onClick={() => setFocus(i)}>
                   <i style={{ background: typeColor(i) }} />{name.replaceAll("_", " ")}
                 </button>
               ))}
             </fieldset>
-          )}
           <div
-            className={`retina-grid ${order.some((g, i) => i > 0 && d.manifest.groups[g].age === d.manifest.groups[order[i - 1]].age) ? "retina-grid--replicates" : ""}`}
+            className={`retina-grid ${kind === "multi" ? "retina-grid--triplets" : order.some((g, i) => i > 0 && d.manifest.groups[g].age === d.manifest.groups[order[i - 1]].age) ? "retina-grid--replicates" : ""}`}
           >
             {order.map((g) => (
               <SampleView key={g} title={label(g)} count={d.sets[g].length}>
-                  {kind === "spatial" && (
-                    <Plot d={d} g={g} spatial={!embedding} focus={focus} />
-                  )}{" "}
+                  <Plot d={d} g={g} spatial={kind === "spatial" && !embedding} focus={focus} />
                   {res.list.map((r) => (
                     <Plot
                       key={r.mode}

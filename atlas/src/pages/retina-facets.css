@@ -25,6 +25,10 @@
   border-top: 1px solid #a7b7b5;
   padding-top: 0.5rem;
 }
+.retina-grid--triplets { grid-template-columns: minmax(0, 1fr); }
+@container (max-width: 560px) {
+  .retina-grid--triplets .retina-pair { flex-direction: column; gap: 8px; }
+}
 .retina-grid header,
 .retina-scales,
 .retina-key {
