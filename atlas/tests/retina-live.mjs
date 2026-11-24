@@ -12,6 +12,10 @@ try {
     for(const [key,n] of Object.entries(cohorts)) {
       await page.getByLabel('Cohort').selectOption(key);
       await page.waitForFunction(n=>document.querySelectorAll('.retina-grid header').length===n,n);
+      const grid = await page.locator('.retina-grid').boundingBox();
+      const card = await page.locator('.expression-atlas-dataset-card').boundingBox();
+      assert.ok(grid.width >= card.width - 48, `${key}: plots must span the result card`);
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${key}: desktop overflow`);
       const scales=await page.locator('.retina-scales').innerText(); assert.ok(scales.includes('≥'));assert.equal(await page.locator('.retina-pair canvas').count(),2*n);
       if(key==='monkey_age_space') {
         const row=page.getByRole('rowheader',{name:'RPE',exact:true}).locator('..');assert.equal(await row.locator('td').first().innerText(),'0.11');await page.getByLabel('Statistic').selectOption('n');assert.equal(await row.locator('td').first().innerText(),'709');await page.getByLabel('Statistic').selectOption('mean');

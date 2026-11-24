@@ -1,5 +1,7 @@
 .retina-facets {
+  grid-column: 1 / -1;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
   min-width: 0;
 }
@@ -15,7 +17,7 @@
 }
 .retina-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr));
   gap: 1rem;
 }
 .retina-grid section {
@@ -95,7 +97,7 @@
 .retina-key {
   padding: 0.5rem 0;
 }
-@container (min-width: 680px) {
+@container (min-width: 896px) {
   .retina-grid--replicates {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
