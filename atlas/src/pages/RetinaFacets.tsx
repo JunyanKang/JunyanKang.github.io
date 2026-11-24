@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { gunzipSync, strFromU8 } from "fflate";
+import { useSearchParams } from "react-router-dom";
 import { select } from "d3-selection";
 import { zoom, zoomIdentity, zoomTransform } from "d3-zoom";
 import type { ReactNode } from "react";
@@ -348,7 +349,13 @@ export function RetinaFacets({
   kind: keyof typeof cohorts;
   gene: string;
 }) {
-  const [key, setKey] = useState(cohorts[kind][0][0]);
+  const [params, setParams] = useSearchParams();
+  const key = (cohorts[kind].find(([id]) => id === params.get("cohort")) ?? cohorts[kind][0])[0];
+  const updateView = (field: string, value: string) => {
+    const next = new URLSearchParams(params);
+    next.set(field, value);
+    setParams(next);
+  };
   const [d, setData] = useState<Data>();
   const [res, setRes] = useState<{
     gene: string;
@@ -358,8 +365,10 @@ export function RetinaFacets({
   const [error, setError] = useState("");
   const [retry, setRetry] = useState(0);
   const [metric, setMetric] = useState("mean");
-  const [embedding, setEmbedding] = useState(false);
-  const [focus, setFocus] = useState(-1);
+  const embedding = kind === "spatial" && params.get("coordinates") === "umap";
+  const [highlight, setHighlight] = useState({ key, index: -1 });
+  const focus = highlight.key === key ? highlight.index : -1;
+  const setFocus = (index: number) => setHighlight({ key, index });
   useEffect(() => {
     const c = new AbortController();
     setData(undefined);
@@ -406,9 +415,10 @@ export function RetinaFacets({
   };
   return (
     <div className="retina-facets">
+      <div className="retina-toolbar" id="atlas-map-controls">
       <label>
         Cohort{" "}
-        <select value={key} onChange={(e) => { setFocus(-1); setKey(e.target.value); }}>
+        <select value={key} onChange={(e) => { setFocus(-1); updateView("cohort", e.target.value); }}>
           {cohorts[kind].map(([id, title]) => (
             <option key={id} value={id}>
               {title}
@@ -421,13 +431,15 @@ export function RetinaFacets({
           Coordinates{" "}
           <select
             value={embedding ? "umap" : "tissue"}
-            onChange={(e) => setEmbedding(e.target.value === "umap")}
+            onChange={(e) => updateView("coordinates", e.target.value)}
           >
             <option value="tissue">Tissue section</option>
             <option value="umap">RNA UMAP</option>
           </select>
         </label>
       )}
+      {d?.key === key && res?.key === key && res.gene === gene && <button type="button" className="retina-jump" onClick={() => document.getElementById("atlas-statistics")?.focus()}>View statistics ↓</button>}
+      </div>
       {error ? (
         <p role="alert">
           {error} <button onClick={() => setRetry((n) => n + 1)}>Retry</button>
@@ -487,6 +499,7 @@ export function RetinaFacets({
               </SampleView>
             ))}
           </div>
+          <div className="retina-toolbar retina-statistics" id="atlas-statistics" tabIndex={-1}>
           <h4>
             {key === "mouse_dev_multi"
               ? "Cluster summary"
@@ -500,6 +513,8 @@ export function RetinaFacets({
               <option value="n">Measured cells</option>
             </select>
           </label>
+          <button type="button" className="retina-jump" onClick={() => document.querySelector<HTMLSelectElement>("#atlas-map-controls select")?.focus()}>Back to maps ↑</button>
+          </div>
           {res.list.map((r) => {
             const value = (s: { sum: number; n: number; pos: number }) =>
               metric === "mean"

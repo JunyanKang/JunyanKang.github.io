@@ -1505,7 +1505,14 @@ export const ExpressionAtlasPage = () => {
   const [queryInput, setQueryInput] = useState(initialGene);
   const [submittedGene, setSubmittedGene] = useState(initialGene);
   const [queryAttempt, setQueryAttempt] = useState(0);
-  const [selectedDatasetKey, setSelectedDatasetKey] = useState<string>(() => searchParams.get('dataset') || '');
+  const selectedDatasetKey = searchParams.get('dataset') || '';
+  const selectDataset = (key: string) => {
+    const params = new URLSearchParams(searchParams);
+    params.set('dataset', key);
+    params.delete('cohort');
+    params.delete('coordinates');
+    setSearchParams(params);
+  };
   const [datasetViewModes, setDatasetViewModes] = useState<Record<string, DatasetViewMode>>({});
   const [orthologPage, setOrthologPage] = useState(1);
   const [queryState, setQueryState] = useState<{
@@ -1519,10 +1526,9 @@ export const ExpressionAtlasPage = () => {
   });
 
   useEffect(() => {
-    const geneFromUrl = searchParams.get('gene')?.trim() || 'Pax6';
-    setQueryInput(geneFromUrl);
-    setSubmittedGene(geneFromUrl);
-  }, [searchParams]);
+    setQueryInput(initialGene);
+    setSubmittedGene(initialGene);
+  }, [initialGene]);
 
   useEffect(() => {
     setOrthologPage(1);
@@ -1556,7 +1562,7 @@ export const ExpressionAtlasPage = () => {
     if (!nextGene) return;
     const nextParams = new URLSearchParams(searchParams);
     nextParams.set('gene', nextGene);
-    setSearchParams(nextParams, { replace: true });
+    setSearchParams(nextParams, { replace: nextGene === submittedGene });
     setSubmittedGene(nextGene);
     if (nextGene === submittedGene) setQueryAttempt((attempt) => attempt + 1);
   };
@@ -1605,12 +1611,9 @@ export const ExpressionAtlasPage = () => {
     return panels.sort((left, right) => (datasetPanelOrder[left.key] ?? 999) - (datasetPanelOrder[right.key] ?? 999));
   }, [queryState.data]);
   const activePanel = useMemo(
-    () => datasetPanels.find((panel) => panel.key === selectedDatasetKey) ?? datasetPanels[0] ?? null,
+    () => datasetPanels.find((panel) => panel.key === retainDatasetSelection(datasetPanels, selectedDatasetKey)) ?? null,
     [datasetPanels, selectedDatasetKey]
   );
-  useEffect(() => {
-    setSelectedDatasetKey(previous => retainDatasetSelection(datasetPanels, previous));
-  }, [datasetPanels]);
   const orthologPageSize = 3;
   const orthologTotalPages = Math.max(1, Math.ceil((queryState.data?.orthologs.length ?? 0) / orthologPageSize));
   const visibleOrthologs = useMemo(
@@ -1648,7 +1651,9 @@ export const ExpressionAtlasPage = () => {
             <div className="atlas-suggestions"><span>Try</span>{['Pax6', 'Rax', 'Vsx2', 'Otx2', 'Crx', 'Rho'].map((gene) => (
               <button type="button" key={gene} onClick={() => {
                 setQueryInput(gene);
-                setSearchParams({ gene }, { replace: true });
+                const params = new URLSearchParams(searchParams);
+                params.set('gene', gene);
+                setSearchParams(params, { replace: gene === submittedGene });
                 if (gene === submittedGene) setQueryAttempt((attempt) => attempt + 1);
               }}>{gene}</button>
             ))}</div>
@@ -1672,7 +1677,7 @@ export const ExpressionAtlasPage = () => {
           <div className="expression-atlas-stack">
             <div className="expression-atlas-dataset-picker">
               <label htmlFor="atlas-dataset">Dataset</label>
-              <select id="atlas-dataset" value={activePanel?.key ?? ''} onChange={(event) => setSelectedDatasetKey(event.target.value)}>
+              <select id="atlas-dataset" value={activePanel?.key ?? ''} onChange={(event) => selectDataset(event.target.value)}>
                 {datasetPanels.map(panel => <option key={panel.key} value={panel.key}>{panel.title}</option>)}
               </select>
             </div>
@@ -1683,7 +1688,7 @@ export const ExpressionAtlasPage = () => {
                   aria-pressed={activePanel?.key === panel.key}
                   type="button"
                   className={`tab-button ${activePanel?.key === panel.key ? 'is-active' : ''}`}
-                  onClick={() => setSelectedDatasetKey(panel.key)}
+                  onClick={() => selectDataset(panel.key)}
                 >
                   {panel.title}
                 </button>

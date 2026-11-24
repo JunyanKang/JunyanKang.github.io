@@ -275,3 +275,39 @@ main:focus { outline:none; }
 }
 
 .atlas-query { margin-bottom: 16px; }
+.expression-atlas-dataset-tabs {
+  align-items: center;
+  padding: 5px;
+  border: 1px solid var(--kl-border);
+  border-radius: var(--kl-radius);
+  background: var(--kl-surface);
+}
+.expression-atlas-dataset-tabs .tab-button { flex: 1 1 auto; }
+.retina-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  padding-block: 8px;
+  border-block: 1px solid var(--kl-border);
+  scroll-margin-top: 100px;
+}
+.retina-toolbar label { display: inline-flex; align-items: center; gap: 8px; min-width: 0; font-size: 13px; }
+.retina-toolbar select, .retina-toolbar button {
+  min-height: 36px;
+  padding: 5px 10px;
+  font: inherit;
+  border: 1px solid var(--kl-border-strong);
+  border-radius: var(--kl-radius);
+  color: var(--kl-ink);
+  background: var(--kl-paper);
+}
+.retina-toolbar .retina-jump { margin-inline-start: auto; font-size: 13px; cursor: pointer; }
+.retina-statistics h4 { margin-inline-end: auto; }
+@media (max-width: 760px) {
+  .expression-atlas-dataset-picker { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 10px; }
+  .atlas-query-context { display: flex; flex-flow: row wrap; align-items: center; justify-content: space-between; }
+  .retina-toolbar { gap: 8px; }
+  .retina-toolbar label { display: grid; gap: 3px; flex: 1 1 120px; }
+  .retina-toolbar select { width: 100%; min-height: 40px; }
+}
