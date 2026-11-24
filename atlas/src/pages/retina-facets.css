@@ -98,6 +98,11 @@
 .retina-heat tbody th {
   text-align: left;
 }
+.retina-dot-cell { background: #f7faf8; color: #586865; height: 28px; }
+.retina-dot { display: inline-block; aspect-ratio: 1; border-radius: 50%; vertical-align: middle; }
+.retina-dot-legend, .retina-dot-legend span { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.retina-dot-legend { gap: 6px 14px; margin-block: 6px 10px; font-size: 13px; }
+.retina-dot-ramp { width: 60px; height: 8px; background: linear-gradient(to right, #d4e8dd, #1b6256); }
 .retina-key {
   padding: 0.5rem 0;
 }

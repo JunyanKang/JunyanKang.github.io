@@ -9,6 +9,13 @@ try {
   await page.goto(new URL('/expression-atlas/?gene=PAX6&dataset=spatial', process.env.ATLAS_TEST_ORIGIN || 'http://127.0.0.1:4387').href);
   for (const [kind,cohorts] of Object.entries({spatial:{monkey_age_space:8,mouse_dev_space:8,mouse_age_space:10,human_age_space:3,monkey_dev_space:6},multi:{monkey_age_multi:4,monkey_dev_multi:9,mouse_dev_multi:13}})) {
     await page.getByRole('button',{name:kind==='multi'?'Single-cell multiomics':'Spatial RNA',exact:true}).click();
+    assert.equal(await page.getByRole('link', {name:'Dataset manifest'}).count(), 0);
+    if (kind === 'multi') {
+      assert.equal(await page.getByRole('combobox', {name:'View',exact:true}).inputValue(), 'combined');
+      await page.getByRole('button', {name:'All time points', exact:true}).waitFor();
+      assert.equal(await page.locator('.retina-pair canvas').count(), 4);
+      await page.getByRole('combobox', {name:'View',exact:true}).selectOption('facet');
+    }
     for(const [key,n] of Object.entries(cohorts)) {
       await page.getByLabel('Cohort').selectOption(key);
       await page.waitForFunction(n=>document.querySelectorAll('.retina-grid header').length===n,n);
@@ -34,7 +41,9 @@ try {
         assert.equal(transforms[0][2], 2);
         await sample.getByRole('button', {name: 'Reset view'}).click();
         assert.equal(await sample.locator('output').innerText(), '1×');
-        const row=page.getByRole('rowheader',{name:'RPE',exact:true}).locator('..');assert.equal(await row.locator('td').first().innerText(),'0.11');await page.getByLabel('Statistic').selectOption('n');assert.equal(await row.locator('td').first().innerText(),'709');await page.getByLabel('Statistic').selectOption('mean');
+        const cell = page.getByRole("rowheader", {name:"RPE", exact:true}).locator("..").locator("td").first();
+        assert.match(await cell.getAttribute("title"), /mean 0\.11 .*\/709 measured cells/);
+        assert.ok(await cell.locator(".retina-dot").evaluate(dot => dot.getBoundingClientRect().width > 0));
       }
       if(kind==='spatial') {
         await page.getByLabel('Coordinates').selectOption('umap');

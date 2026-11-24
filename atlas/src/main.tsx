@@ -56,5 +56,5 @@ createRoot(document.getElementById('root')!).render(<>
     <Route path="/internal-resources" element={<ResourcesRedirect />} />
     <Route path="*" element={<Navigate to="/expression-atlas/" replace />} />
   </Routes></BrowserRouter></AtlasBoundary></main>
-  <footer className="atlas-footer"><div className="kl-footer-identity"><a href="https://app.pagescms.org/sign-in" aria-label="Admin sign-in" title="Admin sign-in"><LabLogo variant="symbol" /></a><p>Public expression atlas · Shanghai Ninth People's Hospital</p></div><div><a href="/assets/atlas/v1/manifest.json">Dataset manifest</a></div></footer>
+  <footer className="atlas-footer"><div className="kl-footer-identity"><a href="https://app.pagescms.org/sign-in" aria-label="Admin sign-in" title="Admin sign-in"><LabLogo variant="symbol" /></a><p>Public expression atlas · Shanghai Ninth People's Hospital</p></div></footer>
 </>);

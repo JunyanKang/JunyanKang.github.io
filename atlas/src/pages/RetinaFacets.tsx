@@ -88,8 +88,11 @@ async function load(key: string, signal: AbortSignal, embedding: boolean) {
     Math.min(...bounds.map((b) => b[2])),
     Math.max(...bounds.map((b) => b[3])),
   ];
-  const annotations = sets.map((indices) => {
-    const types = manifest.types.map(() => ({ count: 0, x: 0, y: 0, anchor: -1, distance: Infinity }));
+  const annotations = sets.map(indices => annotate(indices, geo, manifest.types));
+  return { key, manifest, geo, layers, sets, bounds, common, annotations };
+}
+function annotate(indices: number[], geo: Geometry, labels: string[]) {
+    const types = labels.map(() => ({ count: 0, x: 0, y: 0, anchor: -1, distance: Infinity }));
     for (const i of indices) {
       const t = types[geo.type[i]];
       t.count++;
@@ -106,10 +109,18 @@ async function load(key: string, signal: AbortSignal, embedding: boolean) {
       }
     }
     return types;
-  });
-  return { key, manifest, geo, layers, sets, bounds, common, annotations };
 }
 type Data = Awaited<ReturnType<typeof load>>;
+function combinedMaps(d: Data) {
+  const indices = d.geo.group.map((_, i) => i);
+  const ages = [...new Set(d.manifest.groups.map(group => group.age))].sort(natural.compare);
+  const ageByGroup = d.manifest.groups.map(group => ages.indexOf(group.age));
+  const timeGeo = { ...d.geo, type: d.geo.group.map(group => ageByGroup[group]) };
+  const manifest = { ...d.manifest, groups: [{ age: "All", sample: "All samples" }] };
+  const cells = { ...d, manifest, sets: [indices], annotations: [annotate(indices, d.geo, manifest.types)] };
+  const time = { ...cells, manifest: { ...manifest, types: ages }, geo: timeGeo, annotations: [annotate(indices, timeGeo, ages)] };
+  return { cells, time };
+}
 async function query(d: Data, gene: string, signal: AbortSignal) {
   const modes = [...new Set(d.manifest.layers.map((l) => l.mode))];
   return Promise.all(
@@ -224,12 +235,14 @@ function Plot({
   result,
   spatial,
   focus = -1,
+  time = false,
 }: {
   d: Data;
   g: number;
   result?: Result;
   spatial: boolean;
   focus?: number;
+  time?: boolean;
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
@@ -275,7 +288,9 @@ function Plot({
                 ? "#c8bba9"
                 : "#d5dbdc"
             : focus >= 0 && pass === 0 ? "#dce1e1" : typeColor(d.geo.type[i]);
-          ctx.fillRect(x - dot / 2, y - dot / 2, dot, dot);
+          ctx.beginPath();
+          ctx.arc(x, y, dot / 2, 0, Math.PI * 2);
+          ctx.fill();
         }
       if (!result) {
         const present = d.annotations[g].map((t, id) => ({ ...t, id }))
@@ -334,11 +349,11 @@ function Plot({
       <figcaption>
         {result?.mode === "Activity"
           ? "ATAC activity"
-          : result?.mode || (focus < 0 ? (d.key === "mouse_dev_multi" ? "Cluster annotation" : "Cell annotation") : `${d.manifest.types[focus]} · ${d.annotations[g][focus].count.toLocaleString()} cells`)}
+          : result?.mode || (focus < 0 ? (time ? "Time point" : d.key === "mouse_dev_multi" ? "Cluster annotation" : "Cell annotation") : `${time ? "Time point · " : ""}${d.manifest.types[focus]} · ${d.annotations[g][focus].count.toLocaleString()} cells`)}
       </figcaption>
       <canvas
         ref={ref}
-        aria-label={`${d.manifest.groups[g].sample} ${result?.mode || (d.key === "mouse_dev_multi" ? "clusters" : "cell types")} map`}
+        aria-label={`${d.manifest.groups[g].sample} ${result?.mode || (time ? "time point" : d.key === "mouse_dev_multi" ? "clusters" : "cell types")} map`}
       />
     </figure>
   );
@@ -365,8 +380,11 @@ export function RetinaFacets({
   }>();
   const [error, setError] = useState("");
   const [retry, setRetry] = useState(0);
-  const [metric, setMetric] = useState("mean");
   const embedding = kind === "spatial" && params.get("coordinates") === "umap";
+  const combined = kind === "multi" && params.get("view") !== "facet";
+  const merged = useMemo(() => combined && d?.key === key ? combinedMaps(d) : null, [combined, d, key]);
+  const [timeSelection, setTimeSelection] = useState({ key, index: -1 });
+  const ageFocus = timeSelection.key === key ? timeSelection.index : -1;
   const [highlight, setHighlight] = useState({ key, index: -1 });
   const focus = highlight.key === key ? highlight.index : -1;
   const setFocus = (index: number) => setHighlight({ key, index });
@@ -427,6 +445,11 @@ export function RetinaFacets({
           ))}
         </select>
       </label>
+      {kind === "multi" && <label>View
+        <select value={combined ? "combined" : "facet"} onChange={e => updateView("view", e.target.value)}>
+          <option value="combined">Combined</option><option value="facet">Facet</option>
+        </select>
+      </label>}
       {kind === "spatial" && (
         <label>
           Coordinates{" "}
@@ -478,10 +501,21 @@ export function RetinaFacets({
                 </button>
               ))}
             </fieldset>
+          {merged && <fieldset className="retina-annotation-key">
+            <legend>Highlight time point</legend>
+            {["All time points", ...merged.time.manifest.types].map((name, i) =>
+              <button type="button" key={name} aria-pressed={ageFocus === i - 1} onClick={() => setTimeSelection({ key, index: i - 1 })}>
+                {i > 0 && <i style={{ background: typeColor(i - 1) }} />}{name}
+              </button>)}
+          </fieldset>}
           <div
             className={`retina-grid ${kind === "multi" ? "retina-grid--triplets" : order.some((g, i) => i > 0 && d.manifest.groups[g].age === d.manifest.groups[order[i - 1]].age) ? "retina-grid--replicates" : ""}`}
           >
-            {order.map((g) => (
+            {merged ? <SampleView key="combined" title="All samples" count={d.manifest.n}>
+              <Plot d={merged.cells} g={0} spatial={false} focus={focus} />
+              <Plot d={merged.time} g={0} spatial={false} focus={ageFocus} time />
+              {res.list.map(r => <Plot key={r.mode} d={merged.cells} g={0} result={r} spatial={false} />)}
+            </SampleView> : order.map((g) => (
               <SampleView key={g} title={label(g)} count={d.sets[g].length}>
                   <Plot d={d} g={g} spatial={kind === "spatial" && !embedding} focus={focus} />
                   {res.list.map((r) => (
@@ -502,35 +536,22 @@ export function RetinaFacets({
               ? "Cluster summary"
               : "Cell-type summary"}
           </h4>
-          <label>
-            Statistic{" "}
-            <select value={metric} onChange={(e) => setMetric(e.target.value)}>
-              <option value="mean">Mean normalized signal</option>
-              <option value="pct">Detected cells (%)</option>
-              <option value="n">Measured cells</option>
-            </select>
-          </label>
           <button type="button" className="retina-jump" onClick={() => document.querySelector<HTMLSelectElement>("#atlas-map-controls select")?.focus()}>Back to maps ↑</button>
           </div>
           {res.list.map((r) => {
-            const value = (s: { sum: number; n: number; pos: number }) =>
-              metric === "mean"
-                ? s.sum / s.n
-                : metric === "pct"
-                  ? (100 * s.pos) / s.n
-                  : s.n;
-            const max =
-              metric === "pct"
-                ? 100
-                : Math.max(
-                    0,
-                    ...r.stats
-                      .flat()
-                      .filter((s) => s.n)
-                      .map(value),
-                  );
+            const max = Math.max(0, ...r.stats.flat().map(s => s.n ? s.sum / s.n : 0));
+            const hasMeasurements = r.stats.some(row => row.some(s => s.n));
+            const percentageLabel = r.mode === "RNA" ? "Expressing cells" : "Cells with positive activity";
             return (
               <div className="retina-heat" key={r.mode}>
+                <div className="retina-dot-legend">
+                  <strong>{percentageLabel}</strong>
+                  {[25, 50, 100].map(pct => <span key={pct}><i className="retina-dot" style={{width: 20 * Math.sqrt(pct / 100), background: ramp[75]}} />{pct}%</span>)}
+                  <span>0% = empty</span><span>NA = unavailable</span>
+                  {hasMeasurements && <span>Mean normalized {r.mode === "RNA" ? "expression" : "activity"} · 0
+                    {max > 0 && <><i className="retina-dot-ramp" />{Number(max.toPrecision(3))}</>}
+                  </span>}
+                </div>
                 <table>
                   <caption>
                     {r.mode === "Activity" ? "ATAC gene activity" : r.mode} ·{" "}
@@ -551,27 +572,16 @@ export function RetinaFacets({
                       <tr key={i}>
                         <th>{d.manifest.types[i]}</th>
                         {order.map((g) => {
-                          const s = row[g],
-                            v = value(s),
-                            f = max > 0 ? v / max : 0;
+                          const s = row[g];
+                          const mean = s.n ? s.sum / s.n : 0;
+                          const fraction = s.n ? s.pos / s.n : 0;
+                          const detail = s.n ? `${d.manifest.types[i]} · ${label(g)} · mean ${mean.toFixed(2)} · ${(100 * fraction).toFixed(1)}% (${s.pos}/${s.n} measured cells)` : "NA";
                           return (
-                            <td
-                              key={g}
-                              title={`${s.pos} detected / ${s.n} measured`}
-                              style={
-                                s.n
-                                  ? {
-                                      background: ramp[Math.round(f * 100)],
-                                      color: f > 0.65 ? "white" : "#142f32",
-                                    }
-                                  : {}
-                              }
-                            >
-                              {s.n
-                                ? metric === "n"
-                                  ? v
-                                  : v.toFixed(metric === "pct" ? 1 : 2)
-                                : "NA"}
+                            <td key={g} className="retina-dot-cell" title={detail} aria-label={detail}>
+                              {s.n ? <i className="retina-dot" style={{
+                                width: 20 * Math.sqrt(fraction),
+                                background: ramp[max ? Math.round(100 * mean / max) : 0],
+                              }} /> : "NA"}
                             </td>
                           );
                         })}
