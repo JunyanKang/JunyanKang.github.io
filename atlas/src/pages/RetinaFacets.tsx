@@ -1,0 +1,485 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import { gunzipSync, strFromU8 } from "fflate";
+import "./retina-facets.css";
+
+type Mode = "RNA" | "Activity";
+type Manifest = {
+  groups: { age: string; sample: string }[];
+  types: string[];
+  n: number;
+  layers: { prefix: string; mode: Mode }[];
+  coordinate: string;
+};
+type Geometry = { x: number[]; y: number[]; type: number[]; group: number[] };
+type Layer = {
+  genes: string[];
+  cells: number[];
+  lib: number[];
+  unmeasured?: number[];
+};
+type Bounds = [number, number, number, number];
+const cohorts = {
+  spatial: [
+    ["monkey_age_space", "Monkey · aging"],
+    ["monkey_dev_space", "Monkey · development"],
+    ["mouse_dev_space", "Mouse · development"],
+    ["mouse_age_space", "Mouse · aging"],
+    ["human_age_space", "Human · aging"],
+  ],
+  multi: [
+    ["monkey_age_multi", "Monkey · aging"],
+    ["monkey_dev_multi", "Monkey · development"],
+    ["mouse_dev_multi", "Mouse · development"],
+  ],
+};
+const base = (
+  import.meta.env.VITE_RETINA_ATLAS_BASE || "/assets/retina-atlas"
+).replace(/\/$/, "");
+async function bytes(path: string, signal: AbortSignal) {
+  const response = await fetch(`${base}/${path}`, { signal });
+  if (!response.ok) throw Error(`Data request failed (${response.status}).`);
+  const b = new Uint8Array(await response.arrayBuffer());
+  return b[0] === 31 && b[1] === 139 ? gunzipSync(b) : b;
+}
+async function json<T>(path: string, signal: AbortSignal): Promise<T> {
+  return JSON.parse(strFromU8(await bytes(path, signal)));
+}
+async function load(key: string, signal: AbortSignal, embedding: boolean) {
+  const [manifest, geo] = await Promise.all([
+    json<Manifest>(`${key}/dataset.json.gz`, signal),
+    json<Geometry>(`${key}/geometry.json.gz`, signal),
+  ]);
+  if (embedding) {
+    const umap = await json<{ x: number[]; y: number[]; name: string }>(
+      `${key}/umap.json.gz`,
+      signal,
+    );
+    geo.x = umap.x;
+    geo.y = umap.y;
+    manifest.coordinate = umap.name;
+  }
+  const layers = await Promise.all(
+    manifest.layers.map((l) =>
+      json<Layer>(`${key}/${l.prefix}.json.gz`, signal),
+    ),
+  );
+  const sets = manifest.groups.map(() => [] as number[]);
+  const bounds: Bounds[] = sets.map(() => [
+    Infinity,
+    -Infinity,
+    Infinity,
+    -Infinity,
+  ]);
+  geo.group.forEach((g, i) => {
+    sets[g].push(i);
+    const b = bounds[g];
+    b[0] = Math.min(b[0], geo.x[i]);
+    b[1] = Math.max(b[1], geo.x[i]);
+    b[2] = Math.min(b[2], geo.y[i]);
+    b[3] = Math.max(b[3], geo.y[i]);
+  });
+  const common: Bounds = [
+    Math.min(...bounds.map((b) => b[0])),
+    Math.max(...bounds.map((b) => b[1])),
+    Math.min(...bounds.map((b) => b[2])),
+    Math.max(...bounds.map((b) => b[3])),
+  ];
+  return { key, manifest, geo, layers, sets, bounds, common };
+}
+type Data = Awaited<ReturnType<typeof load>>;
+async function query(d: Data, gene: string, signal: AbortSignal) {
+  const modes = [...new Set(d.manifest.layers.map((l) => l.mode))];
+  return Promise.all(
+    modes.map(async (mode) => {
+      const values = new Float32Array(d.manifest.n).fill(NaN);
+      const layers = [...d.manifest.layers.entries()].filter(
+        ([, layer]) => layer.mode === mode,
+      );
+      const pending = layers.values();
+      async function readLayers() {
+        for (const [l, desc] of pending) {
+          const layer = d.layers[l];
+          let idx = layer.genes.indexOf(gene);
+          if (idx < 0)
+            idx = layer.genes.findIndex(
+              (s) => s.toUpperCase() === gene.toUpperCase(),
+            );
+          if (idx < 0 || layer.unmeasured?.includes(idx)) continue;
+          const block = await bytes(
+            `${d.key}/${desc.prefix}-${Math.floor(idx / 32)}.bin.gz`,
+            signal,
+          );
+          const view = new DataView(
+            block.buffer,
+            block.byteOffset,
+            block.byteLength,
+          );
+          const integer = (i: number) => view.getInt32(4 * i, true);
+          const offsets = integer(0),
+            count = integer(offsets),
+            start = integer(1 + (idx % 32)),
+            end = integer(2 + (idx % 32));
+          layer.cells.forEach((cell, i) => {
+            if (layer.lib[i] > 0) values[cell] = 0;
+          });
+          for (let i = start; i < end; i++) {
+            const k = integer(1 + offsets + i);
+            if (layer.lib[k] > 0)
+              values[layer.cells[k]] = Math.log1p(
+                (10000 * view.getFloat32(4 * (1 + offsets + count + i), true)) /
+                  layer.lib[k],
+              );
+          }
+        }
+      }
+      await Promise.all(
+        Array.from({ length: Math.min(3, layers.length) }, readLayers),
+      );
+      const positive = values.filter((v) => v > 0).sort();
+      const cap = positive[Math.floor((positive.length - 1) * 0.98)] || 0;
+      const stats = d.manifest.types.map(() =>
+        d.sets.map(() => ({ sum: 0, n: 0, pos: 0 })),
+      );
+      values.forEach((v, i) => {
+        if (Number.isFinite(v)) {
+          const s = stats[d.geo.type[i]][d.geo.group[i]];
+          s.n++;
+          s.sum += v;
+          if (v > 0) s.pos++;
+        }
+      });
+      return { mode, values, cap, stats };
+    }),
+  );
+}
+type Result = Awaited<ReturnType<typeof query>>[number];
+const natural = new Intl.Collator("en", { numeric: true });
+const typeColor = (t: number) =>
+  `hsl(${(t * 137.508 + 162) % 360} 51% ${38 + 10 * (t % 3)}%)`;
+const ramp = Array.from(
+  { length: 101 },
+  (_, i) =>
+    `rgb(${Math.round(212 - i * 1.85)},${Math.round(232 - i * 1.34)},${Math.round(221 - i * 1.35)})`,
+);
+function Plot({
+  d,
+  g,
+  result,
+  spatial,
+}: {
+  d: Data;
+  g: number;
+  result?: Result;
+  spatial: boolean;
+}) {
+  const ref = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    function draw() {
+      if (!el) return;
+      const w = el.clientWidth,
+        h = el.clientHeight;
+      if (!w || !h) return;
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      el.width = Math.ceil(w * ratio);
+      el.height = Math.ceil(h * ratio);
+      const ctx = el.getContext("2d");
+      if (!ctx) return;
+      ctx.scale(ratio, ratio);
+      const [x0, x1, y0, y1] = spatial ? d.bounds[g] : d.common;
+      const s = Math.min(
+        (w - 8) / Math.max(x1 - x0, 1e-8),
+        (h - 8) / Math.max(y1 - y0, 1e-8),
+      );
+      const dot = Math.max(
+        1,
+        Math.min(2.4, Math.sqrt((w * h) / d.sets[g].length) * 0.65),
+      );
+      for (const pass of result ? [0, 1] : [0])
+        for (const i of d.sets[g]) {
+          const v = result?.values[i] ?? NaN;
+          if (result && Number(v > 0) !== pass) continue;
+          ctx.fillStyle = result
+            ? v > 0
+              ? ramp[Math.min(100, Math.ceil((100 * v) / result.cap))]
+              : Number.isNaN(v)
+                ? "#c8bba9"
+                : "#d5dbdc"
+            : typeColor(d.geo.type[i]);
+          ctx.fillRect(
+            w / 2 + (d.geo.x[i] - (x0 + x1) / 2) * s - dot / 2,
+            h / 2 +
+              (spatial ? 1 : -1) * (d.geo.y[i] - (y0 + y1) / 2) * s -
+              dot / 2,
+            dot,
+            dot,
+          );
+        }
+    }
+    const observer = new ResizeObserver(draw);
+    observer.observe(el);
+    draw();
+    return () => observer.disconnect();
+  }, [d, g, result, spatial]);
+  return (
+    <figure>
+      <figcaption>
+        {result?.mode === "Activity"
+          ? "ATAC activity"
+          : result?.mode || "Cell types"}
+      </figcaption>
+      <canvas
+        ref={ref}
+        aria-label={`${d.manifest.groups[g].age} ${result?.mode || "cell types"} map`}
+      />
+    </figure>
+  );
+}
+export function RetinaFacets({
+  kind,
+  gene,
+}: {
+  kind: keyof typeof cohorts;
+  gene: string;
+}) {
+  const [key, setKey] = useState(cohorts[kind][0][0]);
+  const [d, setData] = useState<Data>();
+  const [res, setRes] = useState<{
+    gene: string;
+    key: string;
+    list: Result[];
+  }>();
+  const [error, setError] = useState("");
+  const [retry, setRetry] = useState(0);
+  const [metric, setMetric] = useState("mean");
+  const [embedding, setEmbedding] = useState(false);
+  useEffect(() => {
+    const c = new AbortController();
+    setData(undefined);
+    setRes(undefined);
+    setError("");
+    load(key, c.signal, embedding)
+      .then((v) => {
+        if (!c.signal.aborted) setData(v);
+      })
+      .catch((e) => {
+        if (!c.signal.aborted) setError(String(e.message));
+      });
+    return () => c.abort();
+  }, [key, retry, embedding]);
+  useEffect(() => {
+    if (!d || d.key !== key) return;
+    const c = new AbortController();
+    setError("");
+    query(d, gene, c.signal)
+      .then((list) => {
+        if (!c.signal.aborted) setRes({ gene, key, list });
+      })
+      .catch((e) => {
+        if (!c.signal.aborted) setError(String(e.message));
+      });
+    return () => c.abort();
+  }, [d, key, gene]);
+  const order = useMemo(
+    () =>
+      d?.manifest.groups
+        .map((_, i) => i)
+        .sort((a, b) => {
+          const A = d.manifest.groups[a],
+            B = d.manifest.groups[b];
+          return (
+            natural.compare(A.age, B.age) || natural.compare(A.sample, B.sample)
+          );
+        }) || [],
+    [d],
+  );
+  const label = (g: number) => {
+    const v = d!.manifest.groups[g];
+    return v.age === v.sample ? v.age : `${v.age} · ${v.sample}`;
+  };
+  return (
+    <div className="retina-facets">
+      <label>
+        Cohort{" "}
+        <select value={key} onChange={(e) => setKey(e.target.value)}>
+          {cohorts[kind].map(([id, title]) => (
+            <option key={id} value={id}>
+              {title}
+            </option>
+          ))}
+        </select>
+      </label>
+      {kind === "spatial" && (
+        <label>
+          Coordinates{" "}
+          <select
+            value={embedding ? "umap" : "tissue"}
+            onChange={(e) => setEmbedding(e.target.value === "umap")}
+          >
+            <option value="tissue">Tissue section</option>
+            <option value="umap">RNA UMAP</option>
+          </select>
+        </label>
+      )}
+      {error ? (
+        <p role="alert">
+          {error} <button onClick={() => setRetry((n) => n + 1)}>Retry</button>
+        </p>
+      ) : !d || d.key !== key || res?.key !== key || res.gene !== gene ? (
+        <p role="status">Loading {gene}…</p>
+      ) : (
+        <>
+          <p>
+            {d.manifest.n.toLocaleString()} cells · {order.length} samples ·{" "}
+            {d.manifest.coordinate}
+          </p>
+          <div className="retina-scales">
+            {res.list.map((r) => (
+              <span key={r.mode}>
+                {r.mode}{" "}
+                {r.cap > 0 ? (
+                  <>
+                    0 <i /> ≥{r.cap.toFixed(2)}
+                  </>
+                ) : r.stats.some((row) => row.some((s) => s.n)) ? (
+                  "· all measured values zero"
+                ) : (
+                  "· feature unavailable"
+                )}
+              </span>
+            ))}
+          </div>
+          <div
+            className={`retina-grid ${order.some((g, i) => i > 0 && d.manifest.groups[g].age === d.manifest.groups[order[i - 1]].age) ? "retina-grid--replicates" : ""}`}
+          >
+            {order.map((g) => (
+              <section key={g}>
+                <header>
+                  <strong>{label(g)}</strong>{" "}
+                  <small>{d.sets[g].length.toLocaleString()} cells</small>
+                </header>
+                <div className="retina-pair">
+                  {kind === "spatial" && (
+                    <Plot d={d} g={g} spatial={!embedding} />
+                  )}{" "}
+                  {res.list.map((r) => (
+                    <Plot
+                      key={r.mode}
+                      d={d}
+                      g={g}
+                      result={r}
+                      spatial={kind === "spatial" && !embedding}
+                    />
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+          {kind === "spatial" && (
+            <details>
+              <summary>Cell-type key</summary>
+              <div className="retina-key">
+                {d.manifest.types.map((t, i) => (
+                  <span key={t}>
+                    <b style={{ background: typeColor(i) }} />
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </details>
+          )}
+          <h4>
+            {key === "mouse_dev_multi"
+              ? "Cluster summary"
+              : "Cell-type summary"}
+          </h4>
+          <label>
+            Statistic{" "}
+            <select value={metric} onChange={(e) => setMetric(e.target.value)}>
+              <option value="mean">Mean normalized signal</option>
+              <option value="pct">Detected cells (%)</option>
+              <option value="n">Measured cells</option>
+            </select>
+          </label>
+          {res.list.map((r) => {
+            const value = (s: { sum: number; n: number; pos: number }) =>
+              metric === "mean"
+                ? s.sum / s.n
+                : metric === "pct"
+                  ? (100 * s.pos) / s.n
+                  : s.n;
+            const max =
+              metric === "pct"
+                ? 100
+                : Math.max(
+                    0,
+                    ...r.stats
+                      .flat()
+                      .filter((s) => s.n)
+                      .map(value),
+                  );
+            return (
+              <div className="retina-heat" key={r.mode}>
+                <table>
+                  <caption>
+                    {r.mode === "Activity" ? "ATAC gene activity" : r.mode} ·{" "}
+                    {gene}
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th>
+                        {key === "mouse_dev_multi" ? "Cluster" : "Cell type"}
+                      </th>
+                      {order.map((g) => (
+                        <th key={g}>{label(g)}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {r.stats.map((row, i) => (
+                      <tr key={i}>
+                        <th>{d.manifest.types[i]}</th>
+                        {order.map((g) => {
+                          const s = row[g],
+                            v = value(s),
+                            f = max > 0 ? v / max : 0;
+                          return (
+                            <td
+                              key={g}
+                              title={`${s.pos} detected / ${s.n} measured`}
+                              style={
+                                s.n
+                                  ? {
+                                      background: ramp[Math.round(f * 100)],
+                                      color: f > 0.65 ? "white" : "#142f32",
+                                    }
+                                  : {}
+                              }
+                            >
+                              {s.n
+                                ? metric === "n"
+                                  ? v
+                                  : v.toFixed(metric === "pct" ? 1 : 2)
+                                : "NA"}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            );
+          })}
+          <small>
+            Signal: log(1 + 10,000 × feature count / cell library size),
+            separately per assay. Maps saturate at the 98th percentile of
+            positive cells across samples. Gray: zero. Sand: unavailable. NA: no
+            measured cells.
+          </small>
+        </>
+      )}
+    </div>
+  );
+}

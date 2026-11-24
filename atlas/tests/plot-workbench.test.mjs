@@ -21,6 +21,7 @@ function loadPage(width = 1100) {
   const module = { exports: {} };
   const localRequire = name => {
     if (name === '../api/modules') return {};
+    if (name === './RetinaFacets') return {};
     if (name === '../../shared/chart-layout.mjs') return { categoryLayout, fitCategoryBlocks };
     if (name === 'react') return { ...React, useState: initial => React.useState(initial === 0 ? width : initial) };
     return require(name);

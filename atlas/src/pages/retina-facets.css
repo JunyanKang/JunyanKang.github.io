@@ -1,0 +1,105 @@
+.retina-facets {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+.retina-facets select {
+  font: inherit;
+  padding: 0.33em 0.6em;
+  max-width: 100%;
+}
+.retina-facets p,
+.retina-facets figure,
+.retina-facets h4 {
+  margin: 0;
+}
+.retina-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 1rem;
+}
+.retina-grid section {
+  min-width: 0;
+  border-top: 1px solid #a7b7b5;
+  padding-top: 0.5rem;
+}
+.retina-grid header,
+.retina-scales,
+.retina-key {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  flex-wrap: wrap;
+}
+.retina-grid header {
+  justify-content: space-between;
+}
+.retina-pair {
+  display: flex;
+  margin-top: 0.5rem;
+  gap: 4px;
+}
+.retina-pair figure {
+  flex: 1;
+  min-width: 0;
+}
+.retina-pair figcaption {
+  font-size: 0.79rem;
+}
+.retina-pair canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1.2;
+  background: #fafbf8;
+}
+.retina-key span,
+.retina-scales span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+.retina-key b {
+  width: 0.65em;
+  height: 0.65em;
+  border-radius: 50%;
+}
+.retina-scales i {
+  width: 4em;
+  height: 0.6em;
+  background: linear-gradient(90deg, #d4e8dd, #1b6257);
+}
+.retina-heat {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.retina-heat table {
+  border-collapse: collapse;
+  width: 100%;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.78rem;
+}
+.retina-heat caption {
+  text-align: left;
+  font-weight: 650;
+  margin-bottom: 0.4rem;
+}
+.retina-heat th,
+.retina-heat td {
+  padding: 0.25em 0.5em;
+  text-align: center;
+  border: 1px solid #ccd4d1;
+}
+.retina-heat tbody th {
+  text-align: left;
+}
+.retina-key {
+  padding: 0.5rem 0;
+}
+@container (min-width: 680px) {
+  .retina-grid--replicates {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.retina-facets {
+  container-type: inline-size;
+}

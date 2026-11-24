@@ -36,6 +36,7 @@ jobs:
       - run: bundle exec ruby tests/contact_test.rb
       - run: node scripts/build.mjs
         env:
+          VITE_RETINA_ATLAS_BASE: https://raw.githubusercontent.com/JunyanKang/retina-atlas-data/atlas-v1
           AMAP_WEB_SERVICE_KEY: ${{ github.event_name != 'pull_request' && secrets.AMAP_WEB_SERVICE_KEY || '' }}
           REQUIRE_CONTACT_MAP: ${{ github.event_name != 'pull_request' }}
       - uses: actions/upload-pages-artifact@v3

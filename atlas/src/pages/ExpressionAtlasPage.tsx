@@ -2,6 +2,7 @@ import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, FormEvent, MouseEvent, ReactNode } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { RetinaFacets } from './RetinaFacets';
 import { queryExpressionAtlas } from '../api/modules';
 import { fitCategoryBlocks } from '../../shared/chart-layout.mjs';
 import type {
@@ -95,7 +96,7 @@ type LegendItem = {
 type DatasetPanel = {
   key: string;
   title: string;
-  kind: 'dataset' | 'ortholog';
+  kind: 'dataset' | 'ortholog' | 'spatial' | 'multi';
   datasets: ExpressionAtlasDatasetResult[];
   hasMatch: boolean;
 };
@@ -104,9 +105,8 @@ const datasetPanelOrder: Record<string, number> = {
   mouse_tissue_multiomics: 1,
   human_retina_rpe_rna: 2,
   human_retina_scrna: 3,
-  mouse_retina_scrna: 4,
-  mouse_retina_dev_scrna: 5,
-  monkey_retina_aging_scrna: 6,
+  spatial: 4,
+  multi: 5,
   ortholog_mapping: 7
 };
 
@@ -1505,7 +1505,7 @@ export const ExpressionAtlasPage = () => {
   const [queryInput, setQueryInput] = useState(initialGene);
   const [submittedGene, setSubmittedGene] = useState(initialGene);
   const [queryAttempt, setQueryAttempt] = useState(0);
-  const [selectedDatasetKey, setSelectedDatasetKey] = useState<string>('');
+  const [selectedDatasetKey, setSelectedDatasetKey] = useState<string>(() => searchParams.get('dataset') || '');
   const [datasetViewModes, setDatasetViewModes] = useState<Record<string, DatasetViewMode>>({});
   const [orthologPage, setOrthologPage] = useState(1);
   const [queryState, setQueryState] = useState<{
@@ -1561,11 +1561,6 @@ export const ExpressionAtlasPage = () => {
     if (nextGene === submittedGene) setQueryAttempt((attempt) => attempt + 1);
   };
 
-  const matchedDatasetCount = useMemo(
-    () => queryState.data?.datasets.filter((dataset) => dataset.hasMatch).length ?? 0,
-    [queryState.data]
-  );
-
   const externalLinks = useMemo(
     () => (queryState.data ? buildExternalLinks(queryState.data) : null),
     [queryState.data]
@@ -1575,7 +1570,7 @@ export const ExpressionAtlasPage = () => {
     if (!queryState.data) return [];
     const rna = queryState.data.datasets.find((dataset) => dataset.key === 'mouse_tissue_rna');
     const protein = queryState.data.datasets.find((dataset) => dataset.key === 'mouse_tissue_protein');
-    const rest = queryState.data.datasets.filter((dataset) => !['mouse_tissue_rna', 'mouse_tissue_protein'].includes(dataset.key));
+    const rest = queryState.data.datasets.filter((dataset) => ['human_retina_rpe_rna', 'human_retina_scrna'].includes(dataset.key));
     const panels: DatasetPanel[] = [];
     if (rna || protein) {
       const grouped = [rna, protein].filter(Boolean) as ExpressionAtlasDatasetResult[];
@@ -1598,6 +1593,8 @@ export const ExpressionAtlasPage = () => {
         hasMatch: dataset.hasMatch
       });
       });
+    panels.push({key:'spatial', title:'Spatial RNA', kind:'spatial', datasets:[], hasMatch:false},
+      {key:'multi', title:'Single-cell multiomics', kind:'multi', datasets:[], hasMatch:false});
     panels.push({
       key: 'ortholog_mapping',
       title: 'Ortholog mapping',
@@ -1658,7 +1655,7 @@ export const ExpressionAtlasPage = () => {
           </form>
           <div className="atlas-query-context">
             <p className="atlas-query-result" aria-live="polite">
-              {queryState.loading ? 'Searching expression datasets…' : queryState.data ? <><strong>{queryState.data.query}</strong><span>{matchedDatasetCount} of {queryState.data.datasets.length} datasets matched</span></> : 'Search the public collection'}
+              {queryState.loading ? 'Searching expression datasets…' : queryState.data ? <strong>{queryState.data.query}</strong> : 'Search the public collection'}
             </p>
             {geneAnnotationLinks ? <>
               <div className="expression-atlas-annotations-desktop">{geneAnnotationLinks}</div>
@@ -1700,6 +1697,8 @@ export const ExpressionAtlasPage = () => {
                   <p className="text-muted expression-atlas-dataset-card__subtitle">
                     {activePanel.kind === 'ortholog'
                       ? 'Cross-species symbol, alias and external annotation links'
+                      : activePanel.kind === 'spatial' ? 'Tissue coordinates · Annotated cell types'
+                      : activePanel.kind === 'multi' ? 'RNA expression and ATAC gene activity · UMAP'
                       : activePanel.datasets.length > 1
                       ? 'Bulk RNA-seq + Bulk proteomics · Mouse'
                       : `${activePanel.datasets[0].modality} · ${activePanel.datasets[0].species}${activePanel.datasets[0].unit ? ` · ${activePanel.datasets[0].unit}` : ''}`}
@@ -1712,7 +1711,9 @@ export const ExpressionAtlasPage = () => {
                     </div>
                   ) : null}
                 </div>
-                {activePanel.kind === 'ortholog' ? (
+                {activePanel.kind === 'spatial' || activePanel.kind === 'multi' ? (
+                  <RetinaFacets key={activePanel.kind} kind={activePanel.kind} gene={submittedGene}/>
+                ) : activePanel.kind === 'ortholog' ? (
                   <OrthologPanel
                     orthologs={visibleOrthologs}
                     query={queryState.data.query}
