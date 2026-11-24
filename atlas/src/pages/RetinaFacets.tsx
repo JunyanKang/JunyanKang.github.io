@@ -191,11 +191,17 @@ type Result = Awaited<ReturnType<typeof query>>[number];
 const natural = new Intl.Collator("en", { numeric: true });
 const typeColor = (t: number) =>
   `hsl(${(t * 137.508 + 162) % 360} 51% ${38 + 10 * (t % 3)}%)`;
-const ramp = Array.from(
-  { length: 101 },
-  (_, i) =>
-    `rgb(${Math.round(212 - i * 1.85)},${Math.round(232 - i * 1.34)},${Math.round(221 - i * 1.35)})`,
-);
+function colorRamp(from: number[], to: number[]) {
+  return Array.from({ length: 101 }, (_, i) =>
+    'rgb(' + from.map((v, j) => Math.round(v + (to[j] - v) * i / 100)).join(',') + ')');
+}
+const palettes = {
+  RNA: colorRamp([205, 231, 223], [20, 100, 89]),
+  Activity: colorRamp([250, 222, 181], [163, 70, 16]),
+};
+function scaleStyle(mode: Mode) {
+  return { background: 'linear-gradient(90deg, ' + palettes[mode][0] + ', ' + palettes[mode][100] + ')' };
+}
 function SampleView({ title, count, children }: { title: string; count: number; children: ReactNode }) {
   const pair = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
@@ -296,7 +302,7 @@ function Plot({
           }
           ctx.fillStyle = result
             ? v > 0
-              ? ramp[Math.min(100, Math.ceil((100 * v) / result.cap))]
+              ? palettes[result.mode][Math.min(100, Math.ceil((100 * v) / result.cap))]
               : Number.isNaN(v)
                 ? "#c8bba9"
                 : "#d5dbdc"
@@ -474,7 +480,7 @@ export function RetinaFacets({
                 {r.mode}{" "}
                 {r.cap > 0 ? (
                   <>
-                    0 <i /> ≥{r.cap.toFixed(2)}
+                    0 <i style={scaleStyle(r.mode)} /> ≥{r.cap.toFixed(2)}
                   </>
                 ) : r.stats.some((row) => row.some((s) => s.n)) ? (
                   "· all measured values zero"
@@ -530,60 +536,8 @@ export function RetinaFacets({
           </h4>
           <button type="button" className="retina-jump" onClick={() => document.querySelector<HTMLSelectElement>("#atlas-map-controls select")?.focus()}>Back to maps ↑</button>
           </div>
-          {res.list.map((r) => {
-            const max = Math.max(0, ...r.stats.flat().map(s => s.n ? s.sum / s.n : 0));
-            const hasMeasurements = r.stats.some(row => row.some(s => s.n));
-            const percentageLabel = r.mode === "RNA" ? "Expressing cells" : "Cells with positive activity";
-            return (
-              <div className="retina-heat" key={r.mode}>
-                <div className="retina-dot-legend">
-                  <strong>{percentageLabel}</strong>
-                  {[25, 50, 100].map(pct => <span key={pct}><i className="retina-dot" style={{width: 20 * Math.sqrt(pct / 100), background: ramp[75]}} />{pct}%</span>)}
-                  <span>0% = empty</span><span>NA = unavailable</span>
-                  {hasMeasurements && <span>Mean normalized {r.mode === "RNA" ? "expression" : "activity"} · 0
-                    {max > 0 && <><i className="retina-dot-ramp" />{Number(max.toPrecision(3))}</>}
-                  </span>}
-                </div>
-                <table>
-                  <caption>
-                    {r.mode === "Activity" ? "ATAC gene activity" : r.mode} ·{" "}
-                    {gene}
-                  </caption>
-                  <thead>
-                    <tr>
-                      <th>
-                        {key === "mouse_dev_multi" ? "Cluster" : "Cell type"}
-                      </th>
-                      {order.map((g) => (
-                        <th key={g}>{label(g)}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {r.stats.map((row, i) => (
-                      <tr key={i}>
-                        <th>{d.manifest.types[i]}</th>
-                        {order.map((g) => {
-                          const s = row[g];
-                          const mean = s.n ? s.sum / s.n : 0;
-                          const fraction = s.n ? s.pos / s.n : 0;
-                          const detail = s.n ? `${d.manifest.types[i]} · ${label(g)} · mean ${mean.toFixed(2)} · ${(100 * fraction).toFixed(1)}% (${s.pos}/${s.n} measured cells)` : "NA";
-                          return (
-                            <td key={g} className="retina-dot-cell" title={detail} aria-label={detail}>
-                              {s.n ? <i className="retina-dot" style={{
-                                width: 20 * Math.sqrt(fraction),
-                                background: ramp[max ? Math.round(100 * mean / max) : 0],
-                              }} /> : "NA"}
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            );
-          })}
+          <DotSummary results={res.list} types={d.manifest.types} order={order} label={label}
+            category={key === "mouse_dev_multi" ? "Cluster" : "Cell type"} gene={gene} />
           <small>
             Signal: log(1 + 10,000 × feature count / cell library size),
             separately per assay. Maps saturate at the 98th percentile of
@@ -594,4 +548,49 @@ export function RetinaFacets({
       )}
     </div>
   );
+}
+
+function DotSummary({ results, types, order, label, category, gene }: {
+  results: Result[]; types: string[]; order: number[]; label: (group: number) => string;
+  category: string; gene: string;
+}) {
+  const container = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(800);
+  useEffect(() => {
+    const observer = new ResizeObserver(([entry]) => setWidth(entry.contentRect.width));
+    observer.observe(container.current!);
+    return () => observer.disconnect();
+  }, []);
+  const assays = results.map(result => ({
+    ...result, title: result.mode === 'RNA' ? 'RNA' : 'ATAC activity',
+    max: Math.max(0, ...result.stats.flat().filter(s => s.n).map(s => s.sum / s.n)),
+    measured: result.stats.some(row => row.some(s => s.n)),
+  }));
+  const perBlock = Math.max(1, Math.floor((width - 120) / (assays.length === 2 ? 72 : 64)));
+  const groups = Array.from({length: Math.ceil(order.length / perBlock)}, (_, i) => order.slice(i * perBlock, (i + 1) * perBlock));
+  return <div className="retina-heat retina-summary" ref={container}>
+    <div className="retina-dot-legend">
+      <strong>{gene}</strong><span>Positive cells</span>
+      {[25, 50, 100].map(pct => <span key={pct}><i className="retina-dot" style={{width: 20 * Math.sqrt(pct / 100), background: '#adc0c5'}} />{pct}%</span>)}
+      <span>0% = empty · NA = unavailable</span>
+    </div>
+    <div className="retina-dot-legend"><strong>Mean normalized signal</strong>
+      {assays.map(a => <span key={a.mode}>{a.title} {a.measured ? <>0 <i className="retina-dot-ramp" style={scaleStyle(a.mode)} /> {Number(a.max.toPrecision(3))}</> : '· unavailable'}</span>)}
+    </div>
+    {groups.map(block => <table key={block[0]} style={{width: `min(100%, ${120 + block.length * (assays.length === 2 ? 114 : 72)}px)`}} aria-label={`${gene} · ${block.map(label).join(', ')}`}>
+      <thead><tr><th rowSpan={assays.length > 1 ? 2 : 1}>{category}</th>
+        {block.map(g => <th key={g} colSpan={assays.length}>{label(g)}</th>)}
+      </tr>{assays.length > 1 && <tr>{block.flatMap(g => assays.map(a => <th key={`${g}-${a.mode}`} className="retina-assay-heading">{a.mode === 'RNA' ? 'RNA' : 'ATAC'}</th>))}</tr>}</thead>
+      <tbody>{types.map((type, i) => <tr key={type}><th scope="row">{type}</th>
+        {block.flatMap(g => assays.map(a => {
+          const s = a.stats[i][g];
+          const mean = s.n ? s.sum / s.n : 0;
+          const fraction = s.n ? s.pos / s.n : 0;
+          const detail = `${type} · ${label(g)} · ${a.title} · ` + (s.n ? `mean ${mean.toFixed(2)} · ${(100 * fraction).toFixed(1)}% (${s.pos}/${s.n} measured cells)` : 'NA');
+          return <td key={`${g}-${a.mode}`} className="retina-dot-cell" title={detail} aria-label={detail}>
+            {s.n ? <i className="retina-dot" style={{width: 20 * Math.sqrt(fraction), background: palettes[a.mode][a.max ? Math.round(100 * mean / a.max) : 0]}} /> : 'NA'}
+          </td>;
+        }))}</tr>)}</tbody>
+    </table>)}
+  </div>;
 }

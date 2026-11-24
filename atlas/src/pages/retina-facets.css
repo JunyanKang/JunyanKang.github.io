@@ -167,3 +167,7 @@
 .retina-pair canvas:active { cursor: grabbing; }
 .retina-map-label-key { display: flex; flex-wrap: wrap; gap: 2px 9px; padding-top: 5px; font-size: 12px; line-height: 1.4; }
 .retina-map-label-key b { color: #c5daa7; font-variant-numeric: tabular-nums; }
+.retina-summary table { width: max-content; max-width: 100%; margin-block: 8px 12px; }
+.retina-summary tbody th { max-width: 120px; overflow-wrap: anywhere; }
+.retina-summary .retina-dot-cell { min-width: 30px; padding: 2px 4px; }
+.retina-summary .retina-assay-heading { font-size: 11px; font-weight: 500; }
