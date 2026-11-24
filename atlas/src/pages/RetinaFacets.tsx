@@ -253,10 +253,11 @@ function Plot({
         (w - 8) / Math.max(x1 - x0, 1e-8),
         (h - 8) / Math.max(y1 - y0, 1e-8),
       );
-      const dot = Math.max(
+      const baseDot = Math.max(
         1,
         Math.min(2.4, Math.sqrt((w * h) / d.sets[g].length) * 0.65),
       );
+      const dot = baseDot * Math.sqrt(view.k);
       const sx = s * view.k, sy = spatial ? sx : -sx;
       const ox = view.applyX(w / 2) - ((x0 + x1) / 2) * sx;
       const oy = view.applyY(h / 2) - ((y0 + y1) / 2) * sy;
