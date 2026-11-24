@@ -19,10 +19,19 @@ export function createAtlasQuery(loadJson) {
     }
     return buckets.get(key);
   };
-  return async gene => {
+  return async (gene, catalogOnly = false) => {
     const normalizedQuery = normalizeGene(gene);
-    if (!normalizedQuery || normalizedQuery.length > 120) throw new Error('Enter a gene symbol (up to 120 characters).');
+    if ((!normalizedQuery && !catalogOnly) || normalizedQuery.length > 120) throw new Error('Enter a gene symbol (up to 120 characters).');
     manifestPromise ??= loadJson('manifest.json').catch(error => { manifestPromise = null; throw error; });
+    if (catalogOnly) {
+      const manifest = await manifestPromise;
+      return {
+        query: gene, normalizedQuery, candidateGenes: [], orthologs: [],
+        datasets: manifest.datasets.map(dataset => ({
+          ...dataset, samples: [], hasMatch: false, matchedGene: null,
+        })),
+      };
+    }
     mappingsPromise ??= loadJson('orthologs.json.gz').catch(error => { mappingsPromise = null; throw error; });
     const [manifest, mappings] = await Promise.all([manifestPromise, mappingsPromise]);
     const exact = mappings.filter(item =>

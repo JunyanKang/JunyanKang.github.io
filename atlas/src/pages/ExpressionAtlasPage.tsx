@@ -1501,11 +1501,12 @@ const retainDatasetSelection = (panels: DatasetPanel[], previous: string) =>
 
 export const ExpressionAtlasPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialGene = searchParams.get('gene')?.trim() || 'Pax6';
-  const [queryInput, setQueryInput] = useState(initialGene);
+  const initialGene = searchParams.get('gene')?.trim() || '';
+  const [queryInput, setQueryInput] = useState(initialGene || 'Pax6');
   const [submittedGene, setSubmittedGene] = useState(initialGene);
   const [queryAttempt, setQueryAttempt] = useState(0);
-  const selectedDatasetKey = searchParams.get('dataset') || '';
+  const selectedDatasetKey = searchParams.get('dataset') || 'spatial';
+  const catalogOnly = !submittedGene || selectedDatasetKey === 'spatial' || selectedDatasetKey === 'multi';
   const selectDataset = (key: string) => {
     const params = new URLSearchParams(searchParams);
     params.set('dataset', key);
@@ -1526,7 +1527,7 @@ export const ExpressionAtlasPage = () => {
   });
 
   useEffect(() => {
-    setQueryInput(initialGene);
+    setQueryInput(initialGene || 'Pax6');
     setSubmittedGene(initialGene);
   }, [initialGene]);
 
@@ -1535,13 +1536,12 @@ export const ExpressionAtlasPage = () => {
   }, [submittedGene, queryState.data?.orthologs.length]);
 
   useEffect(() => {
-    if (!submittedGene) return;
     let cancelled = false;
 
     void (async () => {
       try {
         setQueryState((prev) => ({ ...prev, loading: true, error: null }));
-        const data = await queryExpressionAtlas(submittedGene);
+        const data = await queryExpressionAtlas(submittedGene, catalogOnly);
         if (cancelled) return;
         setQueryState({ data, loading: false, error: null });
       } catch (error) {
@@ -1554,7 +1554,7 @@ export const ExpressionAtlasPage = () => {
     return () => {
       cancelled = true;
     };
-  }, [submittedGene, queryAttempt]);
+  }, [submittedGene, queryAttempt, catalogOnly]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -1568,7 +1568,7 @@ export const ExpressionAtlasPage = () => {
   };
 
   const externalLinks = useMemo(
-    () => (queryState.data ? buildExternalLinks(queryState.data) : null),
+    () => (queryState.data?.query ? buildExternalLinks(queryState.data) : null),
     [queryState.data]
   );
 
@@ -1718,7 +1718,7 @@ export const ExpressionAtlasPage = () => {
                 </div>
                 {activePanel.kind === 'spatial' || activePanel.kind === 'multi' ? (
                   <RetinaFacets key={activePanel.kind} kind={activePanel.kind} gene={submittedGene}/>
-                ) : activePanel.kind === 'ortholog' ? (
+                ) : !submittedGene ? null : activePanel.kind === 'ortholog' ? (
                   <OrthologPanel
                     orthologs={visibleOrthologs}
                     query={queryState.data.query}

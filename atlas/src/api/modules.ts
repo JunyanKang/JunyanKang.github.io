@@ -12,5 +12,5 @@ async function loadJson(path: string) {
   }
   return response.json();
 }
-export const queryExpressionAtlas: (gene: string) => Promise<ExpressionAtlasQueryResult> = createAtlasQuery(loadJson);
+export const queryExpressionAtlas: (gene: string, catalogOnly?: boolean) => Promise<ExpressionAtlasQueryResult> = createAtlasQuery(loadJson);
 

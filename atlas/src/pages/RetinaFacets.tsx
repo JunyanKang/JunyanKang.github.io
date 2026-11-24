@@ -25,9 +25,9 @@ type Layer = {
 type Bounds = [number, number, number, number];
 const cohorts = {
   spatial: [
+    ["mouse_dev_space", "Mouse · development"],
     ["monkey_age_space", "Monkey · aging"],
     ["monkey_dev_space", "Monkey · development"],
-    ["mouse_dev_space", "Mouse · development"],
     ["mouse_age_space", "Mouse · aging"],
     ["human_age_space", "Human · aging"],
   ],
@@ -386,11 +386,13 @@ export function RetinaFacets({
   const [highlight, setHighlight] = useState({ key, index: -1 });
   const focus = highlight.key === key ? highlight.index : -1;
   const setFocus = (index: number) => setHighlight({ key, index });
+  const hasGene = Boolean(gene);
   useEffect(() => {
     const c = new AbortController();
     setData(undefined);
     setRes(undefined);
     setError("");
+    if (!hasGene) return;
     load(key, c.signal, embedding)
       .then((v) => {
         if (!c.signal.aborted) setData(v);
@@ -399,9 +401,9 @@ export function RetinaFacets({
         if (!c.signal.aborted) setError(String(e.message));
       });
     return () => c.abort();
-  }, [key, retry, embedding]);
+  }, [key, retry, embedding, hasGene]);
   useEffect(() => {
-    if (!d || d.key !== key) return;
+    if (!gene || !d || d.key !== key) return;
     const c = new AbortController();
     setError("");
     query(d, gene, c.signal)
@@ -462,7 +464,7 @@ export function RetinaFacets({
       )}
       {d?.key === key && res?.key === key && res.gene === gene && <button type="button" className="retina-jump" onClick={() => document.getElementById("atlas-statistics")?.focus()}>View statistics ↓</button>}
       </div>
-      {error ? (
+      {!hasGene ? null : error ? (
         <p role="alert">
           {error} <button onClick={() => setRetry((n) => n + 1)}>Retry</button>
         </p>
