@@ -165,3 +165,5 @@
 .retina-view-tools output { font-variant-numeric: tabular-nums; font-size: 13px; }
 .retina-pair canvas { cursor: grab; }
 .retina-pair canvas:active { cursor: grabbing; }
+.retina-map-label-key { display: flex; flex-wrap: wrap; gap: 2px 9px; padding-top: 5px; font-size: 12px; line-height: 1.4; }
+.retina-map-label-key b { color: #c5daa7; font-variant-numeric: tabular-nums; }

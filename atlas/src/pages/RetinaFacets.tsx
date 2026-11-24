@@ -5,6 +5,7 @@ import { select } from "d3-selection";
 import { zoom, zoomIdentity, zoomTransform } from "d3-zoom";
 import type { ReactNode } from "react";
 import "./retina-facets.css";
+import { drawAnnotationLabels } from "./annotationLabels";
 
 type Mode = "RNA" | "Activity";
 type Manifest = {
@@ -245,6 +246,7 @@ function Plot({
   time?: boolean;
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
+  const [labelKey, setLabelKey] = useState<number[]>([]);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -274,6 +276,8 @@ function Plot({
       const sx = s * view.k, sy = spatial ? sx : -sx;
       const ox = view.applyX(w / 2) - ((x0 + x1) / 2) * sx;
       const oy = view.applyY(h / 2) - ((y0 + y1) / 2) * sy;
+      const visibleTypes = new Map<number, Map<number, { count: number; x: number; y: number }>>();
+      const columns = Math.ceil(w / 24);
       for (const pass of result || focus >= 0 ? [0, 1] : [0])
         for (const i of d.sets[g]) {
           const v = result?.values[i] ?? NaN;
@@ -281,6 +285,15 @@ function Plot({
           if (!result && focus >= 0 && Number(d.geo.type[i] === focus) !== pass) continue;
           const x = ox + d.geo.x[i] * sx, y = oy + d.geo.y[i] * sy;
           if (x < -dot || x > w + dot || y < -dot || y > h + dot) continue;
+          if (!result && (focus < 0 || pass === 1) && x >= 0 && y >= 0 && x < w && y < h) {
+            const id = d.geo.type[i];
+            let bins = visibleTypes.get(id);
+            if (!bins) { bins = new Map(); visibleTypes.set(id, bins); }
+            const bin = Math.floor(y / 24) * columns + Math.floor(x / 24);
+            const existing = bins.get(bin);
+            if (existing) existing.count++;
+            else bins.set(bin, { count: 1, x, y });
+          }
           ctx.fillStyle = result
             ? v > 0
               ? ramp[Math.min(100, Math.ceil((100 * v) / result.cap))]
@@ -293,36 +306,12 @@ function Plot({
           ctx.fill();
         }
       if (!result) {
-        const present = d.annotations[g].map((t, id) => ({ ...t, id }))
-          .filter(t => t.count && (focus < 0 || t.id === focus))
-          .sort((a, b) => b.count - a.count)
-          .slice(0, w < 200 ? 2 : 3)
-          .sort((a, b) => d.geo.x[a.anchor] - d.geo.x[b.anchor]);
-        ctx.font = "600 11px sans-serif";
-        present.forEach((t, index) => {
-          const x = ox + d.geo.x[t.anchor] * sx;
-          const y = oy + d.geo.y[t.anchor] * sy;
-          if (x < 0 || x > w || y < 0 || y > h) return;
-          const slot = w / present.length;
-          const text = d.manifest.types[t.id].replaceAll("_", " ");
-          const box = Math.min(slot - 4, ctx.measureText(text).width + 8);
-          const center = slot * (index + 0.5);
-          const top = y > h / 2 ? h - 17 : 2;
-          ctx.strokeStyle = "#324746";
-          ctx.beginPath();
-          ctx.moveTo(center, top + 7);
-          ctx.lineTo(x, y);
-          ctx.stroke();
-          ctx.fillStyle = typeColor(t.id);
-          ctx.beginPath();
-          ctx.arc(x, y, 2.5, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.fillStyle = "#f9fbf8";
-          ctx.fillRect(center - box / 2, top, box, 15);
-          ctx.textAlign = "center";
-          ctx.fillStyle = "#182d31";
-          ctx.fillText(text, center, top + 11, box - 4);
-        });
+        const anchors = Array.from(visibleTypes, ([id, bins]) => {
+          const peak = Array.from(bins.values()).reduce((best, bin) => bin.count > best.count ? bin : best);
+          return { id, x: peak.x, y: peak.y, name: d.manifest.types[id].replaceAll("_", " ") };
+        }).sort((a, b) => a.id - b.id);
+        const key = drawAnnotationLabels(ctx, anchors, w, h, view.k);
+        setLabelKey(previous => previous.length === key.length && previous.every((v,i) => v === key[i]) ? previous : key);
       }
     }
     let visible = false, frame = 0;
@@ -355,6 +344,9 @@ function Plot({
         ref={ref}
         aria-label={`${d.manifest.groups[g].sample} ${result?.mode || (time ? "time point" : d.key === "mouse_dev_multi" ? "clusters" : "cell types")} map`}
       />
+      {labelKey.length > 0 && <div className="retina-map-label-key" aria-label="Visible annotations">
+        {labelKey.map(id => <span key={id}><b>{id + 1}</b> {d.manifest.types[id]?.replaceAll("_", " ")}</span>)}
+      </div>}
     </figure>
   );
 }
