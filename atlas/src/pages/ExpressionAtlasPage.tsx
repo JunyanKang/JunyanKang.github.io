@@ -1517,6 +1517,7 @@ export const ExpressionAtlasPage = () => {
   const [datasetViewModes, setDatasetViewModes] = useState<Record<string, DatasetViewMode>>({});
   const [orthologPage, setOrthologPage] = useState(1);
   const [queryState, setQueryState] = useState<{
+    catalogOnly?: boolean;
     data: ExpressionAtlasQueryResult | null;
     loading: boolean;
     error: string | null;
@@ -1543,7 +1544,7 @@ export const ExpressionAtlasPage = () => {
         setQueryState((prev) => ({ ...prev, loading: true, error: null }));
         const data = await queryExpressionAtlas(submittedGene, catalogOnly);
         if (cancelled) return;
-        setQueryState({ data, loading: false, error: null });
+        setQueryState({ data, catalogOnly, loading: false, error: null });
       } catch (error) {
         console.error(error);
         if (cancelled) return;
@@ -1614,6 +1615,7 @@ export const ExpressionAtlasPage = () => {
     () => datasetPanels.find((panel) => panel.key === retainDatasetSelection(datasetPanels, selectedDatasetKey)) ?? null,
     [datasetPanels, selectedDatasetKey]
   );
+  const legacyReady = !queryState.loading && queryState.catalogOnly === false && queryState.data?.query === submittedGene;
   const orthologPageSize = 3;
   const orthologTotalPages = Math.max(1, Math.ceil((queryState.data?.orthologs.length ?? 0) / orthologPageSize));
   const visibleOrthologs = useMemo(
@@ -1708,7 +1710,7 @@ export const ExpressionAtlasPage = () => {
                       ? 'Bulk RNA-seq + Bulk proteomics · Mouse'
                       : `${activePanel.datasets[0].modality} · ${activePanel.datasets[0].species}${activePanel.datasets[0].unit ? ` · ${activePanel.datasets[0].unit}` : ''}`}
                   </p>
-                  {activePanel.kind === 'ortholog' ? (
+                  {activePanel.kind === 'ortholog' && legacyReady ? (
                     <div className="expression-atlas-dataset-card__meta">
                       <span className={`badge ${activePanel.hasMatch ? 'badge--success' : ''}`}>
                         {activePanel.hasMatch ? 'Matched' : 'No match'}
@@ -1718,7 +1720,7 @@ export const ExpressionAtlasPage = () => {
                 </div>
                 {activePanel.kind === 'spatial' || activePanel.kind === 'multi' ? (
                   <RetinaFacets key={activePanel.kind} kind={activePanel.kind} gene={submittedGene}/>
-                ) : !submittedGene ? null : activePanel.kind === 'ortholog' ? (
+                ) : !submittedGene ? null : !legacyReady ? <p role="status">Loading {submittedGene}…</p> : activePanel.kind === 'ortholog' ? (
                   <OrthologPanel
                     orthologs={visibleOrthologs}
                     query={queryState.data.query}

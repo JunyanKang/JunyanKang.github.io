@@ -40,12 +40,18 @@ const cohorts = {
 const base = (
   import.meta.env.VITE_RETINA_ATLAS_BASE || "/assets/retina-atlas"
 ).replace(/\/$/, "");
+import pagesBlocks from "../../shared/pages-blocks.json";
+const localBlocks = new Set(pagesBlocks);
 let preferredSource = base;
 async function bytes(path: string, signal: AbortSignal) {
   const sources = base === "https://raw.githubusercontent.com/JunyanKang/retina-atlas-data/atlas-v1"
     ? [base, "https://cdn.jsdelivr.net/gh/JunyanKang/retina-atlas-data@atlas-v1"]
     : [base];
   if (preferredSource !== base) sources.reverse();
+  const sameOrigin = "/assets/retina-atlas-v1";
+  if (sources.length > 1 && (path.startsWith("mouse_dev_space/") || path.endsWith(".json.gz") || localBlocks.has(path))) {
+    sources.unshift(sameOrigin);
+  }
   for (const [index, source] of sources.entries()) {
     const request = new AbortController();
     const cancel = () => request.abort();
@@ -57,7 +63,7 @@ async function bytes(path: string, signal: AbortSignal) {
       if (!response.ok) throw Error(`HTTP ${response.status}`);
       const b = new Uint8Array(await response.arrayBuffer());
       const decoded = b[0] === 31 && b[1] === 139 ? gunzipSync(b) : b;
-      preferredSource = source;
+      if (source !== sameOrigin) preferredSource = source;
       return decoded;
     } catch (error) {
       if (signal.aborted) throw error;
