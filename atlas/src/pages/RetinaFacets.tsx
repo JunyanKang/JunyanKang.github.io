@@ -315,6 +315,7 @@ function Plot({
       const columns = Math.ceil(w / 24);
       for (const pass of result || focus >= 0 ? [0, 1] : [0])
         for (const i of d.sets[g]) {
+          if (result && focus >= 0 && d.geo.type[i] !== focus) continue;
           const v = result?.values[i] ?? NaN;
           if (result && Number(v > 0) !== pass) continue;
           if (!result && focus >= 0 && Number(d.geo.type[i] === focus) !== pass) continue;
@@ -374,6 +375,7 @@ function Plot({
         {result?.mode === "Activity"
           ? "ATAC activity"
           : result?.mode || (focus < 0 ? (time ? "Time point" : d.key === "mouse_dev_multi" ? "Cluster annotation" : "Cell annotation") : `${time ? "Time point · " : ""}${d.manifest.types[focus]} · ${d.annotations[g][focus].count.toLocaleString()} cells`)}
+        {result && focus >= 0 && ` · ${d.manifest.types[focus].replaceAll("_", " ")} · ${d.annotations[g][focus].count.toLocaleString()} cells`}
       </figcaption>
       <canvas
         ref={ref}
@@ -543,7 +545,7 @@ export function RetinaFacets({
             {merged ? <SampleView key="combined" title="All samples" count={d.manifest.n}>
               <Plot d={merged.cells} g={0} spatial={false} focus={focus} />
               <Plot d={merged.time} g={0} spatial={false} focus={ageFocus} time />
-              {res.list.map(r => <Plot key={r.mode} d={merged.cells} g={0} result={r} spatial={false} />)}
+              {res.list.map(r => <Plot key={r.mode} d={merged.cells} g={0} result={r} spatial={false} focus={focus} />)}
             </SampleView> : order.map((g) => (
               <SampleView key={g} title={label(g)} count={d.sets[g].length}>
                   <Plot d={d} g={g} spatial={kind === "spatial" && !embedding} focus={focus} />
@@ -553,6 +555,7 @@ export function RetinaFacets({
                       d={d}
                       g={g}
                       result={r}
+                      focus={focus}
                       spatial={kind === "spatial" && !embedding}
                     />
                   ))}
