@@ -83,6 +83,16 @@ async function load(key: string, signal: AbortSignal, embedding: boolean) {
     json<Manifest>(`${key}/dataset.json.gz`, signal),
     json<Geometry>(`${key}/geometry.json.gz`, signal),
   ]);
+  if (key === "mouse_dev_multi") {
+    const { default: mapped } = await import("../data/mouse-eye-types.json");
+    if (mapped.index.length !== manifest.n) throw Error("Cell annotation size mismatch");
+    manifest.types = mapped.types;
+    geo.type = mapped.index;
+    if (mapped.x.length !== manifest.n || mapped.y.length !== manifest.n) throw Error("WNN coordinate size mismatch");
+    geo.x = mapped.x;
+    geo.y = mapped.y;
+    manifest.coordinate = mapped.coordinate;
+  }
   if (embedding) {
     const umap = await json<{ x: number[]; y: number[]; name: string }>(
       `${key}/umap.json.gz`,
@@ -147,7 +157,7 @@ function combinedMaps(d: Data) {
   const ageByGroup = d.manifest.groups.map(group => ages.indexOf(group.age));
   const timeGeo = { ...d.geo, type: d.geo.group.map(group => ageByGroup[group]) };
   const manifest = { ...d.manifest, groups: [{ age: "All", sample: "All samples" }] };
-  const cells = { ...d, manifest, sets: [indices], annotations: [annotate(indices, d.geo, manifest.types)] };
+  const cells = { ...d, manifest, sets: [indices], bounds: [d.common], annotations: [annotate(indices, d.geo, manifest.types)] };
   const time = { ...cells, manifest: { ...manifest, types: ages }, geo: timeGeo, annotations: [annotate(indices, timeGeo, ages)] };
   return { cells, time };
 }
@@ -298,10 +308,11 @@ function Plot({
       ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
       ctx.clearRect(0, 0, w, h);
       const view = zoomTransform(el);
-      const [x0, x1, y0, y1] = spatial ? d.bounds[g] : d.common;
+      const [x0, x1, y0, y1] = d.bounds[g];
+      const inset = Math.min(16, Math.min(w, h) * 0.04);
       const s = Math.min(
-        (w - 8) / Math.max(x1 - x0, 1e-8),
-        (h - 8) / Math.max(y1 - y0, 1e-8),
+        (w - 2 * inset) / Math.max(x1 - x0, 1e-8),
+        (h - 2 * inset) / Math.max(y1 - y0, 1e-8),
       );
       const baseDot = Math.max(
         1,
@@ -374,12 +385,12 @@ function Plot({
       <figcaption>
         {result?.mode === "Activity"
           ? "ATAC activity"
-          : result?.mode || (focus < 0 ? (time ? "Time point" : d.key === "mouse_dev_multi" ? "Cluster annotation" : "Cell annotation") : `${time ? "Time point · " : ""}${d.manifest.types[focus]} · ${d.annotations[g][focus].count.toLocaleString()} cells`)}
+          : result?.mode || (focus < 0 ? (time ? "Time point" : d.key === "mouse_dev_multi" ? "Predicted cell type" : "Cell annotation") : `${time ? "Time point · " : ""}${d.manifest.types[focus]} · ${d.annotations[g][focus].count.toLocaleString()} cells`)}
         {result && focus >= 0 && ` · ${d.manifest.types[focus].replaceAll("_", " ")} · ${d.annotations[g][focus].count.toLocaleString()} cells`}
       </figcaption>
       <canvas
         ref={ref}
-        aria-label={`${d.manifest.groups[g].sample} ${result?.mode || (time ? "time point" : d.key === "mouse_dev_multi" ? "clusters" : "cell types")} map`}
+        aria-label={`${d.manifest.groups[g].sample} ${result?.mode || (time ? "time point" : "cell types")} map`}
       />
       {labelKey.length > 0 && <div className="retina-map-label-key" aria-label="Visible annotations">
         {labelKey.map(id => <span key={id}><b>{id + 1}</b> {d.manifest.types[id]?.replaceAll("_", " ")}</span>)}
@@ -524,8 +535,8 @@ export function RetinaFacets({
             ))}
           </div>
             <fieldset className="retina-annotation-key">
-              <legend>{key === "mouse_dev_multi" ? "Highlight cluster" : "Highlight cell type"}</legend>
-              <button type="button" aria-pressed={focus === -1} onClick={() => setFocus(-1)}>{key === "mouse_dev_multi" ? "All clusters" : "All types"}</button>
+              <legend>{key === "mouse_dev_multi" ? "Highlight predicted cell type" : "Highlight cell type"}</legend>
+              <button type="button" aria-pressed={focus === -1} onClick={() => setFocus(-1)}>All types</button>
               {d.manifest.types.map((name, i) => (
                 <button key={name} type="button" aria-pressed={focus === i} onClick={() => setFocus(i)}>
                   <i style={{ background: typeColor(i) }} />{name.replaceAll("_", " ")}
@@ -565,13 +576,13 @@ export function RetinaFacets({
           <div className="retina-toolbar retina-statistics" id="atlas-statistics" tabIndex={-1}>
           <h4>
             {key === "mouse_dev_multi"
-              ? "Cluster summary"
+              ? "Predicted cell-type summary"
               : "Cell-type summary"}
           </h4>
           <button type="button" className="retina-jump" onClick={() => document.querySelector<HTMLSelectElement>("#atlas-map-controls select")?.focus()}>Back to maps ↑</button>
           </div>
           <DotSummary results={res.list} types={d.manifest.types} order={order} label={label}
-            category={key === "mouse_dev_multi" ? "Cluster" : "Cell type"} gene={gene} />
+            category="Cell type" gene={gene} />
           <small>
             Signal: log(1 + 10,000 × feature count / cell library size),
             separately per assay. Maps saturate at the 98th percentile of

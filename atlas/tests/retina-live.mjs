@@ -26,7 +26,7 @@ try {
       const scales=await page.locator('.retina-scales').innerText(); assert.ok(scales.includes('≥'));assert.equal(await page.locator('.retina-pair canvas').count(),(kind === 'multi' ? 3 : 2)*n);
       if (kind === 'multi') {
         const sample = page.locator('.retina-grid section').first();
-        const target = key === 'mouse_dev_multi' ? 'Cluster 1' : 'Rod';
+        const target = 'Rod';
         await page.getByRole('button', {name: target, exact: true}).click();
         assert.ok((await sample.locator('figcaption').first().innerText()).startsWith(target + ' · '));
         await sample.getByRole('button', {name: 'Zoom in'}).click();
