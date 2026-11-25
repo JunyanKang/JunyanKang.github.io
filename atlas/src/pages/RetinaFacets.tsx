@@ -597,8 +597,15 @@ function DotSummary({ results, types, order, label, category, gene }: {
     max: Math.max(0, ...result.stats.flat().filter(s => s.n).map(s => s.sum / s.n)),
     measured: result.stats.some(row => row.some(s => s.n)),
   }));
-  const perBlock = Math.max(1, Math.floor((width - 120) / (assays.length === 2 ? 72 : 64)));
-  const groups = Array.from({length: Math.ceil(order.length / perBlock)}, (_, i) => order.slice(i * perBlock, (i + 1) * perBlock));
+  const displayTypes = types.map(type => type.replaceAll('_', ' '));
+  const longestLabel = Math.max(category.length, ...displayTypes.map(type => type.length));
+  const labelWidth = Math.min(width * 0.48, Math.max(86, Math.min(230, 18 + longestLabel * 7.5)));
+  const sampleChars = Math.max(0, ...order.flatMap(g => label(g).split(' · ').map(part => part.length)));
+  const sampleWidth = Math.max(assays.length === 2 ? 92 : 58, Math.min(148, 16 + sampleChars * 8));
+  const perBlock = Math.max(1, Math.floor((width - labelWidth - 2) / sampleWidth));
+  const blockCount = Math.ceil(order.length / perBlock);
+  const groups = Array.from({length: blockCount}, (_, i) =>
+    order.slice(Math.ceil(i * order.length / blockCount), Math.ceil((i + 1) * order.length / blockCount)));
   return <div className="retina-heat retina-summary" ref={container}>
     <div className="retina-dot-legend">
       <strong>{gene}</strong><span>Positive cells</span>
@@ -608,11 +615,13 @@ function DotSummary({ results, types, order, label, category, gene }: {
     <div className="retina-dot-legend"><strong>Mean normalized signal</strong>
       {assays.map(a => <span key={a.mode}>{a.title} {a.measured ? <>0 <i className="retina-dot-ramp" style={scaleStyle(a.mode)} /> {Number(a.max.toPrecision(3))}</> : '· unavailable'}</span>)}
     </div>
-    {groups.map(block => <table key={block[0]} style={{width: `min(100%, ${120 + block.length * (assays.length === 2 ? 114 : 72)}px)`}} aria-label={`${gene} · ${block.map(label).join(', ')}`}>
+    {groups.map(block => <table key={block[0]} style={{width: `min(100%, ${labelWidth + block.length * sampleWidth + 2}px)`}} aria-label={`${gene} · ${block.map(label).join(', ')}`}>
+      <colgroup><col style={{width: labelWidth}} /><col span={block.length * assays.length} /></colgroup>
       <thead><tr><th rowSpan={assays.length > 1 ? 2 : 1}>{category}</th>
-        {block.map(g => <th key={g} colSpan={assays.length}>{label(g)}</th>)}
+        {block.map(g => <th key={g} colSpan={assays.length}>{label(g).split(' · ').map((part, i) =>
+          <span key={i} className={i ? 'retina-sample-id' : 'retina-sample-age'}>{part}</span>)}</th>)}
       </tr>{assays.length > 1 && <tr>{block.flatMap(g => assays.map(a => <th key={`${g}-${a.mode}`} className="retina-assay-heading">{a.mode === 'RNA' ? 'RNA' : 'ATAC'}</th>))}</tr>}</thead>
-      <tbody>{types.map((type, i) => <tr key={type}><th scope="row">{type}</th>
+      <tbody>{types.map((type, i) => <tr key={type}><th scope="row">{displayTypes[i]}</th>
         {block.flatMap(g => assays.map(a => {
           const s = a.stats[i][g];
           const mean = s.n ? s.sum / s.n : 0;
